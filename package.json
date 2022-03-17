@@ -1,0 +1,21 @@
+{
+  "name": "nourl",
+  "version": "0.1.0",
+  "repository": "https://github.com/Sherly1001/nourl",
+  "author": "Sherly1001 <Sherly1001@users.noreply.github.com>",
+  "license": "GPL-3.0",
+  "scripts": {
+    "dev": "yarn workspaces run dev",
+    "build": "yarn workspaces run build",
+    "preview": "yarn workspaces run preview"
+  },
+  "private": true,
+  "workspaces": [
+    "frontend"
+  ],
+  "prettier": {
+    "tabWidth": 2,
+    "semi": false,
+    "singleQuote": true
+  }
+}
