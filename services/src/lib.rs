@@ -15,6 +15,7 @@ pub async fn run() {
     rocket::custom(config.cfg)
         .manage(config.db_pool)
         .manage(config.state)
+        .attach(cors::CORS)
         .mount("/api", routes![])
         .launch()
         .await
