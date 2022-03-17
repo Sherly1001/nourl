@@ -1,6 +1,6 @@
 use std::env;
 
-use diesel::r2d2::{self, ConnectionManager};
+use diesel::r2d2::{self, ConnectionManager, PooledConnection};
 use diesel::PgConnection;
 use rocket::{figment::Figment, Config as RConfig};
 
@@ -67,5 +67,16 @@ pub fn from_env() -> Config {
         cfg,
         state,
         db_pool,
+    }
+}
+
+pub fn get_conn(
+    pool: &rocket::State<DbPool>,
+) -> PooledConnection<ConnectionManager<PgConnection>> {
+    loop {
+        match pool.get_timeout(std::time::Duration::from_secs(3)) {
+            Ok(conn) => break conn,
+            _ => continue,
+        }
     }
 }

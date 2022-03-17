@@ -3,21 +3,18 @@ extern crate diesel;
 
 mod config;
 mod cors;
+mod db;
 mod errors;
+mod models;
 mod routes;
 mod schema;
 
-use rocket::{catchers, http::Status, routes};
 use errors::{JRes, Res};
+use rocket::{catchers, http::Status, routes};
 
 #[rocket::catch(404)]
 fn not_found() -> JRes<u8> {
     Res::err(Status::NotFound, "resource not found".to_string())
-}
-
-#[rocket::get("/")]
-fn get_all() -> errors::JRes<Vec<&'static str>> {
-    Res::ok(vec!["all", "data"])
 }
 
 #[rocket::get("/err")]
@@ -35,7 +32,7 @@ pub async fn run() {
         .manage(config.db_pool)
         .manage(config.state)
         .attach(cors::CORS)
-        .mount("/api/users", routes![get_all])
+        .mount("/api/users", routes![routes::user::get])
         .mount("/api/urls", routes![err])
         .register("/", catchers![not_found])
         .launch()
