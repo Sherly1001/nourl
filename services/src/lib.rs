@@ -1,6 +1,10 @@
 use rocket::routes;
 
+#[macro_use]
+extern crate diesel;
+
 mod config;
+mod schema;
 
 #[rocket::main]
 pub async fn run() {
