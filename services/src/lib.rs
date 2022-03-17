@@ -4,6 +4,7 @@ use rocket::routes;
 extern crate diesel;
 
 mod config;
+mod cors;
 mod schema;
 
 #[rocket::main]
