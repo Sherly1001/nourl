@@ -1,6 +1,11 @@
-use rocket::{http::Status, response::status, serde::json::Json};
-use serde::{Deserialize, Serialize};
+use rocket::{
+    http::Status,
+    response::status,
+    serde::{json::Json, Deserialize, Serialize},
+};
 
+pub use rocket::serde::json::Error as JError;
+pub type JBody<'a, D> = Result<Json<D>, JError<'a>>;
 pub type JRes<D> = status::Custom<Json<Res<D>>>;
 
 #[derive(Serialize, Deserialize, Debug)]
