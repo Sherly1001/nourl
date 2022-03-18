@@ -16,7 +16,7 @@ pub struct User {
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct UserDisplay {
-    pub id: i64,
+    pub id: String,
     pub display_name: String,
     pub email: String,
     pub avatar_url: Option<String>,
@@ -29,7 +29,7 @@ impl User {
     pub fn to_user_display(&self) -> UserDisplay {
         // TODO: get user link from secret keys
         UserDisplay {
-            id: self.id,
+            id: self.id.to_string(),
             display_name: self.display_name.clone(),
             email: self.email.clone(),
             avatar_url: self.avatar_url.clone(),
