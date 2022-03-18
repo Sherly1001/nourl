@@ -2,6 +2,22 @@ use crate::schema::users;
 use diesel::{Insertable, Queryable};
 use serde::{Deserialize, Serialize};
 
+#[derive(Serialize, Deserialize, Debug)]
+#[allow(non_camel_case_types)]
+pub enum LoginMethod {
+    email { email: String, passwd: String },
+    github { code: String },
+    google { id_token: String },
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+#[allow(non_camel_case_types)]
+pub enum UserId {
+    email(String),
+    github_id(String),
+    google_id(String),
+}
+
 #[derive(Serialize, Deserialize, Queryable, Insertable, Debug)]
 pub struct User {
     pub id: i64,
