@@ -20,12 +20,7 @@ impl Fairing for CORS {
         request: &'r Request<'_>,
         response: &mut Response<'r>,
     ) {
-        let origin = *request
-            .headers()
-            .get("origin")
-            .collect::<Vec<_>>()
-            .get(0)
-            .unwrap_or(&"*");
+        let origin = request.headers().get_one("origin").unwrap_or("*");
         response.set_header(Header::new("Access-Control-Allow-Origin", origin));
         response.set_header(Header::new(
             "Access-Control-Allow-Methods",
