@@ -4,8 +4,8 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Queryable, Insertable, Debug)]
 pub struct Url {
-    id: i64,
-    code: String,
-    url: String,
-    owner: Option<i64>,
+    pub id: i64,
+    pub code: String,
+    pub url: String,
+    pub owner: Option<i64>,
 }

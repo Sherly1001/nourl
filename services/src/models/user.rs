@@ -4,25 +4,25 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Queryable, Insertable, Debug)]
 pub struct User {
-    id: i64,
-    display_name: String,
-    email: String,
-    avatar_url: Option<String>,
-    hash_passwd: Option<String>,
-    github_id: Option<String>,
-    google_id: Option<String>,
-    facebook_id: Option<String>,
+    pub id: i64,
+    pub display_name: String,
+    pub email: String,
+    pub avatar_url: Option<String>,
+    pub hash_passwd: Option<String>,
+    pub github_id: Option<String>,
+    pub google_id: Option<String>,
+    pub facebook_id: Option<String>,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct UserDisplay {
-    id: i64,
-    display_name: String,
-    email: String,
-    avatar_url: Option<String>,
-    github_url: Option<String>,
-    google_url: Option<String>,
-    facebook_url: Option<String>,
+    pub id: i64,
+    pub display_name: String,
+    pub email: String,
+    pub avatar_url: Option<String>,
+    pub github_url: Option<String>,
+    pub google_url: Option<String>,
+    pub facebook_url: Option<String>,
 }
 
 impl User {
