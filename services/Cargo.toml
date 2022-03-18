@@ -11,3 +11,4 @@ rocket = { version = "0.5.0-rc.1", features = ["json"] }
 serde = "1.0"
 dotenv = "0.15"
 diesel = { version = "1.4.8", features = ["postgres", "r2d2", "chrono"] }
+rustflake = "0.1.1"

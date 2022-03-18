@@ -1,8 +1,10 @@
 use std::env;
+use std::sync::{Arc, Mutex};
 
 use diesel::r2d2::{self, ConnectionManager, PooledConnection};
 use diesel::PgConnection;
 use rocket::{figment::Figment, Config as RConfig};
+use rustflake::Snowflake;
 
 #[derive(Clone)]
 pub struct DbPool(pub r2d2::Pool<ConnectionManager<PgConnection>>);
@@ -20,9 +22,28 @@ impl std::ops::Deref for DbPool {
     }
 }
 
+pub struct IdGen(Snowflake);
+
+impl IdGen {
+    pub fn init(epoch: i64, worker: i64, process: i64) -> Self {
+        Self(Snowflake::new(epoch, worker, process))
+    }
+
+    pub fn new(&mut self) -> i64 {
+        self.0.generate()
+    }
+}
+
+impl std::fmt::Debug for IdGen {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "IdGen()")
+    }
+}
+
 #[derive(Debug, Clone)]
 pub struct AppState {
     pub secret_key: String,
+    pub idgen: Arc<Mutex<IdGen>>,
 }
 
 #[derive(Debug, Clone)]
@@ -47,6 +68,18 @@ pub fn from_env() -> Config {
         .unwrap_or(10u8.to_string())
         .parse()
         .unwrap();
+    let epoch = env::var("SNOWFLAKE_ECPHO")
+        .unwrap_or(1_577_811_600_000_i64.to_string())
+        .parse()
+        .unwrap();
+    let worker = env::var("SNOWFLAKE_WORKER")
+        .unwrap_or(1u16.to_string())
+        .parse()
+        .unwrap();
+    let process = env::var("SNOWFLAKE_PROCESS")
+        .unwrap_or(1u16.to_string())
+        .parse()
+        .unwrap();
 
     let manager = ConnectionManager::<PgConnection>::new(db_url);
     let db_pool = DbPool(
@@ -61,7 +94,9 @@ pub fn from_env() -> Config {
         .merge(("address", "0.0.0.0"))
         .merge(("port", port));
 
-    let state = AppState { secret_key };
+    let idgen = Arc::new(Mutex::new(IdGen::init(epoch, worker, process)));
+
+    let state = AppState { secret_key, idgen };
 
     Config {
         cfg,
