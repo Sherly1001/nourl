@@ -1,6 +1,7 @@
 #[macro_use]
 extern crate diesel;
 
+mod auth;
 mod config;
 mod cors;
 mod db;
@@ -15,6 +16,20 @@ use rocket::{catchers, http::Status, routes};
 #[rocket::catch(404)]
 fn not_found() -> JRes<u8> {
     Res::err(Status::NotFound, "resource not found".to_string())
+}
+
+#[rocket::catch(401)]
+fn c401() -> JRes<u8> {
+    Res::err(Status::Unauthorized, "unauthorized".to_string())
+}
+
+#[rocket::catch(500)]
+fn c500() -> JRes<u8> {
+    Res::err(
+        Status::InternalServerError,
+        "the server encountered an internal error while processing this request"
+            .to_string(),
+    )
 }
 
 #[rocket::get("/err")]
@@ -34,7 +49,7 @@ pub async fn run() {
         .attach(cors::CORS)
         .mount("/api/users", routes![routes::user::get])
         .mount("/api/urls", routes![err])
-        .register("/", catchers![not_found])
+        .register("/", catchers![not_found, c401, c500])
         .launch()
         .await
         .unwrap();
