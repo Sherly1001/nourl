@@ -47,7 +47,14 @@ pub async fn run() {
         .manage(config.db_pool)
         .manage(config.state)
         .attach(cors::CORS)
-        .mount("/api/users", routes![routes::user::get])
+        .mount(
+            "/api/users",
+            routes![
+                routes::user::get,
+                routes::user::create,
+                routes::user::login,
+            ],
+        )
         .mount("/api/urls", routes![err])
         .register("/", catchers![not_found, c401, c500])
         .launch()
