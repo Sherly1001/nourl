@@ -6,10 +6,14 @@ import LinkCustom from './LinkCustom'
 import { Outlet } from 'react-router-dom'
 
 const Header = ({}) => {
-  const { setLoginModalVisible } = useContext(AppContext)
+  const { setSigninModalVisible, setSignupModalVisible } =
+    useContext(AppContext)
 
-  function handleModalVisible() {
-    setLoginModalVisible(true)
+  function handleSigninModalVisible() {
+    setSigninModalVisible(true)
+  }
+  function handleSignupModalVisible() {
+    setSignupModalVisible(true)
   }
 
   return (
@@ -23,9 +27,20 @@ const Header = ({}) => {
           <LinkCustom to="/">Home</LinkCustom>
           <LinkCustom to="/my_url">MyUrl</LinkCustom>
         </nav>
-        <button className="signin" onClick={handleModalVisible}>
-          Sign in
-        </button>
+        <div className="button-box">
+          <button
+            className="signin button-item"
+            onClick={handleSigninModalVisible}
+          >
+            Sign in
+          </button>
+          <button
+            className="signup button-item"
+            onClick={handleSignupModalVisible}
+          >
+            Sign up
+          </button>
+        </div>
       </div>
 
       <Outlet />

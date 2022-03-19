@@ -1,0 +1,117 @@
+@import '../../scss';
+
+.modal.signin {
+  .modal-content {
+    h2 {
+      font-size: 35px;
+      margin-bottom: 10px;
+    }
+    .desc {
+      margin-bottom: 20px;
+      line-height: 1.2;
+    }
+    .form {
+      label {
+        display: block;
+        text-align: start;
+        font-weight: 500;
+        margin-bottom: 10px;
+      }
+      input {
+        padding: 20px 10px;
+        border-radius: 15px;
+        width: 100%;
+        border: 1px solid #e7e7e7;
+        background-color: $white !important;
+        font-size: 16px;
+        margin-bottom: 10px;
+      }
+      .signin-default {
+        width: 100%;
+        margin-top: 10px;
+        padding-block: 20px;
+        background-color: $main-color;
+        border: none;
+        transition: 0.2s background-color;
+        color: #fff;
+        font-size: 18px;
+        &:hover {
+          background-color: $second-color;
+        }
+      }
+    }
+    .seperate {
+      display: inline-block;
+      color: $third-color;
+      font-weight: 500;
+      font-size: 17px;
+      position: relative;
+      margin-bottom: 15px;
+      &:before {
+        content: '';
+        position: absolute;
+        left: -90px;
+        top: 50%;
+        transform: translateY(-50%);
+        height: 1px;
+        width: 75px;
+        background-color: #dddcdc;
+      }
+      &:after {
+        content: '';
+        position: absolute;
+        right: -90px;
+        top: 50%;
+        transform: translateY(-50%);
+        height: 1px;
+        width: 75px;
+        background-color: #dddcdc;
+      }
+    }
+    .signin-button {
+      box-shadow: rgba(0, 0, 0, 0.15) 0px 3px 10px 0px;
+      display: block;
+      padding-block: 15px;
+      margin-inline: auto;
+      border: 2px solid;
+      border-radius: 30px;
+      margin-bottom: 20px;
+      transition: 0.3s background-color;
+      .anticon {
+        margin-right: 7px;
+      }
+    }
+    .signin-facebook {
+      border-color: $facebook-color;
+      .anticon {
+        color: $facebook-color;
+      }
+      &:hover {
+        background-color: #d5dde9;
+      }
+    }
+    .signin-github {
+      border-color: $github-color;
+      .anticon {
+        color: $github-color;
+      }
+      &:hover {
+        background-color: #d6dbe0;
+      }
+    }
+    .signin-google {
+      border-color: $google-color;
+      .anticon {
+        color: $google-color;
+      }
+      &:hover {
+        background-color: #e9d2d0;
+      }
+    }
+    .terms {
+      margin-top: 30px;
+      font-size: 15px;
+      line-height: 1.2;
+    }
+  }
+}

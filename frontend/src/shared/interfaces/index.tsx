@@ -1,4 +1,6 @@
 export interface AppContextInterface {
-  isModalLoginVisible: boolean
-  setLoginModalVisible: Function
+  isSigniModalVisible: boolean
+  setSigninModalVisible: Function
+  isSignupModalVisible: boolean
+  setSignupModalVisible: Function
 }

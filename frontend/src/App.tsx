@@ -4,7 +4,8 @@ import MyUrl from './pages/MyUrl'
 import NoPage from './pages/NoPage'
 import { Routes, Route } from 'react-router-dom'
 import Header from './comps/Header/Header'
-import Login from './comps/Login/Login'
+import SignIn from './comps/SignIn/SignIn'
+import SignUp from './comps/SignUp/SignUp'
 
 const App = () => {
   return (
@@ -18,7 +19,8 @@ const App = () => {
           </Route>
         </Routes>
       </div>
-      <Login />
+      <SignIn />
+      <SignUp />
     </>
   )
 }

@@ -1,4 +1,4 @@
-import { createContext, useState, FC, ReactNode } from 'react'
+import { createContext, useState, ReactNode } from 'react'
 import { AppContextInterface } from '../interfaces'
 
 interface AppProviderProps {
@@ -6,19 +6,29 @@ interface AppProviderProps {
 }
 
 const defaultAppProviderProps = {
-  isModalLoginVisible: false,
-  setLoginModalVisible: () => {},
+  isSigniModalVisible: false,
+  setSigninModalVisible: () => {},
+  isSignupModalVisible: false,
+  setSignupModalVisible: () => {},
 }
 
 export const AppContext = createContext<AppContextInterface>(
   defaultAppProviderProps
 )
 
-const AppProvider: FC<AppProviderProps> = ({ children }) => {
-  const [isModalLoginVisible, setLoginModalVisible] = useState(false)
+const AppProvider = ({ children }: AppProviderProps) => {
+  const [isSigniModalVisible, setSigninModalVisible] = useState(false)
+  const [isSignupModalVisible, setSignupModalVisible] = useState(false)
 
   return (
-    <AppContext.Provider value={{ isModalLoginVisible, setLoginModalVisible }}>
+    <AppContext.Provider
+      value={{
+        isSigniModalVisible,
+        setSigninModalVisible,
+        isSignupModalVisible,
+        setSignupModalVisible,
+      }}
+    >
       {children}
     </AppContext.Provider>
   )
