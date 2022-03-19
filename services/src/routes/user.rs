@@ -8,7 +8,7 @@ use sha2::{Digest, Sha256};
 
 use crate::{
     auth::{user_info, Auth},
-    config::{get_conn, AppState, DbPool},
+    config::{AppState, DbPool},
     db,
     errors::{JBody, JError, JRes, Res},
     models::{
@@ -22,8 +22,7 @@ pub fn get(
     auth: Auth,
     db_pool: &State<DbPool>,
 ) -> JRes<models::user::UserDisplay> {
-    let db = get_conn(db_pool);
-    match db::user::get(&db, auth.user_id).map_err(|err| err.to_string()) {
+    match db::user::get(db_pool, auth.user_id).map_err(|err| err.to_string()) {
         Ok(user) => Res::ok(user.to_user_display()),
         Err(err) => Res::err(Status::Unauthorized, err.to_string()),
     }
@@ -86,10 +85,8 @@ pub async fn create<'r>(
         ));
     }
 
-    match db::user::create(&db, &user).map_err(|err| err.to_string()) {
-        Ok(user) => {
-            Res::ok(Auth::new(user.id).token(state.secret_key.as_bytes()))
-        }
+    match db::user::create(db_pool, &user).map_err(|err| err.to_string()) {
+        Ok(user) => Ok(Auth::new(user.id).token(state.secret_key.as_bytes())),
         Err(err) => {
             let err = err.to_string();
             let mut res = Err(err.clone());
@@ -97,7 +94,8 @@ pub async fn create<'r>(
             if err.contains("users_github_id_unique") {
                 let github_id = user.github_id.unwrap();
                 let user =
-                    db::user::find(&db, &UserId::github_id(github_id)).unwrap();
+                    db::user::find(db_pool, &UserId::github_id(github_id))
+                        .unwrap();
                 res = Ok(Auth::new(user.id).token(state.secret_key.as_bytes()));
             } else if err.contains("users_email_unique") {
                 res = Err("email existed".to_string());
@@ -124,7 +122,6 @@ pub async fn login<'r>(
         };
         return Res::err(Status::UnprocessableEntity, err);
     }
-    let db = get_conn(db_pool);
 
     let user = user.unwrap().0;
     let id = match &user.method {
@@ -140,7 +137,7 @@ pub async fn login<'r>(
         LoginMethod::google { id_token } => UserId::google_id(id_token.clone()),
     };
 
-    match db::user::find(&db, &id) {
+    match db::user::find(db_pool, &user_id) {
         Ok(u) => match user.method {
             LoginMethod::email { email: _, passwd } => {
                 let hash_passwd = Some(hash_with_key(

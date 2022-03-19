@@ -8,6 +8,7 @@ use rustflake::Snowflake;
 
 #[derive(Clone)]
 pub struct DbPool(pub r2d2::Pool<ConnectionManager<PgConnection>>);
+pub type DbPooled = PooledConnection<ConnectionManager<PgConnection>>;
 
 impl std::fmt::Debug for DbPool {
     fn fmt(&self, _f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
@@ -116,9 +117,7 @@ pub fn from_env() -> Config {
     }
 }
 
-pub fn get_conn(
-    pool: &rocket::State<DbPool>,
-) -> PooledConnection<ConnectionManager<PgConnection>> {
+pub fn get_conn(pool: &DbPool) -> DbPooled {
     loop {
         match pool.get_timeout(std::time::Duration::from_secs(3)) {
             Ok(conn) => break conn,

@@ -2,7 +2,7 @@ use crate::schema::users;
 use diesel::{Insertable, Queryable};
 use serde::{Deserialize, Serialize};
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Clone, Debug)]
 #[allow(non_camel_case_types)]
 pub enum LoginMethod {
     email { email: String, passwd: String },
@@ -10,7 +10,7 @@ pub enum LoginMethod {
     google { id_token: String },
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Clone, Debug)]
 #[allow(non_camel_case_types)]
 pub enum UserId {
     email(String),
