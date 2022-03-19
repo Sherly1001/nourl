@@ -9,23 +9,29 @@ import {
 import { AppContext } from '../../shared/Context/AppProvider'
 
 const Login = () => {
-  const value = useContext(AppContext)
-  const { isModalLoginVisible, setLoginModalVisible } = value
-  const modalElement = useRef();
-  const modalContainerElement = useRef();
+  const { isModalLoginVisible, setLoginModalVisible } = useContext(AppContext)
+  const modalElement = useRef()
+  const modalContainerElement = useRef()
 
   function handleCloseModal() {
     setLoginModalVisible(false)
   }
 
   useEffect(() => {
-    window.onclick = e => {
-      if (!modalContainerElement.current.contains(e.target) && modalElement.current.contains(e.target))  setLoginModalVisible(false)
+    window.onclick = (e) => {
+      if (
+        !modalContainerElement.current?.contains(e.target) &&
+        modalElement.current?.contains(e.target)
+      )
+        setLoginModalVisible(false)
     }
   }, [])
 
   return (
-    <div className={`modal ${isModalLoginVisible ? 'active' : ''}`} ref={modalElement}>
+    <div
+      className={`modal ${isModalLoginVisible ? 'active' : ''}`}
+      ref={modalElement}
+    >
       <div className="modal-container" ref={modalContainerElement}>
         <div className="modal-content">
           <div className="close-icon" onClick={handleCloseModal}>

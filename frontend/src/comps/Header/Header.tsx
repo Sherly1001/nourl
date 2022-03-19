@@ -2,8 +2,10 @@ import { useContext } from 'react'
 import './header.scss'
 import { logoImg } from '../../assests/images'
 import { AppContext } from '../../shared/Context/AppProvider'
+import LinkCustom from './LinkCustom'
 
-const Header = () => {
+const Header = ({}) => {
+  type setLoginModalVisible = Function
   const value = useContext(AppContext)
   const { setLoginModalVisible } = value
 
@@ -18,11 +20,13 @@ const Header = () => {
           <img src={logoImg} alt="" />
           <h2>NoUrl</h2>
         </div>
-        <ul className="navbar">
-          <li className="active">Home</li>
-          <li>MyUrl</li>
-        </ul>
-        <button className="signin" onClick={handleModalVisible}>Sign in</button>
+        <nav className="navbar">
+          <LinkCustom to="/">Home</LinkCustom>
+          <LinkCustom to="/my_url">MyUrl</LinkCustom>
+        </nav>
+        <button className="signin" onClick={handleModalVisible}>
+          Sign in
+        </button>
       </div>
     </div>
   )
