@@ -91,8 +91,8 @@ pub async fn create<'r>(
 }
 
 #[rocket::post("/login", data = "<user>")]
-pub fn login(
-    user: JBody<BodyUser>,
+pub async fn login<'r>(
+    user: JBody<'r, BodyUser>,
     db_pool: &State<DbPool>,
     state: &State<AppState>,
 ) -> JRes<String> {
@@ -108,7 +108,14 @@ pub fn login(
     let user = user.unwrap().0;
     let id = match user.method {
         LoginMethod::email { email, passwd: _ } => UserId::email(email),
-        LoginMethod::github { code } => UserId::github_id(code),
+        github_code @ LoginMethod::github { code: _ } => {
+            match user_info::get(0, github_code, state).await {
+                Ok(user) => UserId::github_id(user.github_id.unwrap()),
+                Err(err) => {
+                    return Res::err(Status::Unauthorized, err.to_string())
+                }
+            }
+        }
         LoginMethod::google { id_token } => UserId::google_id(id_token),
     };
 
