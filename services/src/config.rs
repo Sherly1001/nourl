@@ -43,6 +43,8 @@ impl std::fmt::Debug for IdGen {
 #[derive(Debug, Clone)]
 pub struct AppState {
     pub secret_key: String,
+    pub gh_client_id: String,
+    pub gh_client_secret: String,
     pub idgen: Arc<Mutex<IdGen>>,
 }
 
@@ -60,6 +62,10 @@ pub fn from_env() -> Config {
         .expect("PORT not u16");
     let secret_key = env::var("SECRET_KEY").expect("SECRET_KEY");
     let db_url = env::var("DATABASE_URL").expect("DATABASE_URL");
+    let gh_client_id = env::var("GH_CLIENT_ID").expect("GH_CLIENT_ID");
+    let gh_client_secret =
+        env::var("GH_CLIENT_SECRET").expect("GH_CLIENT_SECRET");
+
     let pool_size = env::var("DATABASE_POOL_SIZE")
         .unwrap_or(10u8.to_string())
         .parse()
@@ -96,7 +102,12 @@ pub fn from_env() -> Config {
 
     let idgen = Arc::new(Mutex::new(IdGen::init(epoch, worker, process)));
 
-    let state = AppState { secret_key, idgen };
+    let state = AppState {
+        secret_key,
+        gh_client_id,
+        gh_client_secret,
+        idgen,
+    };
 
     Config {
         cfg,
