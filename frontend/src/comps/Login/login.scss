@@ -1,0 +1,95 @@
+@import '../../scss';
+
+.modal {
+  position: fixed;
+  @include flex(center, center);
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  visibility: hidden;
+  opacity: 0;
+  transition: 0.5s all;
+  &.active {
+    visibility: visible;
+    opacity: 1;
+    .modal-container {
+      transform: translateY(0);
+    }
+  }
+  &-container {
+    transform: translateY(-200px);
+    transition: all 0.5s;
+    position: relative;
+    min-width: 500px;
+    border-radius: 20px;
+    background-color: $white;
+    box-shadow: 0px 5px 20px black;
+  }
+  &-content {
+    padding: 30px 60px;
+    text-align: center;
+    position: relative;
+    .close-icon {
+      position: absolute;
+      right: 15px;
+      top: 5px;
+      font-size: 30px;
+      color: rgb(102, 102, 102);
+      cursor: pointer;
+    }
+    h2 {
+      font-size: 35px;
+      margin-bottom: 10px;
+    }
+    .desc {
+      margin-bottom: 20px;
+      line-height: 1.2;
+    }
+    .signin-button {
+      display: block;
+      padding-block: 15px;
+      margin-inline: auto;
+      border: 2px solid;
+      width: 200px;
+      border-radius: 30px;
+      margin-bottom: 10px;
+      transition: 0.3s background-color;
+      .anticon {
+        margin-right: 7px;
+      }
+    }
+    .signin-facebook {
+      border-color: $facebook-color;
+      .anticon {
+        color: $facebook-color;
+      }
+      &:hover {
+        background-color: #d5dde9;
+      }
+    }
+    .signin-github {
+      border-color: $github-color;
+      .anticon {
+        color: $github-color;
+      }
+      &:hover {
+        background-color: #d6dbe0;
+      }
+    }
+    .signin-google {
+      border-color: $google-color;
+      .anticon {
+        color: $google-color;
+      }
+      &:hover {
+        background-color: #e9d2d0;
+      }
+    }
+    .terms {
+      margin-top: 30px;
+      font-size: 15px;
+      line-height: 1.2;
+    }
+  }
+}
