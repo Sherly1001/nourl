@@ -4,6 +4,8 @@ use rocket::{
 };
 use serde::{Deserialize, Serialize};
 
+pub mod user_info;
+
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Auth {
     pub user_id: i64,
