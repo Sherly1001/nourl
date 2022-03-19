@@ -11,7 +11,7 @@ table! {
     users (id) {
         id -> Int8,
         display_name -> Text,
-        email -> Text,
+        email -> Nullable<Text>,
         avatar_url -> Nullable<Text>,
         hash_passwd -> Nullable<Text>,
         github_id -> Nullable<Text>,

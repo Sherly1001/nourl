@@ -96,7 +96,13 @@ pub fn create(
         Ok(user) => {
             Res::ok(Auth::new(user.id).token(state.secret_key.as_bytes()))
         }
-        Err(err) => Res::err(Status::Unauthorized, format!("{user_id}: {err}")),
+        Err(err) => {
+            let mut err = err.to_string();
+            if err.contains("users_email_unique") {
+                err = "email existed".to_string();
+            }
+            Res::err(Status::Unauthorized, err)
+        }
     }
 }
 

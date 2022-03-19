@@ -22,7 +22,7 @@ pub enum UserId {
 pub struct User {
     pub id: i64,
     pub display_name: String,
-    pub email: String,
+    pub email: Option<String>,
     pub avatar_url: Option<String>,
     pub hash_passwd: Option<String>,
     pub github_id: Option<String>,
@@ -34,7 +34,7 @@ pub struct User {
 pub struct UserDisplay {
     pub id: String,
     pub display_name: String,
-    pub email: String,
+    pub email: Option<String>,
     pub avatar_url: Option<String>,
     pub github_url: Option<String>,
     pub google_url: Option<String>,
