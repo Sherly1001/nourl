@@ -3,11 +3,10 @@ import './header.scss'
 import { logoImg } from '../../assests/images'
 import { AppContext } from '../../shared/Context/AppProvider'
 import LinkCustom from './LinkCustom'
+import { Outlet } from 'react-router-dom'
 
 const Header = ({}) => {
-  type setLoginModalVisible = Function
-  const value = useContext(AppContext)
-  const { setLoginModalVisible } = value
+  const { setLoginModalVisible } = useContext(AppContext)
 
   function handleModalVisible() {
     setLoginModalVisible(true)
@@ -28,6 +27,8 @@ const Header = ({}) => {
           Sign in
         </button>
       </div>
+
+      <Outlet />
     </div>
   )
 }

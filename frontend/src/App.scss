@@ -57,12 +57,6 @@ iframe {
   border: 0;
 }
 
-.bg-image {
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-}
-
 .overlay {
   position: relative;
 
@@ -77,23 +71,7 @@ iframe {
   }
 }
 
-.main-color {
-  color: $main-color;
-}
-
-.second-color {
-  color: $second-color;
-}
-
 .container {
   max-width: 1450px;
   margin: auto;
-}
-
-.mt-4 {
-  margin-top: 4rem;
-}
-
-.relative {
-  position: relative;
 }

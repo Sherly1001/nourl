@@ -10,11 +10,12 @@ const App = () => {
   return (
     <>
       <div className="container">
-        <Header />
         <Routes>
-          <Route path="/" element={<Home />}></Route>
-          <Route path="/my_url" element={<MyUrl />}></Route>
-          <Route path="/*" element={<NoPage />}></Route>
+          <Route path="/" element={<Header />}>
+            <Route index element={<Home />}></Route>
+            <Route path="/my_url" element={<MyUrl />}></Route>
+            <Route path="/*" element={<NoPage />}></Route>
+          </Route>
         </Routes>
       </div>
       <Login />

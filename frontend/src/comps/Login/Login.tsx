@@ -10,8 +10,8 @@ import { AppContext } from '../../shared/Context/AppProvider'
 
 const Login = () => {
   const { isModalLoginVisible, setLoginModalVisible } = useContext(AppContext)
-  const modalElement = useRef()
-  const modalContainerElement = useRef()
+  const modalElement = useRef<HTMLHeadingElement>(null)
+  const modalContainerElement = useRef<HTMLHeadingElement>(null)
 
   function handleCloseModal() {
     setLoginModalVisible(false)
@@ -20,8 +20,8 @@ const Login = () => {
   useEffect(() => {
     window.onclick = (e) => {
       if (
-        !modalContainerElement.current?.contains(e.target) &&
-        modalElement.current?.contains(e.target)
+        !modalContainerElement.current?.contains(e.target as Node) &&
+        modalElement.current?.contains(e.target as Node)
       )
         setLoginModalVisible(false)
     }
@@ -29,7 +29,7 @@ const Login = () => {
 
   return (
     <div
-      className={`modal ${isModalLoginVisible ? 'active' : ''}`}
+      className={`modal overlay ${isModalLoginVisible ? 'active' : ''}`}
       ref={modalElement}
     >
       <div className="modal-container" ref={modalContainerElement}>

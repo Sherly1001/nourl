@@ -5,7 +5,14 @@ interface AppProviderProps {
   children: ReactNode
 }
 
-export const AppContext = createContext<AppContextInterface | null>(null)
+const defaultAppProviderProps = {
+  isModalLoginVisible: false,
+  setLoginModalVisible: () => {},
+}
+
+export const AppContext = createContext<AppContextInterface>(
+  defaultAppProviderProps
+)
 
 const AppProvider: FC<AppProviderProps> = ({ children }) => {
   const [isModalLoginVisible, setLoginModalVisible] = useState(false)
