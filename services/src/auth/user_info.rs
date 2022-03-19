@@ -14,6 +14,7 @@ pub async fn get(
     state: &State<AppState>,
 ) -> Result<User, String> {
     match info {
+        // TODO: hash_passwd
         LoginMethod::email { email, passwd } => Ok(User {
             id,
             display_name: "none".to_string(),

@@ -9,7 +9,7 @@ pub fn get(conn: &PgConnection, user_id: i64) -> QueryResult<User> {
     schema::users::table.find(user_id).get_result(conn)
 }
 
-pub fn create(conn: &PgConnection, user: User) -> QueryResult<User> {
+pub fn create(conn: &PgConnection, user: &User) -> QueryResult<User> {
     diesel::insert_into(schema::users::table)
         .values(user)
         .get_result(conn)

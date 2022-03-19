@@ -65,16 +65,27 @@ pub async fn create<'r>(
         user.avatar_url = Some(avatar_url);
     }
 
-    match db::user::create(&db, user).map_err(|err| err.to_string()) {
+    match db::user::create(&db, &user).map_err(|err| err.to_string()) {
         Ok(user) => {
             Res::ok(Auth::new(user.id).token(state.secret_key.as_bytes()))
         }
         Err(err) => {
-            let mut err = err.to_string();
-            if err.contains("users_email_unique") {
-                err = "email existed".to_string();
+            let err = err.to_string();
+            let mut res = Err(err.clone());
+
+            if err.contains("users_github_id_unique") {
+                let github_id = user.github_id.unwrap();
+                let user =
+                    db::user::find(&db, &UserId::github_id(github_id)).unwrap();
+                res = Ok(Auth::new(user.id).token(state.secret_key.as_bytes()));
+            } else if err.contains("users_email_unique") {
+                res = Err("email existed".to_string());
             }
-            Res::err(Status::Unauthorized, err)
+
+            match res {
+                Err(err) => Res::err(Status::Unauthorized, err),
+                Ok(token) => Res::ok(token),
+            }
         }
     }
 }
