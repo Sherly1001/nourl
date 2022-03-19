@@ -10,17 +10,16 @@ use crate::{
 
 pub async fn get(
     id: i64,
-    info: LoginMethod,
+    method: &LoginMethod,
     state: &State<AppState>,
 ) -> Result<User, String> {
-    match info {
-        // TODO: hash_passwd
+    match method {
         LoginMethod::email { email, passwd } => Ok(User {
             id,
             display_name: "none".to_string(),
-            email: Some(email),
+            email: Some(email.clone()),
             avatar_url: None,
-            hash_passwd: Some(passwd),
+            hash_passwd: Some(passwd.clone()),
             github_id: None,
             google_id: None,
             facebook_id: None,
@@ -46,7 +45,7 @@ pub async fn get(
             avatar_url: Some(id_token.clone()),
             hash_passwd: None,
             github_id: None,
-            google_id: Some(id_token),
+            google_id: Some(id_token.clone()),
             facebook_id: None,
         }),
     }
