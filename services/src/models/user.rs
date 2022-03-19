@@ -42,11 +42,12 @@ pub struct UserDisplay {
     pub facebook_url: Option<String>,
 }
 
-#[derive(Deserialize, Serialize, AsChangeset, Debug)]
+#[derive(Deserialize, Serialize, AsChangeset, Clone, Debug)]
 pub struct UserUpdate {
     pub display_name: Option<String>,
     pub avatar_url: Option<String>,
     pub email: Option<String>,
+    #[serde(rename = "passwd")]
     pub hash_passwd: Option<String>,
     pub github_id: Option<String>,
     pub google_id: Option<String>,

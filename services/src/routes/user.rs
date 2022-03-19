@@ -237,7 +237,15 @@ pub async fn update<'r>(
         }
     }
 
-    match db::user::update(db_pool, user.id, &user_update.info) {
+    let mut info = user_update.info.clone();
+    if let Some(passwd) = info.hash_passwd {
+        info.hash_passwd = Some(hash_with_key(
+            state.secret_key.as_bytes(),
+            passwd.as_bytes(),
+        ));
+    }
+
+    match db::user::update(db_pool, user.id, &info) {
         Ok(user) => Res::ok(user.to_user_display()),
         Err(err) => Res::err(Status::UnprocessableEntity, err.to_string()),
     }
