@@ -30,7 +30,7 @@ pub fn get(
 
 #[derive(Serialize, Deserialize, Debug)]
 #[allow(non_camel_case_types)]
-pub struct BodyUser {
+pub struct UserBody {
     display_name: Option<String>,
     avatar_url: Option<String>,
     method: LoginMethod,
@@ -38,7 +38,7 @@ pub struct BodyUser {
 
 async fn create_user(
     user_id: i64,
-    body_user: &BodyUser,
+    body_user: &UserBody,
     user_info: Option<User>,
     db_pool: &State<DbPool>,
     state: &State<AppState>,
@@ -107,7 +107,7 @@ async fn create_user(
 
 #[rocket::post("/create", data = "<user>")]
 pub async fn create<'r>(
-    user: JBody<'r, BodyUser>,
+    user: JBody<'r, UserBody>,
     db_pool: &State<DbPool>,
     state: &State<AppState>,
 ) -> JRes<String> {
@@ -129,7 +129,7 @@ pub async fn create<'r>(
 
 #[rocket::post("/login", data = "<user>")]
 pub async fn login<'r>(
-    user: JBody<'r, BodyUser>,
+    user: JBody<'r, UserBody>,
     db_pool: &State<DbPool>,
     state: &State<AppState>,
 ) -> JRes<String> {
