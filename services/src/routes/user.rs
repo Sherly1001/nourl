@@ -11,17 +11,11 @@ use crate::{
     config::{AppState, DbPool},
     db,
     errors::{JBody, JError, JRes, Res},
-    models::{
-        self,
-        user::{LoginMethod, User, UserId},
-    },
+    models::user::{LoginMethod, User, UserDisplay, UserId, UserUpdate},
 };
 
 #[rocket::get("/info")]
-pub fn get(
-    auth: Auth,
-    db_pool: &State<DbPool>,
-) -> JRes<models::user::UserDisplay> {
+pub fn get(auth: Auth, db_pool: &State<DbPool>) -> JRes<UserDisplay> {
     match db::user::get(db_pool, auth.user_id).map_err(|err| err.to_string()) {
         Ok(user) => Res::ok(user.to_user_display()),
         Err(err) => Res::err(Status::Unauthorized, err.to_string()),
@@ -194,6 +188,58 @@ pub async fn login<'r>(
                 }
             }
         }
+    }
+}
+
+fn empty_str() -> String {
+    "".to_string()
+}
+
+#[derive(Deserialize, Serialize, Debug)]
+pub struct UserUpdateBody {
+    #[serde(default = "empty_str")]
+    pub old_passwd: String,
+    pub info: UserUpdate,
+}
+
+#[rocket::put("/update", data = "<user_update>")]
+pub async fn update<'r>(
+    auth: Auth,
+    user_update: JBody<'r, UserUpdateBody>,
+    db_pool: &State<DbPool>,
+    state: &State<AppState>,
+) -> JRes<UserDisplay> {
+    let user_update = match user_update {
+        Ok(user) => user,
+        Err(err) => {
+            let err = match err {
+                JError::Io(err) => err.to_string(),
+                JError::Parse(_raw, err) => err.to_string(),
+            };
+            return Res::err(Status::UnprocessableEntity, err);
+        }
+    };
+    let user = match db::user::get(db_pool, auth.user_id) {
+        Ok(user) => user,
+        Err(err) => return Res::err(Status::Unauthorized, err.to_string()),
+    };
+
+    if let Some(hash_passwd) = user.hash_passwd.clone() {
+        if hash_with_key(
+            state.secret_key.as_bytes(),
+            user_update.old_passwd.as_bytes(),
+        ) != hash_passwd
+        {
+            return Res::err(
+                Status::Unauthorized,
+                "old password not matched".to_string(),
+            );
+        }
+    }
+
+    match db::user::update(db_pool, user.id, &user_update.info) {
+        Ok(user) => Res::ok(user.to_user_display()),
+        Err(err) => Res::err(Status::UnprocessableEntity, err.to_string()),
     }
 }
 

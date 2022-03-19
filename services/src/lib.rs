@@ -53,6 +53,7 @@ pub async fn run() {
                 routes::user::get,
                 routes::user::create,
                 routes::user::login,
+                routes::user::update,
             ],
         )
         .mount("/api/urls", routes![err])

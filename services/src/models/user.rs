@@ -1,5 +1,6 @@
 use crate::schema::users;
-use diesel::{Insertable, Queryable};
+use users as user_updates;
+use diesel::{AsChangeset, Insertable, Queryable};
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
@@ -39,6 +40,17 @@ pub struct UserDisplay {
     pub github_url: Option<String>,
     pub google_url: Option<String>,
     pub facebook_url: Option<String>,
+}
+
+#[derive(Deserialize, Serialize, AsChangeset, Debug)]
+pub struct UserUpdate {
+    pub display_name: Option<String>,
+    pub avatar_url: Option<String>,
+    pub email: Option<String>,
+    pub hash_passwd: Option<String>,
+    pub github_id: Option<String>,
+    pub google_id: Option<String>,
+    pub facebook_id: Option<String>,
 }
 
 impl User {

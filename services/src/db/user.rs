@@ -2,7 +2,7 @@ use diesel::prelude::*;
 
 use crate::{
     config::{get_conn, DbPool},
-    models::user::{User, UserId},
+    models::user::{User, UserId, UserUpdate},
     schema,
 };
 
@@ -34,4 +34,14 @@ pub fn find(conn: &DbPool, user: &UserId) -> QueryResult<User> {
             .filter(schema::users::google_id.eq(id))
             .get_result(conn),
     }
+}
+
+pub fn update(
+    conn: &DbPool,
+    user_id: i64,
+    user: &UserUpdate,
+) -> QueryResult<User> {
+    let conn = &get_conn(conn);
+    let filter = schema::users::table.find(user_id);
+    diesel::update(filter).set(user).get_result(conn)
 }
