@@ -1,5 +1,7 @@
 @import './scss';
 
+@import url('https://fonts.googleapis.com/css2?family=Bungee&family=Open+Sans:wght@300;400;500;700&display=swap');
+
 * {
   padding: 0;
   margin: 0;
@@ -26,13 +28,24 @@ body {
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.5;
-  color: $black;
+  color: $txt-color;
+  font-family: $main-font;
   overflow: hidden;
+  background-image: url('./assests/bg.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 ul,
 li {
   list-style-type: none;
+}
+
+button {
+  outline: none;
+  border: none;
+  cursor: pointer;
 }
 
 a {
@@ -73,7 +86,7 @@ iframe {
 }
 
 .container {
-  max-width: 1670px;
+  max-width: 1450px;
   margin: auto;
 }
 

@@ -1,0 +1,60 @@
+@import '../../scss';
+
+.header {
+  &-inner {
+    padding-block: 25px;
+    @include flex(center, space-between);
+    .logo {
+      @include flex(center, center);
+      img {
+        width: 40px;
+        margin-right: 5px;
+      }
+      h2 {
+        font-family: $logo-font;
+        font-size: 30px;
+        color: $main-color;
+      }
+    }
+    .navbar {
+      @include flex(center, center);
+      li {
+        font-size: 20px;
+        cursor: pointer;
+        transition: 0.2s color;
+        position: relative;
+        padding-bottom: 3px;
+        &:after {
+          content: '';
+          position: absolute;
+          height: 2px;
+          bottom: 0;
+          left: 0;
+          width: 0;
+          background-color: $main-color;
+          transition: 0.2s width;
+        }
+        &.active::after {
+          width: 100%;
+        }
+        &:hover:after {
+          width: 100%;
+        }
+      }
+      li ~ li {
+        margin-left: 20px;
+      }
+    }
+    .signin {
+      color: $white;
+      background-color: $main-color;
+      padding: 10px 25px;
+      font-size: 18px;
+      border-radius: 20px;
+      transition: 0.2s background-color;
+      &:hover {
+        background-color: $second-color;
+      }
+    }
+  }
+}
