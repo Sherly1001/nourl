@@ -5,49 +5,58 @@ use rocket::{
 
 use crate::{
     config::AppState,
-    models::user::{LoginMethod, User},
+    models::user::{LoginMethod, User, UserId},
 };
 
 pub async fn get(
     id: i64,
     method: &LoginMethod,
     state: &State<AppState>,
-) -> Result<User, String> {
+) -> Result<(User, UserId), String> {
     match method {
-        LoginMethod::email { email, passwd } => Ok(User {
-            id,
-            display_name: "none".to_string(),
-            email: Some(email.clone()),
-            avatar_url: None,
-            hash_passwd: Some(passwd.clone()),
-            github_id: None,
-            google_id: None,
-            facebook_id: None,
-        }),
-        LoginMethod::github { code } => {
-            let github_info = get_github_info(&code, state).await?;
-            Ok(User {
+        LoginMethod::email { email, passwd } => Ok((
+            User {
                 id,
-                display_name: github_info.display_name,
-                email: github_info.email,
-                avatar_url: Some(github_info.avatar_url),
-                hash_passwd: None,
-                github_id: Some(github_info.github_id.to_string()),
+                display_name: "none".to_string(),
+                email: Some(email.clone()),
+                avatar_url: None,
+                hash_passwd: Some(passwd.clone()),
+                github_id: None,
                 google_id: None,
                 facebook_id: None,
-            })
+            },
+            UserId::email(email.to_string()),
+        )),
+        LoginMethod::github { code } => {
+            let github_info = get_github_info(&code, state).await?;
+            Ok((
+                User {
+                    id,
+                    display_name: github_info.display_name,
+                    email: github_info.email,
+                    avatar_url: Some(github_info.avatar_url),
+                    hash_passwd: None,
+                    github_id: Some(github_info.github_id.to_string()),
+                    google_id: None,
+                    facebook_id: None,
+                },
+                UserId::github_id(github_info.github_id.to_string()),
+            ))
         }
         // TODO: get user info from google token
-        LoginMethod::google { id_token } => Ok(User {
-            id,
-            display_name: id_token.clone(),
-            email: None,
-            avatar_url: Some(id_token.clone()),
-            hash_passwd: None,
-            github_id: None,
-            google_id: Some(id_token.clone()),
-            facebook_id: None,
-        }),
+        LoginMethod::google { id_token } => Ok((
+            User {
+                id,
+                display_name: id_token.clone(),
+                email: None,
+                avatar_url: Some(id_token.clone()),
+                hash_passwd: None,
+                github_id: None,
+                google_id: Some(id_token.clone()),
+                facebook_id: None,
+            },
+            UserId::google_id(id_token.clone()),
+        )),
     }
 }
 

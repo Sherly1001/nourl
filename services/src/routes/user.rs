@@ -13,7 +13,7 @@ use crate::{
     errors::{JBody, JError, JRes, Res},
     models::{
         self,
-        user::{LoginMethod, UserId},
+        user::{LoginMethod, User, UserId},
     },
 };
 
@@ -36,6 +36,75 @@ pub struct BodyUser {
     method: LoginMethod,
 }
 
+async fn create_user(
+    user_id: i64,
+    body_user: &BodyUser,
+    user_info: Option<User>,
+    db_pool: &State<DbPool>,
+    state: &State<AppState>,
+) -> Result<String, (Status, String)> {
+    let mut user = match user_info {
+        Some(user) => user,
+        None => {
+            let user = user_info::get(user_id, &body_user.method, state).await;
+            if let Err(err) = user {
+                return Err((Status::Unauthorized, err));
+            }
+            let (user, _) = user.unwrap();
+            user
+        }
+    };
+
+    if let Some(display_name) = body_user.display_name.clone() {
+        user.display_name = display_name;
+    }
+    if let Some(avatar_url) = body_user.avatar_url.clone() {
+        user.avatar_url = Some(avatar_url);
+    }
+    if let LoginMethod::email { email, passwd } = body_user.method.clone() {
+        if email == "" {
+            return Err((
+                Status::UnprocessableEntity,
+                "email is empty".to_string(),
+            ));
+        }
+        if passwd == "" {
+            return Err((
+                Status::UnprocessableEntity,
+                "passwd is empty".to_string(),
+            ));
+        }
+
+        user.hash_passwd = Some(hash_with_key(
+            state.secret_key.as_bytes(),
+            passwd.as_bytes(),
+        ));
+    }
+
+    match db::user::create(db_pool, &user).map_err(|err| err.to_string()) {
+        Ok(user) => Ok(Auth::new(user.id).token(state.secret_key.as_bytes())),
+        Err(err) => {
+            let err = err.to_string();
+            let mut res = Err((Status::Unauthorized, err.clone()));
+
+            if err.contains("users_github_id_unique") {
+                let github_id = user.github_id.unwrap();
+                let user =
+                    db::user::find(db_pool, &UserId::github_id(github_id))
+                        .unwrap();
+                res = Ok(Auth::new(user.id).token(state.secret_key.as_bytes()));
+            } else if err.contains("users_email_unique") {
+                res = Err((
+                    Status::UnprocessableEntity,
+                    "email existed".to_string(),
+                ));
+            }
+
+            res
+        }
+    }
+}
+
 #[rocket::post("/create", data = "<user>")]
 pub async fn create<'r>(
     user: JBody<'r, BodyUser>,
@@ -49,63 +118,12 @@ pub async fn create<'r>(
         };
         return Res::err(Status::UnprocessableEntity, err);
     }
-    let db = get_conn(db_pool);
     let user_id = state.idgen.lock().unwrap().new();
 
     let body_user = user.unwrap().0;
-    let user = user_info::get(user_id, &body_user.method, state).await;
-    if let Err(err) = user {
-        return Res::err(Status::Unauthorized, err);
-    }
-    let mut user = user.unwrap();
-
-    if let Some(display_name) = body_user.display_name {
-        user.display_name = display_name;
-    }
-    if let Some(avatar_url) = body_user.avatar_url {
-        user.avatar_url = Some(avatar_url);
-    }
-    if let LoginMethod::email { email, passwd } = body_user.method {
-        if email == "" {
-            return Res::err(
-                Status::UnprocessableEntity,
-                "email is empty".to_string(),
-            );
-        }
-        if passwd == "" {
-            return Res::err(
-                Status::UnprocessableEntity,
-                "passwd is empty".to_string(),
-            );
-        }
-
-        user.hash_passwd = Some(hash_with_key(
-            state.secret_key.as_bytes(),
-            passwd.as_bytes(),
-        ));
-    }
-
-    match db::user::create(db_pool, &user).map_err(|err| err.to_string()) {
-        Ok(user) => Ok(Auth::new(user.id).token(state.secret_key.as_bytes())),
-        Err(err) => {
-            let err = err.to_string();
-            let mut res = Err(err.clone());
-
-            if err.contains("users_github_id_unique") {
-                let github_id = user.github_id.unwrap();
-                let user =
-                    db::user::find(db_pool, &UserId::github_id(github_id))
-                        .unwrap();
-                res = Ok(Auth::new(user.id).token(state.secret_key.as_bytes()));
-            } else if err.contains("users_email_unique") {
-                res = Err("email existed".to_string());
-            }
-
-            match res {
-                Err(err) => Res::err(Status::Unauthorized, err),
-                Ok(token) => Res::ok(token),
-            }
-        }
+    match create_user(user_id, &body_user, None, db_pool, state).await {
+        Ok(token) => Res::ok(token),
+        Err((code, err)) => Res::err(code, err),
     }
 }
 
@@ -124,18 +142,12 @@ pub async fn login<'r>(
     }
 
     let user = user.unwrap().0;
-    let id = match &user.method {
-        LoginMethod::email { email, passwd: _ } => UserId::email(email.clone()),
-        github_code @ LoginMethod::github { code: _ } => {
-            match user_info::get(0, &github_code, state).await {
-                Ok(user) => UserId::github_id(user.github_id.unwrap()),
-                Err(err) => {
-                    return Res::err(Status::Unauthorized, err.to_string())
-                }
-            }
-        }
-        LoginMethod::google { id_token } => UserId::google_id(id_token.clone()),
-    };
+    let user_id = state.idgen.lock().unwrap().new();
+    let (user_info, user_id) =
+        match user_info::get(user_id, &user.method, state).await {
+            Ok(info) => info,
+            Err(err) => return Res::err(Status::Unauthorized, err.to_string()),
+        };
 
     match db::user::find(db_pool, &user_id) {
         Ok(u) => match user.method {
@@ -156,7 +168,32 @@ pub async fn login<'r>(
             }
             _ => Res::ok(Auth::new(u.id).token(state.secret_key.as_bytes())),
         },
-        Err(_) => Res::err(Status::Unauthorized, "not found".to_string()),
+        Err(_) => {
+            if let LoginMethod::email {
+                email: _,
+                passwd: _,
+            } = user.method
+            {
+                Res::err(
+                    Status::Unauthorized,
+                    "email or password not matched".to_string(),
+                )
+            } else {
+                let user_id = state.idgen.lock().unwrap().new();
+                match create_user(
+                    user_id,
+                    &user,
+                    Some(user_info),
+                    db_pool,
+                    state,
+                )
+                .await
+                {
+                    Ok(token) => Res::ok(token),
+                    Err((code, err)) => Res::err(code, err),
+                }
+            }
+        }
     }
 }
 
