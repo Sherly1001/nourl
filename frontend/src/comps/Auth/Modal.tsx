@@ -10,7 +10,7 @@ interface ModalProps {
 }
 
 const Modal = ({ children, visible, setVisible, className }: ModalProps) => {
-  const modalOverlay = useRef<HTMLHeadingElement>(null)
+  const modalOverlay = useRef<HTMLDivElement>(null)
 
   function handleCloseModal() {
     setVisible(false)
