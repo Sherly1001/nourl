@@ -43,20 +43,22 @@ pub async fn get(
                 UserId::github_id(github_info.github_id.to_string()),
             ))
         }
-        // TODO: get user info from google token
-        LoginMethod::google { id_token } => Ok((
-            User {
-                id,
-                display_name: id_token.clone(),
-                email: None,
-                avatar_url: Some(id_token.clone()),
-                hash_passwd: None,
-                github_id: None,
-                google_id: Some(id_token.clone()),
-                facebook_id: None,
-            },
-            UserId::google_id(id_token.clone()),
-        )),
+        LoginMethod::google { id_token } => {
+            let google_info = get_google_info(&id_token, state).await?;
+            Ok((
+                User {
+                    id,
+                    display_name: google_info.display_name,
+                    email: google_info.email,
+                    avatar_url: Some(google_info.avatar_url),
+                    hash_passwd: None,
+                    github_id: None,
+                    google_id: Some(google_info.google_id.clone()),
+                    facebook_id: None,
+                },
+                UserId::google_id(google_info.google_id),
+            ))
+        }
     }
 }
 
@@ -70,7 +72,6 @@ struct GhTokenRes {
 struct GhInfo {
     #[serde(rename = "name")]
     display_name: String,
-    #[serde(rename = "email")]
     email: Option<String>,
     #[serde(rename = "id")]
     github_id: i32,
@@ -115,4 +116,50 @@ async fn get_github_info(
         .json()
         .await
         .map_err(|err| err.to_string())
+}
+
+#[derive(Deserialize, Debug)]
+#[serde(untagged)]
+enum GgInfoRes {
+    Error { error: String },
+    Info(GgInfo),
+}
+
+#[derive(Deserialize, Debug)]
+struct GgInfo {
+    #[serde(rename = "given_name")]
+    display_name: String,
+    email: Option<String>,
+    #[serde(rename = "sub")]
+    google_id: String,
+    #[serde(rename = "picture")]
+    avatar_url: String,
+    #[serde(rename = "aud")]
+    gg_client_id: String,
+}
+
+async fn get_google_info(
+    id_token: &str,
+    state: &State<AppState>,
+) -> Result<GgInfo, String> {
+    let res = reqwest::Client::new()
+        .get("https://oauth2.googleapis.com/tokeninfo")
+        .header("User-Agent", "nourl")
+        .query(&[("id_token", id_token)])
+        .send()
+        .await
+        .map_err(|err| err.to_string())?
+        .json()
+        .await
+        .map_err(|err| err.to_string())?;
+    match res {
+        GgInfoRes::Error { error } => Err(error),
+        GgInfoRes::Info(info) => {
+            if info.gg_client_id != state.gg_client_id {
+                Err("unauthorized".to_string())
+            } else {
+                Ok(info)
+            }
+        }
+    }
 }
