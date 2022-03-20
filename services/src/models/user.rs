@@ -17,6 +17,7 @@ pub enum UserId {
     email(String),
     github_id(String),
     google_id(String),
+    facebook_id(String),
 }
 
 #[derive(Serialize, Deserialize, Queryable, Insertable, Debug)]
@@ -65,6 +66,43 @@ impl User {
             github_url: self.google_id.clone(),
             google_url: self.google_id.clone(),
             facebook_url: self.facebook_id.clone(),
+        }
+    }
+}
+
+impl std::default::Default for UserUpdate {
+    fn default() -> Self {
+        Self {
+            display_name: None,
+            avatar_url: None,
+            email: None,
+            hash_passwd: None,
+            github_id: None,
+            google_id: None,
+            facebook_id: None,
+        }
+    }
+}
+
+impl UserId {
+    pub fn get_google_id(&self) -> Option<String> {
+        match self {
+            Self::google_id(id) => Some(id.to_owned()),
+            _ => None,
+        }
+    }
+
+    pub fn get_github_id(&self) -> Option<String> {
+        match self {
+            Self::github_id(id) => Some(id.to_owned()),
+            _ => None,
+        }
+    }
+
+    pub fn get_facebook_id(&self) -> Option<String> {
+        match self {
+            Self::facebook_id(id) => Some(id.to_owned()),
+            _ => None,
         }
     }
 }

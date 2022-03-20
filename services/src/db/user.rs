@@ -33,6 +33,10 @@ pub fn find(conn: &DbPool, user: &UserId) -> QueryResult<User> {
             .select(schema::users::all_columns)
             .filter(schema::users::google_id.eq(id))
             .get_result(conn),
+        UserId::facebook_id(id) => schema::users::table
+            .select(schema::users::all_columns)
+            .filter(schema::users::facebook_id.eq(id))
+            .get_result(conn),
     }
 }
 
