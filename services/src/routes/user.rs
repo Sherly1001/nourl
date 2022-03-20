@@ -191,13 +191,9 @@ pub async fn login<'r>(
     }
 }
 
-fn empty_str() -> String {
-    "".to_string()
-}
-
 #[derive(Deserialize, Serialize, Debug)]
 pub struct UserUpdateBody {
-    #[serde(default = "empty_str")]
+    #[serde(default)]
     pub old_passwd: String,
     pub info: UserUpdate,
 }
