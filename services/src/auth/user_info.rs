@@ -59,6 +59,22 @@ pub async fn get(
                 UserId::google_id(google_info.google_id),
             ))
         }
+        LoginMethod::facebook { access_token } => {
+            let fb_info = get_facebook_info(&access_token, state).await?;
+            Ok((
+                User {
+                    id,
+                    display_name: fb_info.display_name,
+                    email: fb_info.email,
+                    avatar_url: Some(fb_info.picture.data.url),
+                    hash_passwd: None,
+                    github_id: None,
+                    google_id: None,
+                    facebook_id: Some(fb_info.facebook_id.clone()),
+                },
+                UserId::facebook_id(fb_info.facebook_id),
+            ))
+        }
     }
 }
 
@@ -161,5 +177,92 @@ async fn get_google_info(
                 Ok(info)
             }
         }
+    }
+}
+
+#[derive(Deserialize, Debug)]
+#[allow(non_camel_case_types)]
+enum FbInfoToken {
+    error { message: String },
+    data(FbToken),
+}
+
+#[derive(Deserialize, Debug)]
+struct FbToken {
+    app_id: String,
+    is_valid: bool,
+    user_id: String,
+}
+
+#[derive(Deserialize, Debug)]
+#[allow(non_camel_case_types)]
+struct FbInfo {
+    #[serde(rename = "id")]
+    facebook_id: String,
+    #[serde(rename = "name")]
+    display_name: String,
+    email: Option<String>,
+    picture: FbAvtWrapper,
+}
+
+#[derive(Deserialize, Debug)]
+#[allow(non_camel_case_types)]
+struct FbAvtWrapper {
+    data: FbAvt,
+}
+
+#[derive(Deserialize, Debug)]
+#[allow(non_camel_case_types)]
+struct FbAvt {
+    url: String,
+}
+
+async fn get_facebook_info(
+    access_token: &str,
+    state: &State<AppState>,
+) -> Result<FbInfo, String> {
+    let token = reqwest::Client::new()
+        .get("https://graph.facebook.com/v13.0/debug_token")
+        .header("User-Agent", "nourl")
+        .query(&[
+            ("access_token", access_token),
+            ("input_token", access_token),
+        ])
+        .send()
+        .await
+        .map_err(|err| err.to_string())?
+        .json()
+        .await
+        .map_err(|err| err.to_string())?;
+
+    let fb_user_id = match token {
+        FbInfoToken::error { message } => Err(message),
+        FbInfoToken::data(token) => {
+            if token.app_id != state.fb_client_id || !token.is_valid {
+                Err("invalid access token".to_string())
+            } else {
+                Ok(token.user_id)
+            }
+        }
+    }?;
+
+    let fb_info = reqwest::Client::new()
+        .get("https://graph.facebook.com/v13.0/me")
+        .header("User-Agent", "nourl")
+        .query(&[
+            ("access_token", access_token),
+            ("fields", "id,name,picture,email"),
+        ])
+        .send()
+        .await
+        .map_err(|err| err.to_string())?
+        .json::<FbInfo>()
+        .await
+        .map_err(|err| err.to_string())?;
+
+    if fb_info.facebook_id != fb_user_id {
+        Err("unauthorized".to_string())
+    } else {
+        Ok(fb_info)
     }
 }

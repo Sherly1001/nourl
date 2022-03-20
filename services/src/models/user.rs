@@ -9,6 +9,7 @@ pub enum LoginMethod {
     email { email: String, passwd: String },
     github { code: String },
     google { id_token: String },
+    facebook { access_token: String },
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
@@ -20,7 +21,7 @@ pub enum UserId {
     facebook_id(String),
 }
 
-#[derive(Serialize, Deserialize, Queryable, Insertable, Debug)]
+#[derive(Serialize, Deserialize, Queryable, Insertable, Clone, Debug)]
 pub struct User {
     pub id: i64,
     pub display_name: String,
