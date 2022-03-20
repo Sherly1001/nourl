@@ -38,7 +38,21 @@ async fn create_user(
     state: &State<AppState>,
 ) -> Result<String, (Status, String)> {
     let (mut user, uid) = match user_info {
-        Some(user) => (user, UserId::email("".to_string())),
+        Some(user) => (
+            user.clone(),
+            match body_user.method.clone() {
+                LoginMethod::email { email, .. } => UserId::email(email),
+                LoginMethod::google { .. } => {
+                    UserId::google_id(user.google_id.unwrap())
+                }
+                LoginMethod::github { .. } => {
+                    UserId::github_id(user.github_id.unwrap())
+                }
+                LoginMethod::facebook { .. } => {
+                    UserId::facebook_id(user.facebook_id.unwrap())
+                }
+            },
+        ),
         None => user_info::get(user_id, &body_user.method, state)
             .await
             .map_err(|err| (Status::Unauthorized, err))?,
