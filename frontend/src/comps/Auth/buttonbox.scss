@@ -1,0 +1,46 @@
+@import '../../scss';
+
+.modal .modal-content .button-box {
+  @include flex(center, center);
+  margin-bottom: 30px;
+  .button-item {
+    @include flex(center, center);
+    border: 1px solid;
+    border-radius: 15px;
+    width: 60px;
+    font-size: 23px;
+    height: 60px;
+    transition: 0.3s background-color;
+    box-shadow: $box-shadow;
+  }
+  .button-item ~ .button-item {
+    margin-left: 10px;
+  }
+  .signin-facebook {
+    border-color: $facebook-color;
+    .anticon {
+      color: $facebook-color;
+    }
+    &:hover {
+      background-color: #d5dde9;
+    }
+  }
+  .signin-github {
+    border-color: $github-color;
+    .anticon {
+      color: $github-color;
+    }
+    &:hover {
+      background-color: #d6dbe0;
+    }
+  }
+  .signin-google {
+    border-color: $google-color;
+    .anticon {
+      color: $google-color;
+    }
+    &:hover {
+      background-color: #e9d2d0;
+    }
+  }
+}
