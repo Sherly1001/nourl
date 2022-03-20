@@ -1,7 +1,7 @@
 use crate::schema::users;
-use users as user_updates;
 use diesel::{AsChangeset, Insertable, Queryable};
 use serde::{Deserialize, Serialize};
+use users as user_updates;
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
 #[allow(non_camel_case_types)]

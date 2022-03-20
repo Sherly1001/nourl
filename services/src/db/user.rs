@@ -49,3 +49,13 @@ pub fn update(
     let filter = schema::users::table.find(user_id);
     diesel::update(filter).set(user).get_result(conn)
 }
+
+pub fn update_by_email(
+    conn: &DbPool,
+    email: &str,
+    user: &UserUpdate,
+) -> QueryResult<User> {
+    let conn = &get_conn(conn);
+    let filter = schema::users::table.filter(schema::users::email.eq(email));
+    diesel::update(filter).set(user).get_result(conn)
+}

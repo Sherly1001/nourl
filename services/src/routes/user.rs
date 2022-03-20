@@ -37,16 +37,11 @@ async fn create_user(
     db_pool: &State<DbPool>,
     state: &State<AppState>,
 ) -> Result<String, (Status, String)> {
-    let mut user = match user_info {
-        Some(user) => user,
-        None => {
-            let user = user_info::get(user_id, &body_user.method, state).await;
-            if let Err(err) = user {
-                return Err((Status::Unauthorized, err));
-            }
-            let (user, _) = user.unwrap();
-            user
-        }
+    let (mut user, uid) = match user_info {
+        Some(user) => (user, UserId::email("".to_string())),
+        None => user_info::get(user_id, &body_user.method, state)
+            .await
+            .map_err(|err| (Status::Unauthorized, err))?,
     };
 
     if let Some(display_name) = body_user.display_name.clone() {
@@ -79,22 +74,39 @@ async fn create_user(
         Ok(user) => Ok(Auth::new(user.id).token(state.secret_key.as_bytes())),
         Err(err) => {
             let err = err.to_string();
-            let mut res = Err((Status::Unauthorized, err.clone()));
+            let err_clone = err.clone();
 
             if err.contains("users_github_id_unique") {
                 let github_id = user.github_id.unwrap();
                 let user =
                     db::user::find(db_pool, &UserId::github_id(github_id))
                         .unwrap();
-                res = Ok(Auth::new(user.id).token(state.secret_key.as_bytes()));
+                Ok(Auth::new(user.id).token(state.secret_key.as_bytes()))
             } else if err.contains("users_email_unique") {
-                res = Err((
-                    Status::UnprocessableEntity,
-                    "email existed".to_string(),
-                ));
+                if let UserId::email(_) = uid {
+                    Err((
+                        Status::UnprocessableEntity,
+                        "email existed".to_string(),
+                    ))
+                } else {
+                    db::user::update_by_email(
+                        db_pool,
+                        &user.email.unwrap(),
+                        &UserUpdate {
+                            google_id: uid.get_google_id(),
+                            github_id: uid.get_github_id(),
+                            facebook_id: uid.get_facebook_id(),
+                            ..UserUpdate::default()
+                        },
+                    )
+                    .map_err(|err| {
+                        (Status::UnprocessableEntity, err.to_string())
+                    })
+                    .map(|u| Auth::new(u.id).token(state.secret_key.as_bytes()))
+                }
+            } else {
+                Err((Status::Unauthorized, err_clone))
             }
-
-            res
         }
     }
 }
