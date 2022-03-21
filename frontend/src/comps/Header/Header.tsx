@@ -3,7 +3,7 @@ import './header.scss'
 import { logoImg, logoText } from '../../assests/images'
 import { AppContext } from '../../shared/Context/AppProvider'
 import LinkCustom from './LinkCustom'
-import { Outlet } from 'react-router-dom'
+import { Outlet, Link } from 'react-router-dom'
 import SignUp from '../Auth/SignUp'
 import SignIn from '../Auth/SignIn'
 
@@ -22,10 +22,10 @@ const Header = ({}) => {
     <>
       <div className="header">
         <div className="header-inner">
-          <a href="/" className="header-logo">
+          <LinkCustom to="/" className="header-logo">
             <img className="imgLogo" src={logoImg} alt="" />
             <img className="textLogo" src={logoText} alt="" />
-          </a>
+          </LinkCustom>
           <nav className="header-navbar">
             <LinkCustom to="/">Home</LinkCustom>
             <LinkCustom to="/my_url">MyUrls</LinkCustom>
