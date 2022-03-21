@@ -33,7 +33,7 @@
         background-color: $main-color;
         transition: 0.3s width;
       }
-      &.active::after {
+      &.active:after {
         width: 70%;
       }
       &:hover:after {

@@ -15,10 +15,10 @@ const ShowUrl = ({ show, setShow }: ShowFormProps) => {
   return (
     <div className={`show-form ${!show ? 'd-none' : ''}`}>
       <form className="form" onSubmit={handleShowCustomForm}>
-        <label htmlFor="url">Your long URL</label>
+        <label>Your long URL</label>
         <input type="url" value="http://localhost:8080/" disabled />
-        <label htmlFor="code">Your shortened URL</label>
-        <input type="text" id="code" value="http://localhost:8080/" disabled />
+        <label>Your shortened URL</label>
+        <input type="text" value="http://localhost:8080/" disabled />
         <div className="button-box">
           <button className="myurl-button">My URLs</button>
           <button className="return-button">Shorten another</button>

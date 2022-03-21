@@ -18,28 +18,31 @@
     }
     table {
       width: 100%;
-      border-collapse: collapse;
-      td,
-      th {
-        padding: 15px 20px;
-        text-align: start;
-        vertical-align: center;
-      }
-      th {
-        background-color: #dddddd;
-        font-size: 18px;
-        font-weight: 500;
-      }
-      td {
-        border-bottom: 1px solid #dddddd;
-      }
-      th:first-child {
-        border-bottom-left-radius: 5px;
-        border-top-left-radius: 5px;
-      }
-      th:last-child {
-        border-bottom-right-radius: 5px;
-        border-top-right-radius: 5px;
+      tbody {
+        width: 100%;
+        border-collapse: collapse;
+        td,
+        th {
+          padding: 15px 20px;
+          text-align: start;
+          vertical-align: center;
+        }
+        th {
+          background-color: #dddddd;
+          font-size: 18px;
+          font-weight: 500;
+        }
+        td {
+          border-bottom: 1px solid #dddddd;
+        }
+        th:first-child {
+          border-bottom-left-radius: 5px;
+          border-top-left-radius: 5px;
+        }
+        th:last-child {
+          border-bottom-right-radius: 5px;
+          border-top-right-radius: 5px;
+        }
       }
     }
   }

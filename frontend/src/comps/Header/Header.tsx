@@ -22,13 +22,13 @@ const Header = ({}) => {
     <>
       <div className="header">
         <div className="header-inner">
-          <div className="header-logo">
+          <a href="/" className="header-logo">
             <img className="imgLogo" src={logoImg} alt="" />
             <img className="textLogo" src={logoText} alt="" />
-          </div>
+          </a>
           <nav className="header-navbar">
             <LinkCustom to="/">Home</LinkCustom>
-            <LinkCustom to="/my_url">MyUrl</LinkCustom>
+            <LinkCustom to="/my_url">MyUrls</LinkCustom>
           </nav>
           <div className="header-button">
             <button
