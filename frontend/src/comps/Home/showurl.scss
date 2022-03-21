@@ -27,19 +27,35 @@
     color: #ff0000;
     height: 20px;
   }
-  .return-button {
-    box-shadow: $box-shadow;
-    border-radius: 30px;
-    transition: 0.3s background-color;
-    color: #fff;
-    font-size: 18px;
-    width: 100%;
-    margin-bottom: 20px;
-    margin-top: 15px;
-    padding-block: 20px;
-    background-color: $main-color;
-    &:hover {
-      background-color: $second-color;
+  .button-box {
+    @include flex(center, center);
+    margin-block: 20px;
+    .myurl-button,
+    .return-button {
+      flex: 50%;
+      font-size: 18px;
+      box-shadow: $box-shadow;
+      border-radius: 30px;
+      padding-block: 20px;
+    }
+    .myurl-button {
+      transition: 0.3s all;
+      color: $main-color;
+      border: 1px solid $main-color;
+      background-color: $white;
+      &:hover {
+        background-color: $main-color;
+        color: $white;
+      }
+      margin-right: 20px;
+    }
+    .return-button {
+      transition: 0.3s background-color;
+      color: #fff;
+      background-color: $main-color;
+      &:hover {
+        background-color: $second-color;
+      }
     }
   }
 }

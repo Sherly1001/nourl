@@ -1,5 +1,5 @@
 import './urlcustom.scss'
-import { customText } from '../../assests/images'
+import { textHeader } from '../../assests/images'
 import { CheckOutlined } from '@ant-design/icons'
 import CustomForm from './CustomForm'
 import ShowUrl from './ShowUrl'
@@ -10,7 +10,7 @@ const UrlCustom = () => {
 
   return (
     <div className="custom">
-      <img src={customText} alt="" />
+      <img src={textHeader} alt="" />
       <div className="custom-content">
         <CustomForm show={showCustomForm} setShow={setShowCustomForm} />
         <ShowUrl show={showCustomForm} setShow={setShowCustomForm} />

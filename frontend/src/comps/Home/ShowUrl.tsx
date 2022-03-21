@@ -19,9 +19,12 @@ const ShowUrl = ({ show, setShow }: ShowFormProps) => {
         <input type="url" value="http://localhost:8080/" disabled />
         <label htmlFor="code">Your shortened URL</label>
         <input type="text" id="code" value="http://localhost:8080/" disabled />
-        <button className="return-button" onClick={handleShowCustomForm}>
-          Shorten another
-        </button>
+        <div className="button-box">
+          <button className="myurl-button">My URLs</button>
+          <button className="return-button" onClick={handleShowCustomForm}>
+            Shorten another
+          </button>
+        </div>
       </form>
     </div>
   )
