@@ -7,14 +7,11 @@
   }
   &-logo {
     @include flex(center, center);
-    img {
+    .imgLogo {
       width: 40px;
-      margin-right: 5px;
     }
-    h2 {
-      font-family: $logo-font;
-      font-size: 30px;
-      color: $main-color;
+    .textLogo {
+      width: 100px;
     }
   }
   &-navbar {

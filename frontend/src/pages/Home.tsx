@@ -1,5 +1,7 @@
+import UrlCustom from '../comps/Home/UrlCustom'
+
 const Home = () => {
-  return <div>Hi</div>
+  return <UrlCustom />
 }
 
 export default Home

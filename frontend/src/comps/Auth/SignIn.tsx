@@ -1,7 +1,8 @@
 import { useContext } from 'react'
 import { AppContext } from '../../shared/Context/AppProvider'
-import Modal from './Modal'
+import Modal from '../Modal/Modal'
 import ButtonBox from './ButtonBox'
+import './style.scss'
 
 const SignIn = () => {
   const { isSigniModalVisible, setSigninModalVisible, setSignupModalVisible } =
@@ -24,17 +25,17 @@ const SignIn = () => {
         like save or edit your urls.
       </p>
       <form className="form">
-        <label htmlFor="email">Email address</label>
+        <label htmlFor="email-signin">Email address</label>
         <input
           type="email"
-          id="email"
+          id="email-signin"
           placeholder="Enter your email"
           required
         />
-        <label htmlFor="passwd">Password</label>
+        <label htmlFor="passwd-signin">Password</label>
         <input
           type="password"
-          id="passwd"
+          id="passwd-signin"
           placeholder="Enter your password"
           required
         />

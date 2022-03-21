@@ -1,0 +1,45 @@
+@import '../../scss';
+
+.custom .show-form {
+  flex: 50%;
+  flex-shrink: 0;
+  padding: 20px;
+  background-color: $white;
+  box-shadow: $box-shadow;
+  border-radius: 10px;
+  label {
+    display: block;
+    text-align: start;
+    font-weight: 500;
+    margin-block: 10px;
+  }
+  input {
+    padding: 20px 10px;
+    border-radius: 15px;
+    width: 100%;
+    border: 1px solid #e7e7e7;
+    background-color: $white !important;
+    font-size: 16px;
+    margin-bottom: 10px;
+    cursor: text;
+  }
+  .error {
+    color: #ff0000;
+    height: 20px;
+  }
+  .return-button {
+    box-shadow: $box-shadow;
+    border-radius: 30px;
+    transition: 0.3s background-color;
+    color: #fff;
+    font-size: 18px;
+    width: 100%;
+    margin-bottom: 20px;
+    margin-top: 15px;
+    padding-block: 20px;
+    background-color: $main-color;
+    &:hover {
+      background-color: $second-color;
+    }
+  }
+}
