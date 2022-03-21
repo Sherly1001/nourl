@@ -8,22 +8,15 @@ use sha2::{Digest, Sha256};
 
 use crate::{
     auth::{user_info, Auth},
-    config::{get_conn, AppState, DbPool},
+    config::{AppState, DbPool},
     db,
     errors::{JBody, JError, JRes, Res},
-    models::{
-        self,
-        user::{LoginMethod, UserId},
-    },
+    models::user::{LoginMethod, User, UserDisplay, UserId, UserUpdate},
 };
 
 #[rocket::get("/info")]
-pub fn get(
-    auth: Auth,
-    db_pool: &State<DbPool>,
-) -> JRes<models::user::UserDisplay> {
-    let db = get_conn(db_pool);
-    match db::user::get(&db, auth.user_id).map_err(|err| err.to_string()) {
+pub fn get(auth: Auth, db_pool: &State<DbPool>) -> JRes<UserDisplay> {
+    match db::user::get(db_pool, auth.user_id).map_err(|err| err.to_string()) {
         Ok(user) => Res::ok(user.to_user_display()),
         Err(err) => Res::err(Status::Unauthorized, err.to_string()),
     }
@@ -31,53 +24,58 @@ pub fn get(
 
 #[derive(Serialize, Deserialize, Debug)]
 #[allow(non_camel_case_types)]
-pub struct BodyUser {
+pub struct UserBody {
     display_name: Option<String>,
     avatar_url: Option<String>,
     method: LoginMethod,
 }
 
-#[rocket::post("/create", data = "<user>")]
-pub async fn create<'r>(
-    user: JBody<'r, BodyUser>,
+async fn create_user(
+    user_id: i64,
+    body_user: &UserBody,
+    user_info: Option<User>,
     db_pool: &State<DbPool>,
     state: &State<AppState>,
-) -> JRes<String> {
-    if let Err(err) = user {
-        let err = match err {
-            JError::Io(err) => err.to_string(),
-            JError::Parse(_raw, err) => err.to_string(),
-        };
-        return Res::err(Status::UnprocessableEntity, err);
-    }
-    let db = get_conn(db_pool);
-    let user_id = state.idgen.lock().unwrap().new();
+) -> Result<String, (Status, String)> {
+    let (mut user, uid) = match user_info {
+        Some(user) => (
+            user.clone(),
+            match body_user.method.clone() {
+                LoginMethod::email { email, .. } => UserId::email(email),
+                LoginMethod::google { .. } => {
+                    UserId::google_id(user.google_id.unwrap())
+                }
+                LoginMethod::github { .. } => {
+                    UserId::github_id(user.github_id.unwrap())
+                }
+                LoginMethod::facebook { .. } => {
+                    UserId::facebook_id(user.facebook_id.unwrap())
+                }
+            },
+        ),
+        None => user_info::get(user_id, &body_user.method, state)
+            .await
+            .map_err(|err| (Status::Unauthorized, err))?,
+    };
 
-    let body_user = user.unwrap().0;
-    let user = user_info::get(user_id, &body_user.method, state).await;
-    if let Err(err) = user {
-        return Res::err(Status::Unauthorized, err);
-    }
-    let mut user = user.unwrap();
-
-    if let Some(display_name) = body_user.display_name {
+    if let Some(display_name) = body_user.display_name.clone() {
         user.display_name = display_name;
     }
-    if let Some(avatar_url) = body_user.avatar_url {
+    if let Some(avatar_url) = body_user.avatar_url.clone() {
         user.avatar_url = Some(avatar_url);
     }
-    if let LoginMethod::email { email, passwd } = body_user.method {
+    if let LoginMethod::email { email, passwd } = body_user.method.clone() {
         if email == "" {
-            return Res::err(
+            return Err((
                 Status::UnprocessableEntity,
                 "email is empty".to_string(),
-            );
+            ));
         }
         if passwd == "" {
-            return Res::err(
+            return Err((
                 Status::UnprocessableEntity,
                 "passwd is empty".to_string(),
-            );
+            ));
         }
 
         user.hash_passwd = Some(hash_with_key(
@@ -86,34 +84,50 @@ pub async fn create<'r>(
         ));
     }
 
-    match db::user::create(&db, &user).map_err(|err| err.to_string()) {
-        Ok(user) => {
-            Res::ok(Auth::new(user.id).token(state.secret_key.as_bytes()))
-        }
+    match db::user::create(db_pool, &user).map_err(|err| err.to_string()) {
+        Ok(user) => Ok(Auth::new(user.id).token(state.secret_key.as_bytes())),
         Err(err) => {
             let err = err.to_string();
-            let mut res = Err(err.clone());
+            let err_clone = err.clone();
 
             if err.contains("users_github_id_unique") {
                 let github_id = user.github_id.unwrap();
                 let user =
-                    db::user::find(&db, &UserId::github_id(github_id)).unwrap();
-                res = Ok(Auth::new(user.id).token(state.secret_key.as_bytes()));
+                    db::user::find(db_pool, &UserId::github_id(github_id))
+                        .unwrap();
+                Ok(Auth::new(user.id).token(state.secret_key.as_bytes()))
             } else if err.contains("users_email_unique") {
-                res = Err("email existed".to_string());
-            }
-
-            match res {
-                Err(err) => Res::err(Status::Unauthorized, err),
-                Ok(token) => Res::ok(token),
+                if let UserId::email(_) = uid {
+                    Err((
+                        Status::UnprocessableEntity,
+                        "email existed".to_string(),
+                    ))
+                } else {
+                    db::user::update_by_email(
+                        db_pool,
+                        &user.email.unwrap(),
+                        &UserUpdate {
+                            google_id: uid.get_google_id(),
+                            github_id: uid.get_github_id(),
+                            facebook_id: uid.get_facebook_id(),
+                            ..UserUpdate::default()
+                        },
+                    )
+                    .map_err(|err| {
+                        (Status::UnprocessableEntity, err.to_string())
+                    })
+                    .map(|u| Auth::new(u.id).token(state.secret_key.as_bytes()))
+                }
+            } else {
+                Err((Status::Unauthorized, err_clone))
             }
         }
     }
 }
 
-#[rocket::post("/login", data = "<user>")]
-pub async fn login<'r>(
-    user: JBody<'r, BodyUser>,
+#[rocket::post("/create", data = "<user>")]
+pub async fn create<'r>(
+    user: JBody<'r, UserBody>,
     db_pool: &State<DbPool>,
     state: &State<AppState>,
 ) -> JRes<String> {
@@ -124,23 +138,38 @@ pub async fn login<'r>(
         };
         return Res::err(Status::UnprocessableEntity, err);
     }
-    let db = get_conn(db_pool);
+    let user_id = state.idgen.lock().unwrap().new();
+
+    let body_user = user.unwrap().0;
+    match create_user(user_id, &body_user, None, db_pool, state).await {
+        Ok(token) => Res::ok(token),
+        Err((code, err)) => Res::err(code, err),
+    }
+}
+
+#[rocket::post("/login", data = "<user>")]
+pub async fn login<'r>(
+    user: JBody<'r, UserBody>,
+    db_pool: &State<DbPool>,
+    state: &State<AppState>,
+) -> JRes<String> {
+    if let Err(err) = user {
+        let err = match err {
+            JError::Io(err) => err.to_string(),
+            JError::Parse(_raw, err) => err.to_string(),
+        };
+        return Res::err(Status::UnprocessableEntity, err);
+    }
 
     let user = user.unwrap().0;
-    let id = match &user.method {
-        LoginMethod::email { email, passwd: _ } => UserId::email(email.clone()),
-        github_code @ LoginMethod::github { code: _ } => {
-            match user_info::get(0, &github_code, state).await {
-                Ok(user) => UserId::github_id(user.github_id.unwrap()),
-                Err(err) => {
-                    return Res::err(Status::Unauthorized, err.to_string())
-                }
-            }
-        }
-        LoginMethod::google { id_token } => UserId::google_id(id_token.clone()),
-    };
+    let user_id = state.idgen.lock().unwrap().new();
+    let (user_info, user_id) =
+        match user_info::get(user_id, &user.method, state).await {
+            Ok(info) => info,
+            Err(err) => return Res::err(Status::Unauthorized, err.to_string()),
+        };
 
-    match db::user::find(&db, &id) {
+    match db::user::find(db_pool, &user_id) {
         Ok(u) => match user.method {
             LoginMethod::email { email: _, passwd } => {
                 let hash_passwd = Some(hash_with_key(
@@ -159,7 +188,88 @@ pub async fn login<'r>(
             }
             _ => Res::ok(Auth::new(u.id).token(state.secret_key.as_bytes())),
         },
-        Err(_) => Res::err(Status::Unauthorized, "not found".to_string()),
+        Err(_) => {
+            if let LoginMethod::email {
+                email: _,
+                passwd: _,
+            } = user.method
+            {
+                Res::err(
+                    Status::Unauthorized,
+                    "email or password not matched".to_string(),
+                )
+            } else {
+                let user_id = state.idgen.lock().unwrap().new();
+                match create_user(
+                    user_id,
+                    &user,
+                    Some(user_info),
+                    db_pool,
+                    state,
+                )
+                .await
+                {
+                    Ok(token) => Res::ok(token),
+                    Err((code, err)) => Res::err(code, err),
+                }
+            }
+        }
+    }
+}
+
+#[derive(Deserialize, Serialize, Debug)]
+pub struct UserUpdateBody {
+    #[serde(default)]
+    pub old_passwd: String,
+    pub info: UserUpdate,
+}
+
+#[rocket::put("/update", data = "<user_update>")]
+pub async fn update<'r>(
+    auth: Auth,
+    user_update: JBody<'r, UserUpdateBody>,
+    db_pool: &State<DbPool>,
+    state: &State<AppState>,
+) -> JRes<UserDisplay> {
+    let user_update = match user_update {
+        Ok(user) => user,
+        Err(err) => {
+            let err = match err {
+                JError::Io(err) => err.to_string(),
+                JError::Parse(_raw, err) => err.to_string(),
+            };
+            return Res::err(Status::UnprocessableEntity, err);
+        }
+    };
+    let user = match db::user::get(db_pool, auth.user_id) {
+        Ok(user) => user,
+        Err(err) => return Res::err(Status::Unauthorized, err.to_string()),
+    };
+
+    if let Some(hash_passwd) = user.hash_passwd.clone() {
+        if hash_with_key(
+            state.secret_key.as_bytes(),
+            user_update.old_passwd.as_bytes(),
+        ) != hash_passwd
+        {
+            return Res::err(
+                Status::Unauthorized,
+                "old password not matched".to_string(),
+            );
+        }
+    }
+
+    let mut info = user_update.info.clone();
+    if let Some(passwd) = info.hash_passwd {
+        info.hash_passwd = Some(hash_with_key(
+            state.secret_key.as_bytes(),
+            passwd.as_bytes(),
+        ));
+    }
+
+    match db::user::update(db_pool, user.id, &info) {
+        Ok(user) => Res::ok(user.to_user_display()),
+        Err(err) => Res::err(Status::UnprocessableEntity, err.to_string()),
     }
 }
 

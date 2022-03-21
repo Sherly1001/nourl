@@ -8,6 +8,7 @@ use rustflake::Snowflake;
 
 #[derive(Clone)]
 pub struct DbPool(pub r2d2::Pool<ConnectionManager<PgConnection>>);
+pub type DbPooled = PooledConnection<ConnectionManager<PgConnection>>;
 
 impl std::fmt::Debug for DbPool {
     fn fmt(&self, _f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
@@ -45,6 +46,8 @@ pub struct AppState {
     pub secret_key: String,
     pub gh_client_id: String,
     pub gh_client_secret: String,
+    pub gg_client_id: String,
+    pub fb_client_id: String,
     pub idgen: Arc<Mutex<IdGen>>,
 }
 
@@ -65,6 +68,8 @@ pub fn from_env() -> Config {
     let gh_client_id = env::var("GH_CLIENT_ID").expect("GH_CLIENT_ID");
     let gh_client_secret =
         env::var("GH_CLIENT_SECRET").expect("GH_CLIENT_SECRET");
+    let gg_client_id = env::var("GG_CLIENT_ID").expect("GG_CLIENT_ID");
+    let fb_client_id = env::var("FB_CLIENT_ID").expect("FB_CLIENT_ID");
 
     let pool_size = env::var("DATABASE_POOL_SIZE")
         .unwrap_or(10u8.to_string())
@@ -106,6 +111,8 @@ pub fn from_env() -> Config {
         secret_key,
         gh_client_id,
         gh_client_secret,
+        gg_client_id,
+        fb_client_id,
         idgen,
     };
 
@@ -116,9 +123,7 @@ pub fn from_env() -> Config {
     }
 }
 
-pub fn get_conn(
-    pool: &rocket::State<DbPool>,
-) -> PooledConnection<ConnectionManager<PgConnection>> {
+pub fn get_conn(pool: &DbPool) -> DbPooled {
     loop {
         match pool.get_timeout(std::time::Duration::from_secs(3)) {
             Ok(conn) => break conn,
