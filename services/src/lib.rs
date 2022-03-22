@@ -32,11 +32,6 @@ fn c500() -> JRes<u8> {
     )
 }
 
-#[rocket::get("/err")]
-fn err() -> JRes<u8> {
-    Res::err(Status::UnprocessableEntity, "toang".to_string())
-}
-
 #[rocket::main]
 pub async fn run() {
     dotenv::dotenv().ok();
@@ -56,7 +51,16 @@ pub async fn run() {
                 routes::user::update,
             ],
         )
-        .mount("/api/urls", routes![err])
+        .mount(
+            "/api/urls",
+            routes![
+                routes::url::get,
+                routes::url::get_all,
+                routes::url::create,
+                routes::url::update,
+                routes::url::delete,
+            ],
+        )
         .register("/", catchers![not_found, c401, c500])
         .launch()
         .await
