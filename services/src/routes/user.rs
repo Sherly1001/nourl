@@ -96,6 +96,18 @@ async fn create_user(
                     db::user::find(db_pool, &UserId::github_id(github_id))
                         .unwrap();
                 Ok(user)
+            } else if err.contains("users_google_id_unique") {
+                let google_id = user.google_id.unwrap();
+                let user =
+                    db::user::find(db_pool, &UserId::google_id(google_id))
+                        .unwrap();
+                Ok(user)
+            } else if err.contains("users_facebook_id_unique") {
+                let facebook_id = user.facebook_id.unwrap();
+                let user =
+                    db::user::find(db_pool, &UserId::facebook_id(facebook_id))
+                        .unwrap();
+                Ok(user)
             } else if err.contains("users_email_unique") {
                 if let UserId::email(_) = uid {
                     Err((
