@@ -4,6 +4,7 @@ import MyUrls from './pages/MyUrls'
 import NoPage from './pages/NoPage'
 import { Routes, Route } from 'react-router-dom'
 import Header from './comps/Header/Header'
+import { observer } from 'mobx-react-lite'
 
 const App = () => {
   return (
@@ -21,4 +22,4 @@ const App = () => {
   )
 }
 
-export default App
+export default observer(App)

@@ -1,6 +1,7 @@
 import { ReactNode, useRef } from 'react'
 import './modal.scss'
 import { CloseCircleOutlined } from '@ant-design/icons'
+import { observer } from 'mobx-react-lite'
 
 interface ModalProps {
   children: ReactNode
@@ -13,11 +14,11 @@ const Modal = ({ children, visible, setVisible, className }: ModalProps) => {
   const modalOverlay = useRef<HTMLDivElement>(null)
 
   function handleCloseModal() {
-    setVisible(false)
+    setVisible()
   }
 
   function handleClickOverlay() {
-    setVisible(false)
+    setVisible()
   }
 
   return (
@@ -37,4 +38,4 @@ const Modal = ({ children, visible, setVisible, className }: ModalProps) => {
   )
 }
 
-export default Modal
+export default observer(Modal)

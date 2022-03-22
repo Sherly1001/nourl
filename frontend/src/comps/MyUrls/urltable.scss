@@ -18,30 +18,42 @@
     }
     table {
       width: 100%;
+      border-spacing: 0;
       tbody {
         width: 100%;
         border-collapse: collapse;
+        tr {
+          transition: 0.2s all;
+        }
         td,
         th {
           padding: 15px 20px;
           text-align: start;
-          vertical-align: center;
+          vertical-align: middle;
+        }
+        tr:first-child {
+          background-color: #dddddd;
         }
         th {
-          background-color: #dddddd;
           font-size: 18px;
           font-weight: 500;
         }
         td {
           border-bottom: 1px solid #dddddd;
         }
-        th:first-child {
+        th:first-child,
+        tr td:first-child {
           border-bottom-left-radius: 5px;
           border-top-left-radius: 5px;
         }
-        th:last-child {
+        th:last-child,
+        tr td:last-child {
           border-bottom-right-radius: 5px;
           border-top-right-radius: 5px;
+        }
+        tr:not(:first-child):hover {
+          box-shadow: $box-shadow;
+          background-color: #f7f9fc;
         }
       }
     }

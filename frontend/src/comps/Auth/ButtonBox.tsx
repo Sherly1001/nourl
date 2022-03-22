@@ -4,19 +4,31 @@ import {
   GithubOutlined,
   FacebookOutlined,
 } from '@ant-design/icons'
+import FacebookLogin from 'react-facebook-login'
 
 const ButtonBox = () => {
+  function responseFacebook(response: Object) {
+    console.log(response)
+  }
+
   return (
     <div className="button-box">
-      <a href="#" className="signin-google button-item">
+      <span className="signin-google button-item">
         <GooglePlusOutlined />
-      </a>
-      <a href="#" className="signin-github button-item">
+      </span>
+      <span className="signin-github button-item">
         <GithubOutlined />
-      </a>
-      <a href="#" className="signin-facebook button-item">
-        <FacebookOutlined />
-      </a>
+      </span>
+      <FacebookLogin
+        appId={import.meta.env.VITE_FB_CLIENT_ID as string}
+        autoLoad={true}
+        fields="name,email,picture"
+        callback={responseFacebook}
+        redirectUri="localhost:8080"
+        cssClass="signin-facebook button-item"
+        icon={<FacebookOutlined />}
+        textButton=""
+      />
     </div>
   )
 }

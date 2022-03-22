@@ -13,11 +13,12 @@
     transition: 0.3s background-color;
     box-shadow: $box-shadow;
   }
-  .button-item ~ .button-item {
+  span ~ span {
     margin-left: 10px;
   }
   .signin-facebook {
     border-color: $facebook-color;
+    background-color: $white;
     .anticon {
       color: $facebook-color;
     }

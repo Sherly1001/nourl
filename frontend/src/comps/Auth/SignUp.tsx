@@ -1,22 +1,21 @@
-import { useContext } from 'react'
-import { AppContext } from '../../shared/Context/AppProvider'
+import './style.scss'
 import Modal from '../Modal/Modal'
 import ButtonBox from './ButtonBox'
-import './style.scss'
+import useStores from '../../stores'
+import { observer } from 'mobx-react-lite'
 
 const SignUp = () => {
-  const { isSignupModalVisible, setSignupModalVisible, setSigninModalVisible } =
-    useContext(AppContext)
+  const { appStore } = useStores()
 
   function handleSigninModalOpen() {
-    setSignupModalVisible(false)
-    setSigninModalVisible(true)
+    appStore.setSignupModalVisible(false)
+    appStore.setSigninModalVisible(true)
   }
 
   return (
     <Modal
-      visible={isSignupModalVisible}
-      setVisible={setSignupModalVisible}
+      visible={appStore.isSignupModalVisible}
+      setVisible={appStore.setSignupModalVisible}
       className="signup"
     >
       <h2>Sign up</h2>
@@ -51,4 +50,4 @@ const SignUp = () => {
   )
 }
 
-export default SignUp
+export default observer(SignUp)

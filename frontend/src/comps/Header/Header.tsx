@@ -1,21 +1,20 @@
-import { useContext } from 'react'
 import './header.scss'
 import { logoImg, logoText } from '../../assests/images'
-import { AppContext } from '../../shared/Context/AppProvider'
 import LinkCustom from './LinkCustom'
-import { Outlet, Link } from 'react-router-dom'
+import { Outlet } from 'react-router-dom'
 import SignUp from '../Auth/SignUp'
 import SignIn from '../Auth/SignIn'
+import useStores from '../../stores'
+import { observer } from 'mobx-react-lite'
 
 const Header = ({}) => {
-  const { setSigninModalVisible, setSignupModalVisible } =
-    useContext(AppContext)
+  const { appStore } = useStores()
 
   function handleSigninModalVisible() {
-    setSigninModalVisible(true)
+    appStore.setSigninModalVisible(true)
   }
   function handleSignupModalVisible() {
-    setSignupModalVisible(true)
+    appStore.setSignupModalVisible(true)
   }
 
   return (
@@ -53,4 +52,4 @@ const Header = ({}) => {
   )
 }
 
-export default Header
+export default observer(Header)
