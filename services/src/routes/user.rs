@@ -36,7 +36,7 @@ async fn create_user(
     user_info: Option<User>,
     db_pool: &State<DbPool>,
     state: &State<AppState>,
-) -> Result<String, (Status, String)> {
+) -> Result<User, (Status, String)> {
     let (mut user, uid) = match user_info {
         Some(user) => (
             user.clone(),
@@ -85,7 +85,7 @@ async fn create_user(
     }
 
     match db::user::create(db_pool, &user).map_err(|err| err.to_string()) {
-        Ok(user) => Ok(Auth::new(user.id).token(state.secret_key.as_bytes())),
+        Ok(user) => Ok(user),
         Err(err) => {
             let err = err.to_string();
             let err_clone = err.clone();
@@ -95,7 +95,7 @@ async fn create_user(
                 let user =
                     db::user::find(db_pool, &UserId::github_id(github_id))
                         .unwrap();
-                Ok(Auth::new(user.id).token(state.secret_key.as_bytes()))
+                Ok(user)
             } else if err.contains("users_email_unique") {
                 if let UserId::email(_) = uid {
                     Err((
@@ -116,7 +116,6 @@ async fn create_user(
                     .map_err(|err| {
                         (Status::UnprocessableEntity, err.to_string())
                     })
-                    .map(|u| Auth::new(u.id).token(state.secret_key.as_bytes()))
                 }
             } else {
                 Err((Status::Unauthorized, err_clone))
@@ -125,12 +124,18 @@ async fn create_user(
     }
 }
 
+#[derive(Serialize, Debug)]
+pub struct UserRes {
+    token: String,
+    info: UserDisplay,
+}
+
 #[rocket::post("/create", data = "<user>")]
 pub async fn create<'r>(
     user: JBody<'r, UserBody>,
     db_pool: &State<DbPool>,
     state: &State<AppState>,
-) -> JRes<String> {
+) -> JRes<UserRes> {
     if let Err(err) = user {
         let err = match err {
             JError::Io(err) => err.to_string(),
@@ -142,7 +147,10 @@ pub async fn create<'r>(
 
     let body_user = user.unwrap().0;
     match create_user(user_id, &body_user, None, db_pool, state).await {
-        Ok(token) => Res::ok(token),
+        Ok(user) => Res::ok(UserRes {
+            token: Auth::new(user.id).token(state.secret_key.as_bytes()),
+            info: user.to_user_display(),
+        }),
         Err((code, err)) => Res::err(code, err),
     }
 }
@@ -152,7 +160,7 @@ pub async fn login<'r>(
     user: JBody<'r, UserBody>,
     db_pool: &State<DbPool>,
     state: &State<AppState>,
-) -> JRes<String> {
+) -> JRes<UserRes> {
     if let Err(err) = user {
         let err = match err {
             JError::Io(err) => err.to_string(),
@@ -178,7 +186,11 @@ pub async fn login<'r>(
                 ));
 
                 if u.hash_passwd == hash_passwd {
-                    Res::ok(Auth::new(u.id).token(state.secret_key.as_bytes()))
+                    Res::ok(UserRes {
+                        token: Auth::new(u.id)
+                            .token(state.secret_key.as_bytes()),
+                        info: u.to_user_display(),
+                    })
                 } else {
                     Res::err(
                         Status::Unauthorized,
@@ -186,7 +198,10 @@ pub async fn login<'r>(
                     )
                 }
             }
-            _ => Res::ok(Auth::new(u.id).token(state.secret_key.as_bytes())),
+            _ => Res::ok(UserRes {
+                token: Auth::new(u.id).token(state.secret_key.as_bytes()),
+                info: u.to_user_display(),
+            }),
         },
         Err(_) => {
             if let LoginMethod::email {
@@ -209,7 +224,11 @@ pub async fn login<'r>(
                 )
                 .await
                 {
-                    Ok(token) => Res::ok(token),
+                    Ok(user) => Res::ok(UserRes {
+                        token: Auth::new(user.id)
+                            .token(state.secret_key.as_bytes()),
+                        info: user.to_user_display(),
+                    }),
                     Err((code, err)) => Res::err(code, err),
                 }
             }
