@@ -61,6 +61,7 @@ pub async fn run() {
                 routes::url::delete,
             ],
         )
+        .mount("/", routes![routes::url::go])
         .register("/", catchers![not_found, c401, c500])
         .launch()
         .await

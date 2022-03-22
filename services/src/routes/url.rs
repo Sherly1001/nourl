@@ -1,4 +1,4 @@
-use rocket::{http::Status, serde::Deserialize, State};
+use rocket::{http::Status, response::Redirect, serde::Deserialize, State};
 
 use crate::{
     auth::Auth,
@@ -192,5 +192,19 @@ pub fn delete(auth: Auth, code: String, db_pool: &State<DbPool>) -> JRes<()> {
             Ok(_) => Res::ok(()),
             Err(err) => Res::err(Status::UnprocessableEntity, err.to_string()),
         }
+    }
+}
+
+#[rocket::get("/<code>")]
+pub fn go(
+    code: String,
+    db_pool: &State<DbPool>,
+    state: &State<AppState>,
+) -> Redirect {
+    match db::url::get(db_pool, &code) {
+        Err(_) => {
+            Redirect::moved(format!("{}/{}", state.frontend_notfound_uri, code))
+        }
+        Ok(url) => Redirect::moved(url.url),
     }
 }
