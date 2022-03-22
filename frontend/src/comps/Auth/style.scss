@@ -27,7 +27,7 @@
         border: 1px solid #e7e7e7;
         background-color: $white !important;
         font-size: 16px;
-        margin-bottom: 10px;
+        margin-bottom: 5px;
       }
       .signup-button,
       .signin-button {
@@ -38,12 +38,16 @@
         font-size: 18px;
         width: 100%;
         margin-bottom: 20px;
-        margin-top: 10px;
+        margin-top: 15px;
         padding-block: 20px;
         background-color: $main-color;
         &:hover {
           background-color: $second-color;
         }
+      }
+      .error {
+        height: 20px;
+        color: red;
       }
     }
     .signin span,
