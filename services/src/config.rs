@@ -10,37 +10,6 @@ use rustflake::Snowflake;
 pub struct DbPool(pub r2d2::Pool<ConnectionManager<PgConnection>>);
 pub type DbPooled = PooledConnection<ConnectionManager<PgConnection>>;
 
-impl std::fmt::Debug for DbPool {
-    fn fmt(&self, _f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        Ok(())
-    }
-}
-
-impl std::ops::Deref for DbPool {
-    type Target = r2d2::Pool<ConnectionManager<PgConnection>>;
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-
-pub struct IdGen(Snowflake);
-
-impl IdGen {
-    pub fn init(epoch: i64, worker: i64, process: i64) -> Self {
-        Self(Snowflake::new(epoch, worker, process))
-    }
-
-    pub fn new(&mut self) -> i64 {
-        self.0.generate()
-    }
-}
-
-impl std::fmt::Debug for IdGen {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "IdGen()")
-    }
-}
-
 #[derive(Debug, Clone)]
 pub struct AppState {
     pub secret_key: String,
@@ -48,6 +17,7 @@ pub struct AppState {
     pub gh_client_secret: String,
     pub gg_client_id: String,
     pub fb_client_id: String,
+    pub frontend_notfound_uri: String,
     pub idgen: Arc<Mutex<IdGen>>,
 }
 
@@ -71,6 +41,8 @@ pub fn from_env() -> Config {
     let gg_client_id = env::var("GG_CLIENT_ID").expect("GG_CLIENT_ID");
     let fb_client_id = env::var("FB_CLIENT_ID").expect("FB_CLIENT_ID");
 
+    let frontend_notfound_uri =
+        env::var("FRONTEND_NOTFOUND_URI").unwrap_or("/".to_string());
     let pool_size = env::var("DATABASE_POOL_SIZE")
         .unwrap_or(10u8.to_string())
         .parse()
@@ -113,6 +85,7 @@ pub fn from_env() -> Config {
         gh_client_secret,
         gg_client_id,
         fb_client_id,
+        frontend_notfound_uri,
         idgen,
     };
 
@@ -129,5 +102,36 @@ pub fn get_conn(pool: &DbPool) -> DbPooled {
             Ok(conn) => break conn,
             _ => continue,
         }
+    }
+}
+
+impl std::fmt::Debug for DbPool {
+    fn fmt(&self, _f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        Ok(())
+    }
+}
+
+impl std::ops::Deref for DbPool {
+    type Target = r2d2::Pool<ConnectionManager<PgConnection>>;
+    fn deref(&self) -> &Self::Target {
+        &self.0
+    }
+}
+
+pub struct IdGen(Snowflake);
+
+impl IdGen {
+    pub fn init(epoch: i64, worker: i64, process: i64) -> Self {
+        Self(Snowflake::new(epoch, worker, process))
+    }
+
+    pub fn new(&mut self) -> i64 {
+        self.0.generate()
+    }
+}
+
+impl std::fmt::Debug for IdGen {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "IdGen()")
     }
 }
