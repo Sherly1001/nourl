@@ -9,3 +9,10 @@ export interface User {
   google_id?: string
   facebook_id?: string
 }
+
+export interface Url {
+  id: string
+  code: string
+  url: string
+  owner: string
+}

@@ -1,7 +1,6 @@
 import { User, Nullable } from '../shared/interfaces/index'
 import { makeAutoObservable } from 'mobx'
 import AuthService from '../services/AuthService'
-import UserService from '../services/UserService'
 
 class AuthStore {
   isAuth = false
@@ -18,14 +17,10 @@ class AuthStore {
 
   async signin(email: string, passwd: string) {
     const res = await AuthService.signin(email, passwd)
-    if (res.success === true) {
-      const accessToken = await res.data.data
-      await this.storeToken(accessToken)
-      let user!: User
-      user.email = email
-      const resGetUser = await UserService.getUser()
-      user.id = await resGetUser.data.id
-      this.setUser(user, true)
+    if (res.stt === 'ok') {
+      const data = res.data.data
+      this.storeToken(data.token)
+      this.setUser(data.info, true)
     } else return false
   }
 
@@ -49,8 +44,8 @@ class AuthStore {
     return false
   }
 
-  async storeToken(token: string) {
-    return localStorage.setItem('accessToken', JSON.stringify(token))
+  storeToken(token: string) {
+    localStorage.setItem('accessToken', JSON.stringify(token))
   }
 
   signout() {
@@ -58,10 +53,6 @@ class AuthStore {
     this.setUser(null, false)
     localStorage.removeItem('userId')
   }
-
-  get getUser() {
-    return this.user
-  }
 }
 
-export default new AuthStore()
+export default AuthStore

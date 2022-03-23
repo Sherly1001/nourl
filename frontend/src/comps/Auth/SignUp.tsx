@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useEffect } from 'react'
-import AuthStore from '../../stores/AuthStore'
+import UserService from '../../services/UserService'
 
 const SignUp = () => {
   const { appStore } = useStores()
@@ -35,7 +35,7 @@ const SignUp = () => {
   }
 
   function onSignupSubmit() {
-    AuthStore.signup(getValues('email'), getValues('passwd'))
+    // AuthStore.signup(getValues('email'), getValues('passwd'))
   }
 
   useEffect(() => {

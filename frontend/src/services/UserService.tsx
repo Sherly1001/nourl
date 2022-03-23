@@ -1,8 +1,8 @@
-import axios from 'axios'
+import axios from './custom_axios'
 
 class UserService {
   async getUser() {
-    const res = await axios.get('/users/info')
+    const res = await axios.get('api/users/info')
     return res.data
   }
 }
