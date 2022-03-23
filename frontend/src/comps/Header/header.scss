@@ -61,4 +61,60 @@
       }
     }
   }
+  &-user-info {
+    @include flex(center, center);
+    .user-dropdown {
+      position: relative;
+      .avatar {
+        @include flex(center, center);
+        width: 50px;
+        height: 50px;
+        background-color: $white;
+        border-radius: 50%;
+        cursor: pointer;
+      }
+      .anticon {
+        font-size: 25px;
+      }
+      .dropdown-list {
+        position: absolute;
+        bottom: -120px;
+        right: 0;
+        background-color: $white;
+        border-radius: 10px;
+        box-shadow: $box-shadow;
+        min-width: 200px;
+        padding: 15px 20px;
+        .user-welcome {
+          padding-inline: 10px;
+          @include flex(baseline, flex-end);
+          font-size: 15px;
+          border-bottom: 1px solid #dddcdc;
+          padding-bottom: 5px;
+          .user-name {
+            color: $main-color;
+            font-size: 20px;
+            margin-left: 5px;
+            max-width: 100%;
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            word-break: break-word;
+            margin-right: 5px;
+          }
+        }
+        .logout {
+          display: block;
+          margin-top: 10px;
+          padding: 10px 10px;
+          border-radius: 5px;
+          &:hover {
+            background-color: #e7e7e9;
+          }
+        }
+      }
+    }
+  }
 }

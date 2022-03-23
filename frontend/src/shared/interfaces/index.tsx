@@ -3,11 +3,11 @@ export type Nullable<T> = T | null
 export interface User {
   id: string
   email: string
-  display_name?: string
-  avatar_url?: string
-  github_id?: string
-  google_id?: string
-  facebook_id?: string
+  display_name: string
+  avatar_url: Nullable<string>
+  github_id: Nullable<string>
+  google_id: Nullable<string>
+  facebook_id: Nullable<string>
 }
 
 export interface Url {

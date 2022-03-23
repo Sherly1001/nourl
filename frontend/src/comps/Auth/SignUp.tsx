@@ -7,10 +7,10 @@ import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useEffect } from 'react'
-import UserService from '../../services/UserService'
 
 const SignUp = () => {
-  const { appStore } = useStores()
+  const { appStore, authStore } = useStores()
+
   const schema = yup.object().shape({
     email: yup
       .string()
@@ -34,8 +34,8 @@ const SignUp = () => {
     appStore.setSigninModalVisible(true)
   }
 
-  function onSignupSubmit() {
-    // AuthStore.signup(getValues('email'), getValues('passwd'))
+  const onSignupSubmit = () => {
+    authStore.signup(getValues('email'), getValues('passwd'))
   }
 
   useEffect(() => {

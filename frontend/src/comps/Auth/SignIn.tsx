@@ -3,14 +3,13 @@ import ButtonBox from './ButtonBox'
 import './style.scss'
 import useStores from '../../stores'
 import { observer } from 'mobx-react-lite'
-import AuthStore from '../../stores/AuthStore'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { useEffect } from 'react'
 
 const SignIn = () => {
-  const { appStore } = useStores()
+  const { appStore, authStore } = useStores()
   const schema = yup.object().shape({
     email: yup
       .string()
@@ -23,10 +22,11 @@ const SignIn = () => {
     handleSubmit,
     formState: { errors },
     clearErrors,
+    getValues,
   } = useForm({ resolver: yupResolver(schema) })
 
-  function onSigninSubmit(data: Object) {
-    console.log(data)
+  function onSigninSubmit() {
+    authStore.signin(getValues('email'), getValues('passwd'))
   }
 
   function handleSignupModalOpen() {
