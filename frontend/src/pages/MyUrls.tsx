@@ -1,7 +1,7 @@
-import UrlTable from '../comps/MyUrls/UrlTable'
+import UrlsTable from '../comps/MyUrls/UrlsTable'
 
 const MyUrls = () => {
-  return <UrlTable />
+  return <UrlsTable />
 }
 
 export default MyUrls

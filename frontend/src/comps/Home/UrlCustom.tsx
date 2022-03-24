@@ -2,18 +2,14 @@ import './urlcustom.scss'
 import { textHeader } from '../../assests/images'
 import { CheckOutlined } from '@ant-design/icons'
 import CustomForm from './CustomForm'
-import ShowUrl from './ShowUrl'
-import { useState } from 'react'
+import { observer } from 'mobx-react-lite'
 
 const UrlCustom = () => {
-  const [showCustomForm, setShowCustomForm] = useState(false)
-
   return (
     <div className="custom">
       <img src={textHeader} alt="" />
       <div className="custom-content">
-        <CustomForm show={showCustomForm} setShow={setShowCustomForm} />
-        <ShowUrl show={showCustomForm} setShow={setShowCustomForm} />
+        <CustomForm />
         <div className="custom-desc">
           <ul className="feature">
             <li>
@@ -35,4 +31,4 @@ const UrlCustom = () => {
   )
 }
 
-export default UrlCustom
+export default observer(UrlCustom)

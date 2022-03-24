@@ -18,10 +18,26 @@
     border-radius: 15px;
     width: 100%;
     border: 1px solid #e7e7e7;
-    background-color: $white !important;
+    background-color: $white;
     font-size: 16px;
     margin-bottom: 10px;
     cursor: text;
+  }
+  input:disabled {
+    background-color: #e7e7e7;
+    cursor: alias;
+  }
+  .form-box {
+    position: relative;
+    .anticon {
+      position: absolute;
+      right: 20px;
+      font-size: 20px;
+      top: 40%;
+      transform: translateY(-50%);
+      cursor: copy;
+      padding: 5px;
+    }
   }
   .error {
     color: #ff0000;

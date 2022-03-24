@@ -36,11 +36,10 @@ const SignIn = () => {
         passwd: getValues('passwd'),
       }),
       {
-        pending: 'Signing in pending',
+        pending: 'Signing in is pending',
         success: {
           render() {
             appStore.setSigninModalVisible(false)
-            setClickSignInButtom(false)
             return 'Signin success'
           },
         },

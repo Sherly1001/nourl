@@ -46,8 +46,10 @@ class AuthStore {
     else res = null
     if (res.stt === 'ok') {
       const data = res.data
-      this.storeToken(data.token)
-      this.setUserAndIsAuth(data.info, true)
+      setTimeout(() => {
+        this.storeToken(data.token)
+        this.setUserAndIsAuth(data.info, true)
+      }, 1000)
       return true
     } else return res.data
   }
@@ -103,12 +105,11 @@ class AuthStore {
   signout() {
     localStorage.removeItem('accessToken')
     this.setUserAndIsAuth(null, false)
-    localStorage.removeItem('userId')
   }
 
   async loadUser() {
     const res = await UserService.getUser()
-    this.user = res.data
+    this.setUser(res.data)
   }
 }
 

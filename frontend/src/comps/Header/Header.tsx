@@ -46,14 +46,22 @@ const Header = ({}) => {
           </LinkCustom>
           <nav className="header-navbar">
             <LinkCustom to="/">Home</LinkCustom>
-            <LinkCustom to="/my_url">MyUrls</LinkCustom>
+            {authStore.isAuth ? (
+              <LinkCustom to="/my_url">MyUrls</LinkCustom>
+            ) : (
+              ''
+            )}
           </nav>
-          {authStore.isAuth || authStore.checkLogin() ? (
+          {authStore.isAuth ? (
             <div className="header-user-info">
               <div className="dropdown-box">
                 <div className="dropdown-img">
                   {authStore.user?.avatar_url != null ? (
-                    <img src={authStore.user?.avatar_url} alt="user-img" />
+                    <img
+                      src={authStore.user?.avatar_url}
+                      alt="user-img"
+                      className="user-img"
+                    />
                   ) : (
                     <div className="avatar">
                       <UserOutlined />

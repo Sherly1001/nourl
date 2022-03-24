@@ -7,6 +7,17 @@
   background-color: $white;
   box-shadow: $box-shadow;
   border-radius: 10px;
+  .form-warning {
+    .anticon {
+      color: #fcbc03;
+      margin-right: 5px;
+      font-size: 20px;
+    }
+    border: 1px solid #fcbc03;
+    padding: 10px 20px;
+    background-color: #fffbe6;
+    border-radius: 5px;
+  }
   label {
     display: block;
     text-align: start;
@@ -20,7 +31,7 @@
     border: 1px solid #e7e7e7;
     background-color: $white !important;
     font-size: 16px;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
   }
   .error {
     color: #ff0000;
@@ -34,7 +45,7 @@
     font-size: 18px;
     width: 100%;
     margin-bottom: 20px;
-    margin-top: 15px;
+    margin-top: 20px;
     padding-block: 20px;
     background-color: $main-color;
     &:hover {

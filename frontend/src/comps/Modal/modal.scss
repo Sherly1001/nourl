@@ -1,6 +1,7 @@
 @import '../../scss';
 
 .modal {
+  z-index: 99;
   position: fixed;
   @include flex(center, center);
   height: 100%;

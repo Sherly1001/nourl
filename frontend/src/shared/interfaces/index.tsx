@@ -14,5 +14,5 @@ export interface Url {
   id: string
   code: string
   url: string
-  owner: string
+  owner: Nullable<string>
 }

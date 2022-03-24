@@ -7,6 +7,7 @@ import {
 import FacebookLogin, { ReactFacebookLoginInfo } from 'react-facebook-login'
 import GoogleLogin, { GoogleLogout } from 'react-google-login'
 import useStores from '../../stores'
+import { observer } from 'mobx-react-lite'
 
 const ButtonBox = () => {
   const { authStore } = useStores()
@@ -62,4 +63,4 @@ const ButtonBox = () => {
   )
 }
 
-export default ButtonBox
+export default observer(ButtonBox)
