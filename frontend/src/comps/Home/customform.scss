@@ -8,10 +8,12 @@
   box-shadow: $box-shadow;
   border-radius: 10px;
   .form-warning {
+    margin-top: 15px;
+    font-size: 13px;
     .anticon {
       color: #fcbc03;
       margin-right: 5px;
-      font-size: 20px;
+      font-size: 18px;
     }
     border: 1px solid #fcbc03;
     padding: 10px 20px;
@@ -45,7 +47,7 @@
     font-size: 18px;
     width: 100%;
     margin-bottom: 20px;
-    margin-top: 20px;
+    margin-top: 15px;
     padding-block: 20px;
     background-color: $main-color;
     &:hover {

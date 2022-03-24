@@ -55,15 +55,6 @@ const CustomForm = () => {
     <>
       <div className={`custom-form ${showCustomForm ? 'd-none' : ''}`}>
         <form className="form" onSubmit={handleSubmit(onSubmitCustomUrl)}>
-          {authStore.isAuth ? (
-            ''
-          ) : (
-            <div className="form-warning">
-              <WarningOutlined />
-              Warning: your shorten url may be overide by other since you are
-              not signin
-            </div>
-          )}
           <label htmlFor="url">Enter a long URL to be shortened</label>
           <input
             type="text"
@@ -82,6 +73,15 @@ const CustomForm = () => {
             {...register('code')}
           />
           <p className="error">{errors.code?.message}</p>
+          {authStore.isAuth ? (
+            ''
+          ) : (
+            <div className="form-warning">
+              <WarningOutlined />
+              Warning: your shorten url may be overide by other since you are
+              not signin
+            </div>
+          )}
           <button
             className="customurl-button"
             disabled={isClickButtonCustomUrl ? true : false}
