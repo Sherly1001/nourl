@@ -24,19 +24,62 @@ class AuthStore {
     this.user = user
   }
 
-  async signin(email: string, passwd: string) {
-    const res = await AuthService.signin(email, passwd)
+  async signin(
+    method: string,
+    data: {
+      email?: string
+      passwd?: string
+      access_token?: string
+      code?: string
+      id_token?: string
+    }
+  ) {
+    let res
+    if (method === 'default')
+      res = await AuthService.signinDefault(data.email!, data.passwd!)
+    else if (method === 'facebook')
+      res = await AuthService.signinWithFacebook(data.access_token!)
+    else if (method === 'github')
+      res = await AuthService.signinWithGithub(data.code!)
+    else if (method === 'facebook')
+      res = await AuthService.signinWithGoogle(data.id_token!)
+    else res = null
     if (res.stt === 'ok') {
       const data = res.data
       this.storeToken(data.token)
       this.setUserAndIsAuth(data.info, true)
-    } else return false
+      return true
+    } else return res.data
   }
 
-  async signup(email: string, passwd: string) {
-    const res = await AuthService.signup(email, passwd)
-    if (res.stt === 'ok') return true
-    return false
+  async signup(
+    method: string,
+    data: {
+      email?: string
+      passwd?: string
+      access_token?: string
+      code?: string
+      id_token?: string
+    }
+  ) {
+    let res
+    if (method === 'default')
+      res = await AuthService.signupDefault(data.email!, data.passwd!)
+    else if (method === 'facebook')
+      res = await AuthService.signupWithFacebook(data.access_token!)
+    else if (method === 'github')
+      res = await AuthService.signupWithGithub(data.code!)
+    else if (method === 'google')
+      res = await AuthService.signupWithGoogle(data.id_token!)
+    else res = null
+
+    if (res.stt === 'ok') {
+      // const data = res.data
+      // this.storeToken(data.token)
+      // this.setUserAndIsAuth(data.info, true)
+      return true
+    }
+    return res.data
   }
 
   getAccessToken() {

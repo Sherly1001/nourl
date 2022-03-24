@@ -6,10 +6,12 @@ import { observer } from 'mobx-react-lite'
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import { toast } from 'react-toastify'
 
 const SignUp = () => {
   const { appStore, authStore } = useStores()
+  const [isClickSignupButtom, setClickSignupButtom] = useState(false)
 
   const schema = yup.object().shape({
     email: yup
@@ -35,7 +37,29 @@ const SignUp = () => {
   }
 
   const onSignupSubmit = () => {
-    authStore.signup(getValues('email'), getValues('passwd'))
+    setClickSignupButtom(true)
+    toast.promise(
+      authStore.signup('default', {
+        email: getValues('email'),
+        passwd: getValues('passwd'),
+      }),
+      {
+        pending: 'Pending',
+        success: {
+          render() {
+            appStore.setSigninModalVisible(false)
+            setClickSignupButtom(false)
+            return 'Signup success'
+          },
+        },
+        error: {
+          render({ data }: any) {
+            setClickSignupButtom(false)
+            return `Signup failed: ${data!.response.data.msg}`
+          },
+        },
+      }
+    )
   }
 
   useEffect(() => {
@@ -70,7 +94,12 @@ const SignUp = () => {
           {...register('passwd')}
         />
         <p className="error">{errors.passwd?.message}</p>
-        <button className="signup-button">Sign up</button>
+        <button
+          className="signup-button"
+          disabled={isClickSignupButtom ? true : false}
+        >
+          Sign up
+        </button>
       </form>
       <div className="signin">
         Already a user?

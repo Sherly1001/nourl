@@ -8,6 +8,7 @@ import useStores from '../../stores'
 import { observer } from 'mobx-react-lite'
 import { UserOutlined } from '@ant-design/icons'
 import { useEffect } from 'react'
+import { ToastContainer } from 'react-toastify'
 
 const Header = ({}) => {
   const { appStore, authStore } = useStores()
@@ -49,14 +50,16 @@ const Header = ({}) => {
           </nav>
           {authStore.isAuth || authStore.checkLogin() ? (
             <div className="header-user-info">
-              <div className="user-dropdown">
-                {authStore.user?.avatar_url != null ? (
-                  <img src={authStore.user?.avatar_url} alt="user-img" />
-                ) : (
-                  <div className="avatar">
-                    <UserOutlined />
-                  </div>
-                )}
+              <div className="dropdown-box">
+                <div className="dropdown-img">
+                  {authStore.user?.avatar_url != null ? (
+                    <img src={authStore.user?.avatar_url} alt="user-img" />
+                  ) : (
+                    <div className="avatar">
+                      <UserOutlined />
+                    </div>
+                  )}
+                </div>
                 <div className="dropdown-list">
                   <span className="user-welcome">
                     <span>Hi, </span>
@@ -89,6 +92,7 @@ const Header = ({}) => {
         </div>
       </div>
       <Outlet />
+      <ToastContainer autoClose={2000} pauseOnFocusLoss={false} />
     </>
   )
 }

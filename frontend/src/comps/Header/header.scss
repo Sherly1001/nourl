@@ -2,7 +2,7 @@
 
 .header {
   &-inner {
-    padding-block: 25px;
+    padding-block: 20px;
     @include flex(center, space-between);
   }
   &-logo {
@@ -63,8 +63,15 @@
   }
   &-user-info {
     @include flex(center, center);
-    .user-dropdown {
+    .dropdown-box {
+      .dropdown-img {
+        padding: 10px;
+      }
       position: relative;
+      &:hover .dropdown-list {
+        visibility: visible;
+        opacity: 1;
+      }
       .avatar {
         @include flex(center, center);
         width: 50px;
@@ -72,16 +79,20 @@
         background-color: $white;
         border-radius: 50%;
         cursor: pointer;
+        box-shadow: $box-shadow;
       }
       .anticon {
         font-size: 25px;
       }
       .dropdown-list {
+        visibility: hidden;
+        opacity: 0;
+        transition: 0.2s all;
         position: absolute;
         bottom: -120px;
         right: 0;
         background-color: $white;
-        border-radius: 10px;
+        border-radius: 5px;
         box-shadow: $box-shadow;
         min-width: 200px;
         padding: 15px 20px;
