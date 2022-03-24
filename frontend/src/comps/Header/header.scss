@@ -105,7 +105,7 @@
         padding: 15px 20px;
         .user-welcome {
           padding-inline: 10px;
-          @include flex(baseline, flex-end);
+          @include flex(baseline, flex-start);
           font-size: 15px;
           border-bottom: 1px solid #dddcdc;
           padding-bottom: 5px;

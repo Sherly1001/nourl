@@ -26,7 +26,6 @@ const CustomForm = () => {
     register,
     handleSubmit,
     formState: { errors },
-    clearErrors,
     getValues,
   } = useForm({ resolver: yupResolver(schema) })
 

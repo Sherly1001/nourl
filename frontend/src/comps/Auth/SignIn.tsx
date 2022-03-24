@@ -36,7 +36,7 @@ const SignIn = () => {
         passwd: getValues('passwd'),
       }),
       {
-        pending: 'Signing in is pending',
+        pending: 'Signin is pending',
         success: {
           render() {
             appStore.setSigninModalVisible(false)

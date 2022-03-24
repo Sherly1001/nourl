@@ -23,18 +23,12 @@ class UrlsStore {
   }
 
   setUrls(urls: Url[]) {
-    console.log([...urls])
-
     this.urls = urls
-    console.log(this.urls)
   }
 
   async loadUrls() {
     const data = await this.getAllUrls()
-    console.log(data)
-
     this.setUrls(data)
-    console.log(this.urls)
   }
 
   get getUrls() {

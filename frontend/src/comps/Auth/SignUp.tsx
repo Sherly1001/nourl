@@ -47,7 +47,7 @@ const SignUp = () => {
         pending: 'Pending',
         success: {
           render() {
-            appStore.setSigninModalVisible(false)
+            appStore.setSignupModalVisible(false)
             setClickSignupButtom(false)
             return 'Signup success'
           },

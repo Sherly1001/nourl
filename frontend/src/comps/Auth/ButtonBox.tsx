@@ -12,6 +12,8 @@ import { observer } from 'mobx-react-lite'
 const ButtonBox = () => {
   const { authStore } = useStores()
   function responseFacebook(response: ReactFacebookLoginInfo) {
+    console.log(response)
+
     authStore.signup('facebook', {
       access_token: response.accessToken,
     })
