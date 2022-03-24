@@ -26,19 +26,13 @@ fn not_found(req: &Request) -> JRes<()> {
 }
 
 #[rocket::catch(401)]
-fn c401(req: &Request) -> JRes<()> {
-    match req.method() {
-        Method::Options => Res::ok(()),
-        _ => Res::err(Status::Unauthorized, "unauthorized".to_string()),
-    }
+fn c401() -> JRes<()> {
+    Res::err(Status::Unauthorized, "unauthorized".to_string())
 }
 
 #[rocket::catch(500)]
-fn c500(req: &Request) -> JRes<()> {
-    match req.method() {
-        Method::Options => Res::ok(()),
-        _ => Res::err(Status::InternalServerError, format!("the server encountered an internal error while processing this request"))
-    }
+fn c500() -> JRes<()> {
+    Res::err(Status::InternalServerError, format!("the server encountered an internal error while processing this request"))
 }
 
 #[rocket::main]
