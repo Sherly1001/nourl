@@ -9,17 +9,17 @@ pub struct Url {
     pub id: i64,
     pub code: String,
     pub url: String,
-    #[serde(with = "string_opt")]
+    #[serde(with = "string_opt", default)]
     pub owner: Option<i64>,
 }
 
 #[derive(Serialize, Deserialize, Queryable, AsChangeset, Debug)]
 pub struct UrlUpdate {
-    #[serde(with = "string_opt")]
+    #[serde(with = "string_opt", default)]
     pub id: Option<i64>,
     pub code: Option<String>,
     pub url: Option<String>,
-    #[serde(with = "string_opt")]
+    #[serde(with = "string_opt", default)]
     pub owner: Option<i64>,
 }
 
@@ -53,7 +53,7 @@ mod string_opt {
     use std::fmt::Display;
     use std::str::FromStr;
 
-    use serde::{de, Deserialize, Deserializer, Serialize, Serializer};
+    use serde::{de, Deserialize, Deserializer, Serializer};
 
     pub fn serialize<T, S>(
         value: &Option<T>,
@@ -63,11 +63,10 @@ mod string_opt {
         T: Display,
         S: Serializer,
     {
-        let val = match value {
-            None => None,
-            Some(s) => Some(s.to_string()),
-        };
-        Option::<String>::serialize(&val, serializer)
+        match value {
+            None => serializer.serialize_none(),
+            Some(s) => serializer.serialize_str(&s.to_string()),
+        }
     }
 
     pub fn deserialize<'de, T, D>(
@@ -78,15 +77,8 @@ mod string_opt {
         T::Err: Display,
         D: Deserializer<'de>,
     {
-        match Option::<String>::deserialize(deserializer) {
-            Err(err) => Err(err),
-            Ok(opt) => match opt {
-                None => Ok(None),
-                Some(s) => match s.parse() {
-                    Ok(val) => Ok(Some(val)),
-                    Err(err) => Err(de::Error::custom(err)),
-                },
-            },
-        }
+        Option::<String>::deserialize(deserializer)?
+            .map(|s| s.parse().map(Some).map_err(de::Error::custom))
+            .unwrap_or(Ok(None))
     }
 }
