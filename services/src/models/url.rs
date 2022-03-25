@@ -23,7 +23,7 @@ pub struct UrlUpdate {
     pub owner: Option<i64>,
 }
 
-mod string {
+pub mod string {
     use std::fmt::Display;
     use std::str::FromStr;
 
@@ -49,7 +49,7 @@ mod string {
     }
 }
 
-mod string_opt {
+pub mod string_opt {
     use std::fmt::Display;
     use std::str::FromStr;
 

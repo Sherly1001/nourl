@@ -11,13 +11,13 @@ use crate::{
     config::{AppState, DbPool},
     db,
     errors::{JBody, JError, JRes, Res},
-    models::user::{LoginMethod, User, UserDisplay, UserId, UserUpdate},
+    models::user::{LoginMethod, User, UserId, UserUpdate},
 };
 
 #[rocket::get("/info")]
-pub fn get(auth: Auth, db_pool: &State<DbPool>) -> JRes<UserDisplay> {
+pub fn get(auth: Auth, db_pool: &State<DbPool>) -> JRes<User> {
     match db::user::get(db_pool, auth.user_id).map_err(|err| err.to_string()) {
-        Ok(user) => Res::ok(user.to_user_display()),
+        Ok(user) => Res::ok(user),
         Err(err) => Res::err(Status::Unauthorized, err.to_string()),
     }
 }
@@ -139,7 +139,7 @@ async fn create_user(
 #[derive(Serialize, Debug)]
 pub struct UserRes {
     token: String,
-    info: UserDisplay,
+    info: User,
 }
 
 #[rocket::post("/create", data = "<user>")]
@@ -161,7 +161,7 @@ pub async fn create<'r>(
     match create_user(user_id, &body_user, None, db_pool, state).await {
         Ok(user) => Res::ok(UserRes {
             token: Auth::new(user.id).token(state.secret_key.as_bytes()),
-            info: user.to_user_display(),
+            info: user,
         }),
         Err((code, err)) => Res::err(code, err),
     }
@@ -201,7 +201,7 @@ pub async fn login<'r>(
                     Res::ok(UserRes {
                         token: Auth::new(u.id)
                             .token(state.secret_key.as_bytes()),
-                        info: u.to_user_display(),
+                        info: u,
                     })
                 } else {
                     Res::err(
@@ -212,7 +212,7 @@ pub async fn login<'r>(
             }
             _ => Res::ok(UserRes {
                 token: Auth::new(u.id).token(state.secret_key.as_bytes()),
-                info: u.to_user_display(),
+                info: u,
             }),
         },
         Err(_) => {
@@ -239,7 +239,7 @@ pub async fn login<'r>(
                     Ok(user) => Res::ok(UserRes {
                         token: Auth::new(user.id)
                             .token(state.secret_key.as_bytes()),
-                        info: user.to_user_display(),
+                        info: user,
                     }),
                     Err((code, err)) => Res::err(code, err),
                 }
@@ -261,7 +261,7 @@ pub async fn update<'r>(
     user_update: JBody<'r, UserUpdateBody>,
     db_pool: &State<DbPool>,
     state: &State<AppState>,
-) -> JRes<UserDisplay> {
+) -> JRes<User> {
     let user_update = match user_update {
         Ok(user) => user,
         Err(err) => {
@@ -299,7 +299,7 @@ pub async fn update<'r>(
     }
 
     match db::user::update(db_pool, user.id, &info) {
-        Ok(user) => Res::ok(user.to_user_display()),
+        Ok(user) => Res::ok(user),
         Err(err) => Res::err(Status::UnprocessableEntity, err.to_string()),
     }
 }

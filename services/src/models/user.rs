@@ -23,22 +23,13 @@ pub enum UserId {
 
 #[derive(Serialize, Deserialize, Queryable, Insertable, Clone, Debug)]
 pub struct User {
+    #[serde(with = "super::url::string")]
     pub id: i64,
     pub display_name: String,
     pub email: Option<String>,
     pub avatar_url: Option<String>,
+    #[serde(skip_serializing)]
     pub hash_passwd: Option<String>,
-    pub github_id: Option<String>,
-    pub google_id: Option<String>,
-    pub facebook_id: Option<String>,
-}
-
-#[derive(Serialize, Deserialize, Debug)]
-pub struct UserDisplay {
-    pub id: String,
-    pub display_name: String,
-    pub email: Option<String>,
-    pub avatar_url: Option<String>,
     pub github_id: Option<String>,
     pub google_id: Option<String>,
     pub facebook_id: Option<String>,
@@ -54,20 +45,6 @@ pub struct UserUpdate {
     pub github_id: Option<String>,
     pub google_id: Option<String>,
     pub facebook_id: Option<String>,
-}
-
-impl User {
-    pub fn to_user_display(&self) -> UserDisplay {
-        UserDisplay {
-            id: self.id.to_string(),
-            display_name: self.display_name.clone(),
-            email: self.email.clone(),
-            avatar_url: self.avatar_url.clone(),
-            github_id: self.github_id.clone(),
-            google_id: self.google_id.clone(),
-            facebook_id: self.facebook_id.clone(),
-        }
-    }
 }
 
 impl std::default::Default for UserUpdate {
