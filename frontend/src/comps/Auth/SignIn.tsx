@@ -14,11 +14,8 @@ const SignIn = () => {
   const { appStore, authStore } = useStores()
   const [isClickSignInButtom, setClickSignInButtom] = useState(false)
   const schema = yup.object().shape({
-    email: yup
-      .string()
-      .email('Email không hợp lệ')
-      .required('Vui lòng nhập email'),
-    passwd: yup.string().required('Vui lòng nhập mật khẩu'),
+    email: yup.string().email('Invalid email').required('Email required'),
+    passwd: yup.string().required('Password required'),
   })
   const {
     register,
@@ -36,7 +33,7 @@ const SignIn = () => {
         passwd: getValues('passwd'),
       }),
       {
-        pending: 'Signin is pending',
+        pending: 'Signing up...',
         success: {
           render() {
             appStore.setSigninModalVisible(false)

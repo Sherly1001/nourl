@@ -19,11 +19,12 @@ class UrlService {
     return res.data
   }
 
-  async updateUrl(oldCode: string, newCode: string) {
+  async updateUrl(oldCode: string, newCode: string, newUrl: string) {
     const res = await axios.put('/api/urls/update', {
       oldCode,
       info: {
         code: newCode,
+        url: newUrl,
       },
     })
     return res.data

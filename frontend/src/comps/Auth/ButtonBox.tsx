@@ -8,15 +8,31 @@ import FacebookLogin, { ReactFacebookLoginInfo } from 'react-facebook-login'
 import GoogleLogin, { GoogleLogout } from 'react-google-login'
 import useStores from '../../stores'
 import { observer } from 'mobx-react-lite'
+import { toast } from 'react-toastify'
 
 const ButtonBox = () => {
-  const { authStore } = useStores()
+  const { authStore, appStore } = useStores()
   function responseFacebook(response: ReactFacebookLoginInfo) {
-    console.log(response)
-
-    authStore.signup('facebook', {
-      access_token: response.accessToken,
-    })
+    toast.promise(
+      authStore.signin('facebook', {
+        access_token: response.accessToken,
+      }),
+      {
+        pending: 'Signing up...',
+        success: {
+          render() {
+            appStore.setSigninModalVisible(false)
+            appStore.setSignupModalVisible(false)
+            return 'Signin success'
+          },
+        },
+        error: {
+          render({ data }: any) {
+            return `Signin failed: ${data!.response.data.msg}`
+          },
+        },
+      }
+    )
   }
 
   function responseGoogle(response: any) {

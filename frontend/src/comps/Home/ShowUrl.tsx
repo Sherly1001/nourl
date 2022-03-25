@@ -1,5 +1,5 @@
 import './showurl.scss'
-import { FormEvent } from 'react'
+import { FormEvent, useRef } from 'react'
 import { observer } from 'mobx-react-lite'
 import { CopyOutlined } from '@ant-design/icons'
 import { useNavigate } from 'react-router-dom'
@@ -15,6 +15,8 @@ interface ShowFormProps {
 const ShowUrl = ({ show, setShow, url, code }: ShowFormProps) => {
   const { appStore, authStore } = useStores()
   const navigate = useNavigate()
+  const CopyElement = useRef<HTMLSpanElement>(null)
+
   function handleShowCustomForm(e: FormEvent) {
     e.preventDefault()
     setShow(!show)
@@ -27,6 +29,11 @@ const ShowUrl = ({ show, setShow, url, code }: ShowFormProps) => {
   }
 
   function handleCopyUrlToClipBoard() {
+    const copyElement = CopyElement.current
+    copyElement?.classList.add('show')
+    setTimeout(() => {
+      copyElement?.classList.remove('show')
+    }, 600)
     navigator.clipboard.writeText(`${import.meta.env.VITE_API_URL}/${code}`)
   }
 
@@ -37,12 +44,18 @@ const ShowUrl = ({ show, setShow, url, code }: ShowFormProps) => {
         <input type="url" value={url} disabled />
         <label>Your shortened URL</label>
         <div className="form-box">
-          <input
+          <a
             type="text"
-            value={`${import.meta.env.VITE_API_URL}/${code}`}
-            disabled
-          />
-          <CopyOutlined onClick={handleCopyUrlToClipBoard} />
+            href={`${import.meta.env.VITE_API_URL}/${code}`}
+            target="_blank"
+            className="shortened-url"
+          >{`${import.meta.env.VITE_API_URL}/${code}`}</a>
+          <div className="copy">
+            <CopyOutlined onClick={handleCopyUrlToClipBoard} />
+            <span className="copied" aria-hidden={true} ref={CopyElement}>
+              Copied
+            </span>
+          </div>
         </div>
         <div className="button-box">
           <button className="myurl-button" onClick={handleShowUrls}>

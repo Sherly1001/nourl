@@ -45,9 +45,13 @@ const Header = ({}) => {
             <img className="textLogo" src={logoText} alt="" />
           </LinkCustom>
           <nav className="header-navbar">
-            <LinkCustom to="/">Home</LinkCustom>
+            <LinkCustom className="navbar-home" to="/">
+              Home
+            </LinkCustom>
             {authStore.isAuth ? (
-              <LinkCustom to="/my_url">MyUrls</LinkCustom>
+              <LinkCustom className="navbar-myurls" to="/my_url">
+                MyUrls
+              </LinkCustom>
             ) : (
               ''
             )}

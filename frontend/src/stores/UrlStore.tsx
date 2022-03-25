@@ -10,9 +10,17 @@ class UrlsStore {
     this.urls = []
   }
 
+  setUrls(urls: Url[]) {
+    this.urls = urls
+  }
+
+  get getUrls() {
+    return this.urls
+  }
+
   async createNewUrl(url: string, code: string) {
     const res = await UrlService.createNewUrl(url, code)
-    if (res.stt === 'ok') this.urls.unshift(res.data)
+    if (res.stt === 'ok') this.urls = [...this.urls, res.data]
     return res.data
   }
 
@@ -22,17 +30,21 @@ class UrlsStore {
     return res.data
   }
 
-  setUrls(urls: Url[]) {
-    this.urls = urls
+  async deleteUrl(code: string) {
+    const res = await UrlService.deleteUrl(code)
+    if (res.stt === 'ok')
+      this.urls = this.urls.filter((url) => url.code !== code)
+    return res.data
+  }
+
+  async updateUrl(oldCode: string, newCode: string, newUrl: string) {
+    const res = await UrlService.updateUrl(oldCode, newCode, newUrl)
+    return res.data
   }
 
   async loadUrls() {
     const data = await this.getAllUrls()
     this.setUrls(data)
-  }
-
-  get getUrls() {
-    return this.urls
   }
 }
 

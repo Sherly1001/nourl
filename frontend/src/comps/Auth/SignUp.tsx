@@ -14,14 +14,11 @@ const SignUp = () => {
   const [isClickSignupButtom, setClickSignupButtom] = useState(false)
 
   const schema = yup.object().shape({
-    email: yup
-      .string()
-      .email('Email không hợp lệ')
-      .required('Vui lòng nhập email'),
+    email: yup.string().email('Invalid email').required('Email required'),
     passwd: yup
       .string()
-      .required('Vui lòng nhập mật khẩu')
-      .min(6, 'Mật khẩu ít nhất 6 kí tự'),
+      .required('Password required')
+      .min(6, 'Password must at least 6 characters'),
   })
   const {
     register,
