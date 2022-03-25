@@ -2,7 +2,7 @@ import { observer } from 'mobx-react-lite'
 import './urlstable.scss'
 import useStores from '../../stores'
 import { useEffect, SyntheticEvent } from 'react'
-import { EditOutlined } from '@ant-design/icons'
+import { EditOutlined, LinkOutlined } from '@ant-design/icons'
 import { toast } from 'react-toastify'
 
 const UrlTable = () => {
@@ -111,22 +111,37 @@ const UrlTable = () => {
                     <td>{index + 1}</td>
                     <td>
                       <p className="url">{url.url}</p>
-                      <input type="text" className="new-url" />
+                      <input
+                        type="text"
+                        className="new-url"
+                        placeholder="Enter new url"
+                      />
                     </td>
                     <td>
                       <p className="code">{url.code}</p>
-                      <input type="text" className="new-code" />
+                      <input
+                        type="text"
+                        className="new-code"
+                        placeholder="Enter new code"
+                      />
                     </td>
-                    <td className="shorten-box">
-                      <p
+                    <td>
+                      <span
                         className="shorten-url"
                         onClick={handleCopyToClipBoard}
                       >
                         {`${import.meta.env.VITE_API_URL}/${url.code}`}
-                      </p>
-                      <span className="copied" aria-hidden={true}>
-                        Copied
+                        <span className="copied" aria-hidden={true}>
+                          Copied
+                        </span>
                       </span>
+                      <a
+                        href={`${import.meta.env.VITE_API_URL}/${url.code}`}
+                        target="_blank"
+                        className="redirect-url"
+                      >
+                        <LinkOutlined />
+                      </a>
                     </td>
                     <td>
                       <div className="button-box">
