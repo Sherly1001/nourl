@@ -52,13 +52,23 @@ const UrlTable = () => {
     const inputCodeElement = trElement?.querySelector(
       '.new-code'
     ) as HTMLInputElement
-    const urlElement = trElement?.querySelector('.url') as HTMLInputElement
     const inputUrlElement = trElement?.querySelector(
       '.new-url'
     ) as HTMLInputElement
+    const urlElement = trElement?.querySelector('.url') as HTMLInputElement
+    const codeElement = trElement?.querySelector('.code') as HTMLInputElement
     inputCodeElement.focus()
-    inputCodeElement.value = code
+    inputCodeElement.value = codeElement.innerText
     inputUrlElement.value = urlElement.innerText
+  }
+
+  function handleKeyEnter(
+    code: string,
+    e: React.KeyboardEvent<HTMLInputElement>
+  ) {
+    if (e.key === 'Enter') {
+      handleConfirmEditUrl(code)
+    }
   }
 
   function handleCancelEditUrl(code: string) {
@@ -68,19 +78,23 @@ const UrlTable = () => {
 
   function handleConfirmEditUrl(code: string) {
     const trElement = document.querySelector(`tr[data-code="${code}"]`)
-    trElement?.classList.add('edit')
     const inputCodeElement = trElement?.querySelector(
       '.new-code'
     ) as HTMLInputElement
     const inputUrlElement = trElement?.querySelector(
       '.new-url'
     ) as HTMLInputElement
+    const new_code = inputCodeElement.value
+    const new_url = inputUrlElement.value
 
-    const newCode = inputCodeElement.value
-    const newUrl = inputUrlElement.value
-    toast.promise(urlsStore.updateUrl(code, newCode, newUrl), {
+    toast.promise(urlsStore.updateUrl(code, new_code, new_url), {
       pending: 'Updating...',
-      success: 'Updated',
+      success: {
+        render() {
+          trElement?.classList.remove('edit')
+          return `Updated`
+        },
+      },
       error: {
         render({ data }: any) {
           return `Update failed: ${data.response.data.msg}`
@@ -115,6 +129,7 @@ const UrlTable = () => {
                         type="text"
                         className="new-url"
                         placeholder="Enter new url"
+                        onKeyDown={(event) => handleKeyEnter(url.code, event)}
                       />
                     </td>
                     <td>
@@ -123,6 +138,7 @@ const UrlTable = () => {
                         type="text"
                         className="new-code"
                         placeholder="Enter new code"
+                        onKeyDown={(event) => handleKeyEnter(url.code, event)}
                       />
                     </td>
                     <td>

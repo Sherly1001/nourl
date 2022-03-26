@@ -37,14 +37,14 @@ class UrlsStore {
     return res.data
   }
 
-  async updateUrl(oldCode: string, newCode: string, newUrl: string) {
-    const res = await UrlService.updateUrl(oldCode, newCode, newUrl)
+  async updateUrl(old_code: string, new_code: string, new_url: string) {
+    const res = await UrlService.updateUrl(old_code, new_code, new_url)
+    if (res.stt === 'ok') {
+      const urls = this.urls.find((url) => url.code === old_code)
+      urls!.code = new_code
+      urls!.url = new_url
+    }
     return res.data
-  }
-
-  async loadUrls() {
-    const data = await this.getAllUrls()
-    this.setUrls(data)
   }
 }
 
