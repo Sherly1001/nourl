@@ -31,10 +31,6 @@ body {
   color: $txt-color;
   font-family: $main-font;
   overflow: auto;
-  background-image: url('./assests/bg.png');
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
 }
 
 ul,
@@ -55,6 +51,15 @@ input {
 a {
   color: unset;
   text-decoration: none;
+}
+
+.wrapper {
+  background-image: url('./assests/bg.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  min-height: 100vh;
+  padding-bottom: 50px;
 }
 
 .container {

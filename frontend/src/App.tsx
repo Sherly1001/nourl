@@ -11,18 +11,20 @@ const App = () => {
   const { authStore } = useStores()
   return (
     <>
-      <div className="container">
-        <Routes>
-          <Route path="/" element={<Header />}>
-            <Route index element={<Home />}></Route>
-            {authStore.isAuth ? (
-              <Route path="/my_url" element={<MyUrls />}></Route>
-            ) : (
-              ''
-            )}
-            <Route path="/*" element={<NoPage />}></Route>
-          </Route>
-        </Routes>
+      <div className="wrapper">
+        <div className="container">
+          <Routes>
+            <Route path="/" element={<Header />}>
+              <Route index element={<Home />}></Route>
+              {authStore.isAuth ? (
+                <Route path="/my_url" element={<MyUrls />}></Route>
+              ) : (
+                ''
+              )}
+              <Route path="/*" element={<NoPage />}></Route>
+            </Route>
+          </Routes>
+        </div>
       </div>
     </>
   )
