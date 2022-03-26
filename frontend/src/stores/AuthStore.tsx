@@ -2,6 +2,7 @@ import { User, Nullable } from '../shared/interfaces/index'
 import { makeAutoObservable } from 'mobx'
 import AuthService from '../services/AuthService'
 import UserService from '../services/UserService'
+import { string } from 'yup'
 
 class AuthStore {
   isAuth = false
@@ -34,7 +35,11 @@ class AuthStore {
       id_token?: string
     }
   ) {
-    let res = null
+    let res = {
+      stt: 'error',
+      data: { token: '', info: null },
+      msg: '',
+    }
     switch (method) {
       case 'default':
         res = await AuthService.signinDefault(data.email!, data.passwd!)
@@ -71,7 +76,11 @@ class AuthStore {
       id_token?: string
     }
   ) {
-    let res = null
+    let res = {
+      stt: 'error',
+      data: { token: '', info: null },
+      msg: '',
+    }
     switch (method) {
       case 'default':
         res = await AuthService.signupDefault(data.email!, data.passwd!)
@@ -91,7 +100,7 @@ class AuthStore {
     if (res.stt === 'ok') {
       const data = res.data
       setTimeout(() => {
-        this.storeToken(data.token)
+        this.storeToken(data.token!)
         this.setUserAndIsAuth(data.info, true)
       }, 1000)
       return true
