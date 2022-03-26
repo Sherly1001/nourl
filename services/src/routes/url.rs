@@ -203,8 +203,8 @@ pub fn go(
 ) -> Redirect {
     match db::url::get(db_pool, &code) {
         Err(_) => {
-            Redirect::moved(format!("{}/{}", state.frontend_notfound_uri, code))
+            Redirect::found(format!("{}/{}", state.frontend_notfound_uri, code))
         }
-        Ok(url) => Redirect::moved(url.url),
+        Ok(url) => Redirect::found(url.url),
     }
 }
