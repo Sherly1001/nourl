@@ -12,11 +12,10 @@
     height: 60px;
     transition: 0.3s background-color;
     box-shadow: $box-shadow;
-  }
-  span ~ span {
-    margin-left: 10px;
+    background-color: #fff;
   }
   .signin-facebook {
+    margin-left: 10px;
     border-color: $facebook-color;
     background-color: $white;
     .anticon {
@@ -28,6 +27,7 @@
   }
   .signin-github {
     border-color: $github-color;
+    margin-left: 10px;
     .anticon {
       color: $github-color;
     }

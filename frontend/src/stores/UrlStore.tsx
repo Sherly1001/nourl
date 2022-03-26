@@ -18,6 +18,11 @@ class UrlsStore {
     return this.urls
   }
 
+  setUrl(url: Url, new_code: string, new_url: string) {
+    url.url = new_url
+    url.code = new_code
+  }
+
   async createNewUrl(url: string, code: string) {
     const res = await UrlService.createNewUrl(url, code)
     if (res.stt === 'ok') this.urls = [...this.urls, res.data]
@@ -40,9 +45,8 @@ class UrlsStore {
   async updateUrl(old_code: string, new_code: string, new_url: string) {
     const res = await UrlService.updateUrl(old_code, new_code, new_url)
     if (res.stt === 'ok') {
-      const urls = this.urls.find((url) => url.code === old_code)
-      urls!.code = new_code
-      urls!.url = new_url
+      const index = this.urls.findIndex((url) => url.code === old_code)
+      this.setUrl(this.urls[index], new_code, new_url)
     }
     return res.data
   }

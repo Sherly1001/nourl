@@ -59,6 +59,14 @@ const SignIn = () => {
     clearErrors(['email', 'passwd'])
   }, [appStore.isSigniModalVisible])
 
+  useEffect(() => {
+    window.onkeydown = (e: KeyboardEvent) => {
+      if (e.keyCode == 27) {
+        appStore.setSigninModalVisible(false)
+      }
+    }
+  })
+
   return (
     <>
       <Modal

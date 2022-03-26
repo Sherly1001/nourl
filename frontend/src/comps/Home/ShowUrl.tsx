@@ -4,6 +4,7 @@ import { observer } from 'mobx-react-lite'
 import { CopyOutlined } from '@ant-design/icons'
 import { useNavigate } from 'react-router-dom'
 import useStores from '../../stores/index'
+import { go_url } from '../../utils/const'
 
 interface ShowFormProps {
   show: boolean
@@ -34,7 +35,7 @@ const ShowUrl = ({ show, setShow, url, code }: ShowFormProps) => {
     setTimeout(() => {
       copyElement?.classList.remove('show')
     }, 600)
-    navigator.clipboard.writeText(`${import.meta.env.VITE_API_URL}/${code}`)
+    navigator.clipboard.writeText(`${go_url}/${code}`)
   }
 
   return (
@@ -46,10 +47,10 @@ const ShowUrl = ({ show, setShow, url, code }: ShowFormProps) => {
         <div className="form-box">
           <a
             type="text"
-            href={`${import.meta.env.VITE_API_URL}/${code}`}
+            href={`${go_url}/${code}`}
             target="_blank"
             className="shortened-url"
-          >{`${import.meta.env.VITE_API_URL}/${code}`}</a>
+          >{`${go_url}/${code}`}</a>
           <div className="copy">
             <CopyOutlined onClick={handleCopyUrlToClipBoard} />
             <span className="copied" aria-hidden={true} ref={CopyElement}>

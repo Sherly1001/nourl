@@ -5,10 +5,12 @@ import {
   FacebookOutlined,
 } from '@ant-design/icons'
 import FacebookLogin, { ReactFacebookLoginInfo } from 'react-facebook-login'
-import GoogleLogin, { GoogleLogout } from 'react-google-login'
+import GoogleLogin from 'react-google-login'
 import useStores from '../../stores'
 import { observer } from 'mobx-react-lite'
 import { toast } from 'react-toastify'
+import LoginGithub from 'react-login-github'
+import { gg_client_id, gh_client_id, fb_client_id } from '../../utils/const'
 
 const ButtonBox = () => {
   const { authStore, appStore } = useStores()
@@ -35,44 +37,78 @@ const ButtonBox = () => {
     )
   }
 
-  function responseGoogle(response: any) {
-    authStore.signup('google', {
-      id_token: response.tokenId,
-    })
+  function responseGithub({ code }: { code: string }) {
+    toast.promise(
+      authStore.signin('github', {
+        code,
+      }),
+      {
+        pending: 'Signing up...',
+        success: {
+          render() {
+            appStore.setSigninModalVisible(false)
+            appStore.setSignupModalVisible(false)
+            return 'Signin success'
+          },
+        },
+        error: {
+          render({ data }: any) {
+            return `Signin failed: ${data!.response.data.msg}`
+          },
+        },
+      }
+    )
   }
 
-  function onLogoutSuccess() {
-    console.log('success')
+  function responseGoogle(response: any) {
+    toast.promise(
+      authStore.signin('google', {
+        id_token: response.tokenId,
+      }),
+      {
+        pending: 'Signing up...',
+        success: {
+          render() {
+            appStore.setSigninModalVisible(false)
+            appStore.setSignupModalVisible(false)
+            return 'Signin success'
+          },
+        },
+        error: {
+          render({ data }: any) {
+            return `Signin failed: ${data!.response.data.msg}`
+          },
+        },
+      }
+    )
   }
 
   return (
     <div className="button-box">
-      <span className="signin-google button-item">
-        <GooglePlusOutlined />
-      </span>
-      {/* <GoogleLogin
-        clientId={import.meta.env.VITE_GG_CLIENT_ID as string}
-        buttonText=""
+      <GoogleLogin
+        clientId={gg_client_id as string}
         onSuccess={responseGoogle}
         cookiePolicy={'single_host_origin'}
-        icon={true}
-        autoLoad={true}
         className="signin-google button-item"
+        render={(renderProps) => (
+          <button
+            onClick={renderProps.onClick}
+            className="signin-google button-item"
+          >
+            <GooglePlusOutlined />
+          </button>
+        )}
       ></GoogleLogin>
-      <GoogleLogout
-        clientId={import.meta.env.VITE_GG_CLIENT_ID as string}
-        buttonText="Logout"
-        onLogoutSuccess={onLogoutSuccess}
-      ></GoogleLogout> */}
-      <span className="signin-github button-item">
-        <GithubOutlined />
-      </span>
+      <LoginGithub
+        clientId={gh_client_id}
+        className="signin-github button-item"
+        onSuccess={responseGithub}
+        buttonText={<GithubOutlined />}
+      />
       <FacebookLogin
-        appId={import.meta.env.VITE_FB_CLIENT_ID as string}
-        autoLoad={false}
+        appId={fb_client_id as string}
         fields="name,email,picture"
         callback={responseFacebook}
-        redirectUri="localhost:8080"
         cssClass="signin-facebook button-item"
         icon={<FacebookOutlined />}
         textButton=""

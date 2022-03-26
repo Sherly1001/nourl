@@ -13,6 +13,7 @@ import {
   handleCancelEditUrl,
   handleConfirmEditUrl,
 } from './UrlsTableFunction'
+import { go_url } from '../../utils/const'
 
 const UrlTable = () => {
   const { urlsStore } = useStores()
@@ -70,13 +71,13 @@ const UrlTable = () => {
                         className="shorten-url"
                         onClick={handleCopyToClipBoard}
                       >
-                        {`${import.meta.env.VITE_API_URL}/${url.code}`}
+                        {`${go_url}/${url.code}`}
                         <span className="copied" aria-hidden={true}>
                           Copied
                         </span>
                       </span>
                       <a
-                        href={`${import.meta.env.VITE_API_URL}/${url.code}`}
+                        href={`${go_url}/${url.code}`}
                         target="_blank"
                         className="redirect-url"
                       >

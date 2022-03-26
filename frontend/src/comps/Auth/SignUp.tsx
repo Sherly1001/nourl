@@ -63,6 +63,14 @@ const SignUp = () => {
     clearErrors(['email', 'passwd'])
   }, [appStore.isSignupModalVisible])
 
+  useEffect(() => {
+    window.onkeydown = (e: KeyboardEvent) => {
+      if (e.keyCode == 27) {
+        appStore.setSignupModalVisible(false)
+      }
+    }
+  })
+
   return (
     <Modal
       visible={appStore.isSignupModalVisible}
