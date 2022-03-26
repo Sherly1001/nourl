@@ -30,7 +30,17 @@ body {
   line-height: 1.5;
   color: $txt-color;
   font-family: $main-font;
-  overflow: auto;
+  overflow-x: auto;
+  overflow-y: visible;
+}
+
+body::-webkit-scrollbar {
+  display: none;
+}
+
+body {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 ul,
