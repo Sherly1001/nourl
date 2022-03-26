@@ -34,15 +34,6 @@ body {
   overflow-y: visible;
 }
 
-body::-webkit-scrollbar {
-  display: none;
-}
-
-body {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
 ul,
 li {
   list-style-type: none;
@@ -69,7 +60,7 @@ a {
   background-repeat: no-repeat;
   background-size: cover;
   min-height: 100vh;
-  padding-bottom: 50px;
+  padding-bottom: 30px;
 }
 
 .container {
