@@ -16,8 +16,8 @@ const CustomForm = () => {
   const { authStore, urlsStore } = useStores()
   const [isClickButtonCustomUrl, setClickButtonCustomUrl] = useState(false)
   const schema = yup.object().shape({
-    url: yup.string().url('Invalid url').required('Url required'),
-    code: yup.string().required('Code required'),
+    url: yup.string().url('Invalid url').required('Url is required'),
+    code: yup.string().required('Code is required'),
   })
   const {
     register,

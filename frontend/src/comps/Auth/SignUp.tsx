@@ -14,10 +14,10 @@ const SignUp = () => {
   const [isClickSignupButtom, setClickSignupButtom] = useState(false)
 
   const schema = yup.object().shape({
-    email: yup.string().email('Invalid email').required('Email required'),
+    email: yup.string().email('Invalid email').required('Email is required'),
     passwd: yup
       .string()
-      .required('Password required')
+      .required('Password is required')
       .min(6, 'Password must at least 6 characters'),
   })
   const {

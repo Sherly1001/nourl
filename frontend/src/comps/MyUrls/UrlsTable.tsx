@@ -1,9 +1,18 @@
 import { observer } from 'mobx-react-lite'
 import './urlstable.scss'
 import useStores from '../../stores'
-import { useEffect, SyntheticEvent } from 'react'
+import { useEffect } from 'react'
 import { EditOutlined, LinkOutlined } from '@ant-design/icons'
-import { toast } from 'react-toastify'
+import {
+  handleCopyToClipBoard,
+  handleDeleteUrl,
+  handleCancelDeleteUrl,
+  handleConfirmDeleteUrl,
+  handleEditUrl,
+  handleKeyEnter,
+  handleCancelEditUrl,
+  handleConfirmEditUrl,
+} from './UrlsTableFunction'
 
 const UrlTable = () => {
   const { urlsStore } = useStores()
@@ -11,97 +20,6 @@ const UrlTable = () => {
   useEffect(() => {
     urlsStore.getAllUrls()
   }, [])
-
-  function handleCopyToClipBoard(e: SyntheticEvent) {
-    const target = e.target as HTMLElement
-    const copyElement = target.parentElement?.querySelector(
-      '.copied'
-    ) as HTMLElement
-    copyElement?.classList.add('show')
-    setTimeout(() => {
-      copyElement?.classList.remove('show')
-    }, 600)
-    navigator.clipboard.writeText(target.innerText)
-  }
-
-  function handleDeleteUrl(code: string) {
-    const trElement = document.querySelector(`tr[data-code="${code}"]`)
-    trElement?.classList.add('delete')
-  }
-
-  function handleCancelDeleteUrl(code: string) {
-    const trElement = document.querySelector(`tr[data-code="${code}"]`)
-    trElement?.classList.remove('delete')
-  }
-
-  function handleConfirmDeleteUrl(code: string) {
-    toast.promise(urlsStore.deleteUrl(code), {
-      pending: 'Deleting...',
-      success: 'Deleted',
-      error: {
-        render({ data }: any) {
-          return `Delete failed: ${data.response.data.msg}`
-        },
-      },
-    })
-  }
-
-  function handleEditUrl(code: string) {
-    const trElement = document.querySelector(`tr[data-code="${code}"]`)
-    trElement?.classList.add('edit')
-    const inputCodeElement = trElement?.querySelector(
-      '.new-code'
-    ) as HTMLInputElement
-    const inputUrlElement = trElement?.querySelector(
-      '.new-url'
-    ) as HTMLInputElement
-    const urlElement = trElement?.querySelector('.url') as HTMLInputElement
-    const codeElement = trElement?.querySelector('.code') as HTMLInputElement
-    inputCodeElement.focus()
-    inputCodeElement.value = codeElement.innerText
-    inputUrlElement.value = urlElement.innerText
-  }
-
-  function handleKeyEnter(
-    code: string,
-    e: React.KeyboardEvent<HTMLInputElement>
-  ) {
-    if (e.key === 'Enter') {
-      handleConfirmEditUrl(code)
-    }
-  }
-
-  function handleCancelEditUrl(code: string) {
-    const trElement = document.querySelector(`tr[data-code="${code}"]`)
-    trElement?.classList.remove('edit')
-  }
-
-  function handleConfirmEditUrl(code: string) {
-    const trElement = document.querySelector(`tr[data-code="${code}"]`)
-    const inputCodeElement = trElement?.querySelector(
-      '.new-code'
-    ) as HTMLInputElement
-    const inputUrlElement = trElement?.querySelector(
-      '.new-url'
-    ) as HTMLInputElement
-    const new_code = inputCodeElement.value
-    const new_url = inputUrlElement.value
-
-    toast.promise(urlsStore.updateUrl(code, new_code, new_url), {
-      pending: 'Updating...',
-      success: {
-        render() {
-          trElement?.classList.remove('edit')
-          return `Updated`
-        },
-      },
-      error: {
-        render({ data }: any) {
-          return `Update failed: ${data.response.data.msg}`
-        },
-      },
-    })
-  }
 
   return (
     <div className="myurls">
@@ -129,8 +47,11 @@ const UrlTable = () => {
                         type="text"
                         className="new-url"
                         placeholder="Enter new url"
-                        onKeyDown={(event) => handleKeyEnter(url.code, event)}
+                        onKeyDown={(event) =>
+                          handleKeyEnter(event, urlsStore, url.code)
+                        }
                       />
+                      <p className="error-url"></p>
                     </td>
                     <td>
                       <p className="code">{url.code}</p>
@@ -138,8 +59,11 @@ const UrlTable = () => {
                         type="text"
                         className="new-code"
                         placeholder="Enter new code"
-                        onKeyDown={(event) => handleKeyEnter(url.code, event)}
+                        onKeyDown={(event) =>
+                          handleKeyEnter(event, urlsStore, url.code)
+                        }
                       />
+                      <p className="error-code"></p>
                     </td>
                     <td>
                       <span
@@ -183,7 +107,9 @@ const UrlTable = () => {
                           </button>
                           <button
                             className="ok-edit"
-                            onClick={() => handleConfirmEditUrl(url.code)}
+                            onClick={() =>
+                              handleConfirmEditUrl(urlsStore, url.code)
+                            }
                           >
                             OK
                           </button>
@@ -197,7 +123,9 @@ const UrlTable = () => {
                           </button>
                           <button
                             className="ok-delete"
-                            onClick={() => handleConfirmDeleteUrl(url.code)}
+                            onClick={() =>
+                              handleConfirmDeleteUrl(urlsStore, url.code)
+                            }
                           >
                             OK
                           </button>

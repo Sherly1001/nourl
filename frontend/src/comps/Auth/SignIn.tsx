@@ -14,8 +14,8 @@ const SignIn = () => {
   const { appStore, authStore } = useStores()
   const [isClickSignInButtom, setClickSignInButtom] = useState(false)
   const schema = yup.object().shape({
-    email: yup.string().email('Invalid email').required('Email required'),
-    passwd: yup.string().required('Password required'),
+    email: yup.string().email('Invalid email').required('Email is required'),
+    passwd: yup.string().required('Password is required'),
   })
   const {
     register,
