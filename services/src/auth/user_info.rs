@@ -32,7 +32,9 @@ pub async fn get(
             Ok((
                 User {
                     id,
-                    display_name: github_info.display_name,
+                    display_name: github_info
+                        .display_name
+                        .unwrap_or(github_info.username),
                     email: github_info.email,
                     avatar_url: Some(github_info.avatar_url),
                     hash_passwd: None,
@@ -86,8 +88,10 @@ struct GhTokenRes {
 
 #[derive(Deserialize)]
 struct GhInfo {
+    #[serde(rename = "login")]
+    username: String,
     #[serde(rename = "name")]
-    display_name: String,
+    display_name: Option<String>,
     email: Option<String>,
     #[serde(rename = "id")]
     github_id: i32,
