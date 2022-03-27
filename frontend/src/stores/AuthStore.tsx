@@ -2,7 +2,6 @@ import { User, Nullable } from '../shared/interfaces/index'
 import { makeAutoObservable } from 'mobx'
 import AuthService from '../services/AuthService'
 import UserService from '../services/UserService'
-import { string } from 'yup'
 
 class AuthStore {
   isAuth = false
