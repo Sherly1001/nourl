@@ -104,6 +104,7 @@ const ButtonBox = () => {
         className="signin-github button-item"
         onSuccess={responseGithub}
         buttonText={<GithubOutlined />}
+        redirectUri={window.location.origin}
       />
       <FacebookLogin
         appId={fb_client_id as string}
@@ -112,6 +113,7 @@ const ButtonBox = () => {
         cssClass="signin-facebook button-item"
         icon={<FacebookOutlined />}
         textButton=""
+        redirectUri={window.location.origin}
       />
     </div>
   )
