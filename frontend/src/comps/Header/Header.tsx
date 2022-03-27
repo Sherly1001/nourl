@@ -59,7 +59,7 @@ const Header = ({}) => {
           {authStore.isAuth ? (
             <div className="header-user-info">
               <div className="dropdown-box">
-                <div className="dropdown-img">
+                <div className="dropdown-info">
                   {authStore.user?.avatar_url != null ? (
                     <img
                       src={authStore.user?.avatar_url}
@@ -71,6 +71,13 @@ const Header = ({}) => {
                       <UserOutlined />
                     </div>
                   )}
+                  <span className="user-name">
+                    {
+                      displayName?.split(' ')[
+                        displayName?.split(' ').length - 1
+                      ]
+                    }
+                  </span>
                 </div>
                 <div className="dropdown-list">
                   <span className="user-welcome">

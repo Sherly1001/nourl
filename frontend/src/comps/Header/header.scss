@@ -64,30 +64,45 @@
   &-user-info {
     @include flex(center, center);
     .dropdown-box {
-      .dropdown-img {
-        padding: 10px;
+      .dropdown-info {
+        @include flex(center, center);
+        padding: 5px 15px;
+        background-color: #f7bc92;
+        border-radius: 50px;
+        margin-bottom: 10px;
+        cursor: pointer;
+        .avatar {
+          @include flex(center, center);
+          width: 50px;
+          height: 50px;
+          background-color: $white;
+          border-radius: 50%;
+          box-shadow: $box-shadow;
+        }
+        .user-img {
+          width: 50px;
+          height: 50px;
+          border-radius: 50%;
+          object-fit: cover;
+          box-shadow: $box-shadow;
+        }
+        .user-name {
+          max-width: 100px;
+          margin-left: 10px;
+          font-size: 20px;
+          display: -webkit-box;
+          -webkit-line-clamp: 1;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          word-break: break-all;
+          font-weight: 500;
+        }
       }
       position: relative;
       &:hover .dropdown-list {
         visibility: visible;
         opacity: 1;
-      }
-      .avatar {
-        @include flex(center, center);
-        width: 50px;
-        height: 50px;
-        background-color: $white;
-        border-radius: 50%;
-        cursor: pointer;
-        box-shadow: $box-shadow;
-      }
-      .user-img {
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        cursor: pointer;
-        object-fit: cover;
-        box-shadow: $box-shadow;
       }
       .anticon {
         font-size: 25px;
@@ -102,17 +117,17 @@
         background-color: $white;
         border-radius: 5px;
         box-shadow: $box-shadow;
-        min-width: 200px;
+        width: 230px;
         padding: 15px 20px;
         .user-welcome {
           padding-inline: 10px;
           @include flex(baseline, flex-start);
-          font-size: 15px;
+          font-size: 14px;
           border-bottom: 1px solid #dddcdc;
           padding-bottom: 5px;
           .user-name {
             color: $main-color;
-            font-size: 20px;
+            font-size: 17px;
             margin-left: 5px;
             max-width: 100%;
             display: -webkit-box;
@@ -120,7 +135,7 @@
             -webkit-box-orient: vertical;
             overflow: hidden;
             text-overflow: ellipsis;
-            word-break: break-word;
+            word-break: break-all;
             margin-right: 5px;
           }
         }

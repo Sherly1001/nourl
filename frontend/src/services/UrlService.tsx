@@ -1,4 +1,5 @@
 import axios from './custom_axios'
+import { Url } from '../shared/interfaces'
 
 class UrlService {
   async getAllUrls() {
@@ -20,7 +21,7 @@ class UrlService {
   }
 
   async updateUrl(old_code: string, new_code: string, new_url: string) {
-    let res
+    let res: { data: { stt: string; data: Url } }
     if (old_code === new_code) {
       res = await axios.put('/api/urls/update', {
         old_code,
