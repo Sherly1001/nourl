@@ -17,6 +17,7 @@ pub struct AppState {
     pub gh_client_secret: String,
     pub gg_client_id: String,
     pub fb_client_id: String,
+    pub fb_client_access_token: String,
     pub frontend_notfound_uri: String,
     pub idgen: Arc<Mutex<IdGen>>,
 }
@@ -40,6 +41,8 @@ pub fn from_env() -> Config {
         env::var("GH_CLIENT_SECRET").expect("GH_CLIENT_SECRET");
     let gg_client_id = env::var("GG_CLIENT_ID").expect("GG_CLIENT_ID");
     let fb_client_id = env::var("FB_CLIENT_ID").expect("FB_CLIENT_ID");
+    let fb_client_access_token =
+        env::var("FB_CLIENT_ACCESS_TOKEN").expect("FB_CLIENT_ACCESS_TOKEN");
 
     let frontend_notfound_uri =
         env::var("FRONTEND_NOTFOUND_URI").unwrap_or("/".to_string());
@@ -85,6 +88,7 @@ pub fn from_env() -> Config {
         gh_client_secret,
         gg_client_id,
         fb_client_id,
+        fb_client_access_token,
         frontend_notfound_uri,
         idgen,
     };

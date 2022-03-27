@@ -229,7 +229,7 @@ async fn get_facebook_info(
         .get("https://graph.facebook.com/v13.0/debug_token")
         .header("User-Agent", "nourl")
         .query(&[
-            ("access_token", access_token),
+            ("access_token", state.fb_client_access_token.as_str()),
             ("input_token", access_token),
         ])
         .send()
