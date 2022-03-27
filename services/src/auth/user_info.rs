@@ -52,7 +52,7 @@ pub async fn get(
                     id,
                     display_name: google_info.display_name,
                     email: google_info.email,
-                    avatar_url: Some(google_info.avatar_url),
+                    avatar_url: google_info.avatar_url,
                     hash_passwd: None,
                     github_id: None,
                     google_id: Some(google_info.google_id.clone()),
@@ -103,7 +103,7 @@ async fn get_github_info(
     state: &State<AppState>,
 ) -> Result<GhInfo, String> {
     let token_res = reqwest::Client::new()
-        .get("https://github.com/login/oauth/access_token")
+        .post("https://github.com/login/oauth/access_token")
         .header("Content-Type", "application/json")
         .header("Accept", "application/json")
         .json(&json!({
@@ -153,7 +153,7 @@ struct GgInfo {
     #[serde(rename = "sub")]
     google_id: String,
     #[serde(rename = "picture")]
-    avatar_url: String,
+    avatar_url: Option<String>,
     #[serde(rename = "aud")]
     gg_client_id: String,
 }
@@ -229,7 +229,7 @@ async fn get_facebook_info(
         .get("https://graph.facebook.com/v13.0/debug_token")
         .header("User-Agent", "nourl")
         .query(&[
-            ("access_token", access_token),
+            ("access_token", state.fb_client_access_token.as_str()),
             ("input_token", access_token),
         ])
         .send()
