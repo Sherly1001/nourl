@@ -103,7 +103,7 @@ async fn get_github_info(
     state: &State<AppState>,
 ) -> Result<GhInfo, String> {
     let token_res = reqwest::Client::new()
-        .get("https://github.com/login/oauth/access_token")
+        .post("https://github.com/login/oauth/access_token")
         .header("Content-Type", "application/json")
         .header("Accept", "application/json")
         .json(&json!({
