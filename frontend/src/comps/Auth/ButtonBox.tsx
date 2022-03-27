@@ -11,7 +11,6 @@ import { observer } from 'mobx-react-lite'
 import { toast } from 'react-toastify'
 import LoginGithub from 'react-login-github'
 import { gg_client_id, gh_client_id, fb_client_id } from '../../utils/const'
-import { go_url } from '../../utils/const'
 
 const ButtonBox = () => {
   const { authStore, appStore } = useStores()
@@ -105,7 +104,6 @@ const ButtonBox = () => {
         className="signin-github button-item"
         onSuccess={responseGithub}
         buttonText={<GithubOutlined />}
-        redirectUri={go_url as string}
       />
       <FacebookLogin
         appId={fb_client_id as string}
@@ -114,7 +112,6 @@ const ButtonBox = () => {
         cssClass="signin-facebook button-item"
         icon={<FacebookOutlined />}
         textButton=""
-        redirectUri={go_url as string}
       />
     </div>
   )
