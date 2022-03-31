@@ -1,3 +1,5 @@
+use std::path::PathBuf;
+
 use rocket::{http::Status, response::Redirect, serde::Deserialize, State};
 
 use crate::{
@@ -195,16 +197,23 @@ pub fn delete(auth: Auth, code: String, db_pool: &State<DbPool>) -> JRes<()> {
     }
 }
 
-#[rocket::get("/<code>")]
+#[rocket::get("/<code..>", rank = 1)]
 pub fn go(
-    code: String,
+    code: PathBuf,
     db_pool: &State<DbPool>,
     state: &State<AppState>,
 ) -> Redirect {
-    match db::url::get(db_pool, &code) {
+    let code = code.to_str().unwrap_or("");
+    let url = match db::url::get(db_pool, &code) {
         Err(_) => {
-            Redirect::found(format!("{}/{}", state.frontend_notfound_uri, code))
+            format!(
+                "{}/{}",
+                state.frontend_notfound_uri,
+                urlencoding::encode(&code)
+            )
         }
-        Ok(url) => Redirect::found(url.url),
-    }
+        Ok(url) => url.url,
+    };
+
+    Redirect::found(url)
 }
