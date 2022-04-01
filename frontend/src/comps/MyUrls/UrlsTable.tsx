@@ -40,7 +40,7 @@ const UrlTable = () => {
                 .slice()
                 .reverse()
                 .map((url, index) => (
-                  <tr data-code={url.code} key={url.id}>
+                  <tr data-url-id={url.id} key={url.id}>
                     <td>{index + 1}</td>
                     <td>
                       <p className="url">{url.url}</p>
@@ -49,7 +49,7 @@ const UrlTable = () => {
                         className="new-url"
                         placeholder="Enter new url"
                         onKeyDown={(event) =>
-                          handleKeyEnter(event, urlsStore, url.code)
+                          handleKeyEnter(event, urlsStore, url.id, url.code)
                         }
                       />
                       <p className="error-url"></p>
@@ -61,55 +61,58 @@ const UrlTable = () => {
                         className="new-code"
                         placeholder="Enter new code"
                         onKeyDown={(event) =>
-                          handleKeyEnter(event, urlsStore, url.code)
+                          handleKeyEnter(event, urlsStore, url.id, url.code)
                         }
                       />
                       <p className="error-code"></p>
                     </td>
                     <td>
-                      <span
-                        className="shorten-url"
-                        onClick={handleCopyToClipBoard}
-                      >
-                        {`${go_url}/${url.code}`}
-                        <span className="copied" aria-hidden={true}>
-                          Copied
+                      <div className="td-box">
+                        <span
+                          className="shortened-url"
+                          onClick={handleCopyToClipBoard}
+                        >
+                          {`${go_url}/${encodeURI(url.code)}`}
+
+                          <span className="copied" aria-hidden={true}>
+                            Copied
+                          </span>
                         </span>
-                      </span>
-                      <a
-                        href={`${go_url}/${url.code}`}
-                        target="_blank"
-                        className="redirect-url"
-                      >
-                        <LinkOutlined />
-                      </a>
+                        <a
+                          href={`${go_url}/${url.code}`}
+                          target="_blank"
+                          className="redirect-url"
+                        >
+                          <LinkOutlined />
+                        </a>
+                      </div>
                     </td>
                     <td>
                       <div className="button-box">
                         <button
                           className="delete-url"
-                          onClick={() => handleDeleteUrl(url.code)}
+                          onClick={() => handleDeleteUrl(url.id)}
                         >
                           Delete
                         </button>
 
                         <button
                           className="edit-url"
-                          onClick={() => handleEditUrl(url.code)}
+                          onClick={() => handleEditUrl(url.id)}
                         >
                           <EditOutlined />
                         </button>
                         <div className="confirm-edit">
                           <button
                             className="cancel-edit"
-                            onClick={() => handleCancelEditUrl(url.code)}
+                            onClick={() => handleCancelEditUrl(url.id)}
                           >
                             Cancel
                           </button>
                           <button
                             className="ok-edit"
                             onClick={() =>
-                              handleConfirmEditUrl(urlsStore, url.code)
+                              handleConfirmEditUrl(urlsStore, url.id, url.code)
                             }
                           >
                             OK
@@ -118,7 +121,7 @@ const UrlTable = () => {
                         <div className="confirm-delete">
                           <button
                             className="cancel-delete"
-                            onClick={() => handleCancelDeleteUrl(url.code)}
+                            onClick={() => handleCancelDeleteUrl(url.id)}
                           >
                             Cancel
                           </button>

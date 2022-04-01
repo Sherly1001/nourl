@@ -50,7 +50,7 @@ const ShowUrl = ({ show, setShow, url, code }: ShowFormProps) => {
             href={`${go_url}/${code}`}
             target="_blank"
             className="shortened-url"
-          >{`${go_url}/${code}`}</a>
+          >{`${go_url}/${encodeURI(code)}`}</a>
           <div className="copy">
             <CopyOutlined onClick={handleCopyUrlToClipBoard} />
             <span className="copied" aria-hidden={true} ref={CopyElement}>

@@ -1821,6 +1821,11 @@ react-is@^16.12.0, react-is@^16.13.1:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
   integrity sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==
 
+react-login-github@^1.0.7:
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/react-login-github/-/react-login-github-1.0.7.tgz#97b9ca5a612e6faa3dec3fafdb6702a8dcce8e0d"
+  integrity sha512-pXJ4LTESA2VP7VU+p7JXpAZ61aGp8UjQVbqA4F6e7R1V5P95jDgl2OVWfd9zhJdEMTejYPwJO/xmRy2hitAdgQ==
+
 react-refresh@^0.11.0:
   version "0.11.0"
   resolved "https://registry.yarnpkg.com/react-refresh/-/react-refresh-0.11.0.tgz#77198b944733f0f1f1a90e791de4541f9f074046"

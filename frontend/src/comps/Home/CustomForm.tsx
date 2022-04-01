@@ -17,7 +17,10 @@ const CustomForm = () => {
   const [isClickButtonCustomUrl, setClickButtonCustomUrl] = useState(false)
   const schema = yup.object().shape({
     url: yup.string().url('Invalid url').required('Url is required'),
-    code: yup.string().required('Code is required'),
+    code: yup
+      .string()
+      .required('Code is required')
+      .matches(/^[^// ]+$/, 'Invalid code'),
   })
   const {
     register,

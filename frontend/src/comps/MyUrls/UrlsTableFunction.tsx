@@ -15,17 +15,19 @@ export function handleCopyToClipBoard(e: SyntheticEvent) {
   navigator.clipboard.writeText(target.innerText)
 }
 
-export function handleDeleteUrl(code: string) {
-  const trElement = document.querySelector(`tr[data-code="${code}"]`)
+export function handleDeleteUrl(url_id: string) {
+  const trElement = document.querySelector(`tr[data-url-id="${url_id}"]`)
   trElement?.classList.add('delete')
 }
 
-export function handleCancelDeleteUrl(code: string) {
-  const trElement = document.querySelector(`tr[data-code="${code}"]`)
+export function handleCancelDeleteUrl(url_id: string) {
+  const trElement = document.querySelector(`tr[data-url-id="${url_id}"]`)
   trElement?.classList.remove('delete')
 }
 
 export function handleConfirmDeleteUrl(urlsStore: UrlsStore, code: string) {
+  console.log(code)
+
   toast.promise(urlsStore.deleteUrl(code), {
     pending: 'Deleting...',
     success: 'Deleted',
@@ -37,8 +39,8 @@ export function handleConfirmDeleteUrl(urlsStore: UrlsStore, code: string) {
   })
 }
 
-export function handleEditUrl(code: string) {
-  const trElement = document.querySelector(`tr[data-code="${code}"]`)
+export function handleEditUrl(url_id: string) {
+  const trElement = document.querySelector(`tr[data-url-id="${url_id}"]`)
   trElement?.classList.add('edit')
   const inputCodeElement = trElement?.querySelector(
     '.new-code'
@@ -56,18 +58,20 @@ export function handleEditUrl(code: string) {
 export function handleKeyEnter(
   e: React.KeyboardEvent<HTMLInputElement>,
   urlsStore: UrlsStore,
+  url_id: string,
   code: string
 ) {
   if (e.key === 'Enter') {
-    handleConfirmEditUrl(urlsStore, code)
+    handleConfirmEditUrl(urlsStore, url_id, code)
   }
 }
 
 export async function handleValidateEditUrl(
   urlsStore: UrlsStore,
+  url_id: string,
   code: string
 ) {
-  const trElement = document.querySelector(`tr[data-code="${code}"]`)
+  const trElement = document.querySelector(`tr[data-url-id="${url_id}"]`)
   const inputCodeElement = trElement?.querySelector(
     '.new-code'
   ) as HTMLInputElement
@@ -78,7 +82,10 @@ export async function handleValidateEditUrl(
   const errorUrl = trElement?.querySelector('.error-url') as HTMLInputElement
 
   let customValidation = yup.object().shape({
-    code: yup.string().required('Code is required'),
+    code: yup
+      .string()
+      .required('Code is required')
+      .matches(/^[^// ]+$/, 'Invalid code'),
     url: yup.string().required('Url is required').url('Invalid url'),
   })
 
@@ -123,8 +130,8 @@ export async function handleValidateEditUrl(
     })
 }
 
-export function handleCancelEditUrl(code: string) {
-  const trElement = document.querySelector(`tr[data-code="${code}"]`)
+export function handleCancelEditUrl(url_id: string) {
+  const trElement = document.querySelector(`tr[data-url-id="${url_id}"]`)
   const errorCode = trElement?.querySelector('.error-code') as HTMLInputElement
   const errorUrl = trElement?.querySelector('.error-url') as HTMLInputElement
   errorCode.innerText = ''
@@ -132,6 +139,10 @@ export function handleCancelEditUrl(code: string) {
   trElement?.classList.remove('edit')
 }
 
-export function handleConfirmEditUrl(urlsStore: UrlsStore, code: string) {
-  handleValidateEditUrl(urlsStore, code)
+export function handleConfirmEditUrl(
+  urlsStore: UrlsStore,
+  url_id: string,
+  code: string
+) {
+  handleValidateEditUrl(urlsStore, url_id, code)
 }
