@@ -277,21 +277,20 @@ pub async fn update<'r>(
         Err(err) => return Res::err(Status::Unauthorized, err.to_string()),
     };
 
-    if let Some(hash_passwd) = user.hash_passwd.clone() {
-        if hash_with_key(
-            state.secret_key.as_bytes(),
-            user_update.old_passwd.as_bytes(),
-        ) != hash_passwd
-        {
-            return Res::err(
-                Status::Unauthorized,
-                "old password not matched".to_string(),
-            );
-        }
-    }
-
     let mut info = user_update.info.clone();
     if let Some(passwd) = info.hash_passwd {
+        if let Some(old_passwd) = user.hash_passwd.clone() {
+            if hash_with_key(
+                state.secret_key.as_bytes(),
+                user_update.old_passwd.as_bytes(),
+            ) != old_passwd
+            {
+                return Res::err(
+                    Status::Unauthorized,
+                    "old password not matched".to_string(),
+                );
+            }
+        }
         info.hash_passwd = Some(hash_with_key(
             state.secret_key.as_bytes(),
             passwd.as_bytes(),
