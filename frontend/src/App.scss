@@ -47,6 +47,9 @@ button {
 
 input {
   outline: none;
+  &:focus {
+    border-color: $main-color !important;
+  }
 }
 
 a {

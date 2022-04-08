@@ -64,6 +64,7 @@
   &-user-info {
     @include flex(center, center);
     .dropdown-box {
+      position: relative;
       .dropdown-info {
         @include flex(center, center);
         padding: 5px 15px;
@@ -87,7 +88,7 @@
           box-shadow: $box-shadow;
         }
         .user-name {
-          max-width: 100px;
+          max-width: 150px;
           margin-left: 10px;
           font-size: 20px;
           display: -webkit-box;
@@ -99,7 +100,6 @@
           font-weight: 500;
         }
       }
-      position: relative;
       &:hover .dropdown-list {
         visibility: visible;
         opacity: 1;
@@ -112,7 +112,7 @@
         opacity: 0;
         transition: 0.2s all;
         position: absolute;
-        bottom: -115px;
+        top: 70px;
         right: 5px;
         background-color: $white;
         border-radius: 5px;
@@ -139,14 +139,23 @@
             margin-right: 5px;
           }
         }
-        .logout {
+        .dropdown-nav {
           display: block;
-          margin-top: 10px;
           padding: 10px 10px;
-          border-radius: 5px;
+          border-radius: 8px;
           &:hover {
             background-color: #e7e7e9;
           }
+          &.active {
+            background-color: $main-color;
+            color: $white;
+          }
+        }
+        .dropdown-nav ~ .dropdown-nav {
+          margin-top: 5px;
+        }
+        .user-profile {
+          margin-top: 10px;
         }
       }
     }

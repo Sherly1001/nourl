@@ -6,6 +6,7 @@ import { Routes, Route } from 'react-router-dom'
 import Header from './comps/Header/Header'
 import { observer } from 'mobx-react-lite'
 import useStores from './stores'
+import Profile from './pages/Profile'
 
 const App = () => {
   const { authStore } = useStores()
@@ -17,7 +18,10 @@ const App = () => {
             <Route path="/" element={<Header />}>
               <Route index element={<Home />}></Route>
               {authStore.isAuth ? (
-                <Route path="/my_url" element={<MyUrls />}></Route>
+                <>
+                  <Route path="/my_url" element={<MyUrls />}></Route>
+                  <Route path="/profile/*" element={<Profile />}></Route>
+                </>
               ) : (
                 ''
               )}

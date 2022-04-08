@@ -2,6 +2,7 @@ import { User, Nullable } from '../shared/interfaces/index'
 import { makeAutoObservable } from 'mobx'
 import AuthService from '../services/AuthService'
 import UserService from '../services/UserService'
+import ChangePasswd from '../comps/Profile/ChangePasswd'
 
 class AuthStore {
   isAuth = false
@@ -132,6 +133,20 @@ class AuthStore {
 
   async loadUser() {
     const res = await UserService.getUser()
+    this.setUser(res.data)
+  }
+
+  async updateUser(info: {
+    avatar_url: string | null
+    email?: string
+    display_name?: string
+  }) {
+    const res = await UserService.updateUser(info)
+    this.setUser(res.data)
+  }
+
+  async changePasswd(old_passwd: string, passwd: string) {
+    const res = await UserService.changePasswd(old_passwd, passwd)
     this.setUser(res.data)
   }
 }

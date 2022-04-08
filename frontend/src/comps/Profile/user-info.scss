@@ -1,0 +1,76 @@
+@import '../../scss';
+
+.profile-info {
+  form {
+    .info-header {
+      @include flex(center, flex-start);
+      margin-bottom: 20px;
+      height: 150px;
+      &-img {
+        cursor: pointer;
+        width: 150px;
+        .user-img {
+          @include flex(center, center);
+          height: 150px;
+          width: 150px;
+          background-color: $white;
+          border-radius: 50%;
+          border: 1px solid #e0e0e0;
+          .anticon-user {
+            font-size: 50px;
+          }
+        }
+        .user-avatar {
+          height: 150px;
+          width: 150px;
+          border-radius: 50%;
+          object-fit: cover;
+        }
+      }
+      .user-name {
+        font-size: 20px;
+        margin-left: 30px;
+        color: $main-color;
+      }
+    }
+    label {
+      display: block;
+      text-align: start;
+      font-weight: 500;
+      margin-bottom: 10px;
+    }
+    input {
+      padding: 20px 10px;
+      border-radius: 15px;
+      width: 100%;
+      border: 1px solid #e7e7e7;
+      background-color: $white !important;
+      font-size: 16px;
+      // margin-bottom: 5px;
+      max-width: 600px;
+    }
+    .edit-button {
+      box-shadow: $box-shadow;
+      border-radius: 30px;
+      transition: 0.3s background-color;
+      color: #fff;
+      font-size: 18px;
+      width: fit-content;
+      margin-top: 10px;
+      margin-bottom: 70px;
+      padding: 20px 40px;
+      background-color: $main-color;
+      &:hover {
+        background-color: $second-color;
+      }
+      &:disabled {
+        background-color: #f7b081;
+      }
+    }
+    .error {
+      height: 20px;
+      color: $red;
+      margin-bottom: 5px;
+    }
+  }
+}

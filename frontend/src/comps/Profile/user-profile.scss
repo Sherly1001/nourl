@@ -1,0 +1,54 @@
+@import '../../scss';
+
+.profile {
+  margin-top: 10px;
+  max-width: 1200px;
+  margin-inline: auto;
+  background-color: $white;
+  border-radius: 10px;
+  box-shadow: $box-shadow;
+  height: 100%;
+  &-box {
+    height: 100%;
+    @include flex(stretch, center);
+  }
+  &-tab {
+    flex: 20%;
+    border-right: 1px solid #e7e7e7;
+    h2 {
+      font-weight: 700;
+      font-size: 25px;
+      margin-top: 25px;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .tab-item {
+      color: #847f7e;
+      padding-block: 10px;
+      margin-left: 20px;
+      cursor: pointer;
+      transition: 0.1s all;
+      @include flex(center, flex-start);
+      .anticon {
+        margin-right: 10px;
+        font-size: 20px;
+      }
+      &.active {
+        border-right: 3px solid $main-color;
+        color: $txt-color;
+      }
+      &:hover {
+        border-right: 3px solid $main-color;
+        color: $txt-color;
+      }
+    }
+    .tab-item ~ .tab-item {
+      margin-top: 15px;
+    }
+  }
+  &-right {
+    flex: 75%;
+    padding-top: 50px;
+    padding-left: 70px;
+  }
+}

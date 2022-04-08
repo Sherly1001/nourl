@@ -84,7 +84,17 @@ const Header = ({}) => {
                     <span>Hi, </span>
                     <span className="user-name">{displayName}</span>
                   </span>
-                  <a href="#" className="logout" onClick={handleLogout}>
+                  <LinkCustom
+                    className="user-profile dropdown-nav"
+                    to="/profile/edit"
+                  >
+                    Profile
+                  </LinkCustom>
+                  <a
+                    href="#"
+                    className="logout dropdown-nav"
+                    onClick={handleLogout}
+                  >
                     Log out
                   </a>
                 </div>

@@ -1,8 +1,8 @@
 import { makeAutoObservable } from 'mobx'
 
 class AppStore {
-  isSigniModalVisible
-  isSignupModalVisible
+  isSigniModalVisible: boolean
+  isSignupModalVisible: boolean
 
   constructor(isSigniModalVisible = false, isSignupModalVisible = false) {
     makeAutoObservable(this)
