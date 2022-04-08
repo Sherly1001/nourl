@@ -5,6 +5,7 @@ import * as yup from 'yup'
 import { toast } from 'react-toastify'
 import useStores from '../../stores'
 import { useState } from 'react'
+import { observer } from 'mobx-react-lite'
 
 const ChangePasswd = () => {
   const { authStore } = useStores()
@@ -68,4 +69,4 @@ const ChangePasswd = () => {
   )
 }
 
-export default ChangePasswd
+export default observer(ChangePasswd)

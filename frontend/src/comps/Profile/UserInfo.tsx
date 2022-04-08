@@ -1,5 +1,5 @@
 import './user-info.scss'
-import { EditOutlined, UserOutlined } from '@ant-design/icons'
+import { UserOutlined } from '@ant-design/icons'
 import useStores from '../../stores'
 import { observer } from 'mobx-react-lite'
 import { useForm } from 'react-hook-form'
@@ -12,6 +12,7 @@ const UserInfo = () => {
   const { authStore } = useStores()
   const [isDisabledButtonEdit, setIsDisabledButtonEdit] = useState(true)
   const [isClickButtonEdit, setClickButtonEdit] = useState(false)
+  const [avatar, setAvatar] = useState('')
 
   const schema = yup.object().shape({
     avatar: yup.string().url('Invalid url'),
@@ -41,19 +42,26 @@ const UserInfo = () => {
         setValue('name', authStore.user.display_name)
       if (authStore.user.email != 'none')
         setValue('email', authStore.user.email)
-      if (authStore.user.avatar_url)
+      if (authStore.user.avatar_url) {
         setValue('avatar', authStore.user.avatar_url)
+        setAvatar(authStore.user.avatar_url)
+      }
     }
   }, [authStore.user])
 
   function handleDisabledButtonEdit() {
     setIsDisabledButtonEdit(false)
   }
+  function handleAvatarChange(e: SyntheticEvent) {
+    setIsDisabledButtonEdit(false)
+    const target = e.target as HTMLFormElement
+    setAvatar(target.value)
+  }
   function handleEditProfile() {
     setClickButtonEdit(true)
     toast.promise(
       authStore.updateUser({
-        avatar_url: getValues('avatar') || null,
+        avatar_url: getValues('avatar'),
         email: getValues('email'),
         display_name: getValues('name'),
       }),
@@ -80,16 +88,12 @@ const UserInfo = () => {
       <form onSubmit={handleSubmit(handleEditProfile)}>
         <div className="info-header">
           <div className="info-header-img">
-            {getValues('avatar') ? (
-              <img
-                src={getValues('avatar')}
-                alt="avatar"
-                className="user-avatar"
-              />
+            {avatar ? (
+              <img src={avatar} alt="avatar" className="user-avatar" />
             ) : authStore.user?.avatar_url != null ? (
               <img
                 src={authStore.user?.avatar_url}
-                alt="avatar"
+                alt="avatar-user"
                 className="user-avatar"
               />
             ) : (
@@ -104,7 +108,7 @@ const UserInfo = () => {
         <input
           type="text"
           id="avatar"
-          {...register('avatar', { onChange: handleDisabledButtonEdit })}
+          {...register('avatar', { onChange: (e) => handleAvatarChange(e) })}
         />
         <p className="error">{errors.avatar?.message}</p>
         <label htmlFor="name">Display name</label>

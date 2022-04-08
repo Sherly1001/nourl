@@ -63,7 +63,7 @@ const Header = ({}) => {
                   {authStore.user?.avatar_url != null ? (
                     <img
                       src={authStore.user?.avatar_url}
-                      alt="user-img"
+                      alt="avatar"
                       className="user-img"
                     />
                   ) : (

@@ -137,7 +137,7 @@ class AuthStore {
   }
 
   async updateUser(info: {
-    avatar_url: string | null
+    avatar_url: string
     email?: string
     display_name?: string
   }) {
