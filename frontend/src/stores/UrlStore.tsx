@@ -31,7 +31,7 @@ class UrlsStore {
 
   async getAllUrls() {
     const res = await UrlService.getAllUrls()
-    this.setUrls(res.data)
+    this.setUrls(res.data.reverse())
     return res.data
   }
 
@@ -49,6 +49,18 @@ class UrlsStore {
       this.setUrl(this.urls[index], new_code, new_url)
     }
     return res.data
+  }
+
+  sortUrlsByCodeDown() {
+    this.urls.sort((a, b) => a.code.localeCompare(b.code))
+  }
+
+  sortUrlsByCodeUp() {
+    this.urls.sort((a, b) => b.code.localeCompare(a.code))
+  }
+
+  sortUrlsByTime() {
+    this.urls.sort((a, b) => a.id.localeCompare(b.code))
   }
 }
 

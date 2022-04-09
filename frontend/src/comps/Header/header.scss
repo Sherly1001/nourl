@@ -8,20 +8,20 @@
   &-logo {
     @include flex(center, center);
     .imgLogo {
-      width: 40px;
+      width: 2.5rem;
     }
     .textLogo {
-      width: 100px;
+      width: 6rem;
     }
   }
   &-navbar {
     a {
-      font-size: 20px;
+      font-size: 1.3rem;
       cursor: pointer;
       transition: 0.2s color;
       position: relative;
       padding-bottom: 3px;
-      padding-inline: 10px;
+      padding-inline: 0.6rem;
       &:after {
         content: '';
         position: absolute;
@@ -41,15 +41,15 @@
       }
     }
     a ~ a {
-      margin-left: 10px;
+      margin-left: 0.6rem;
     }
   }
   &-button {
     &-item {
       color: $white;
       background-color: $main-color;
-      padding: 15px 30px;
-      font-size: 18px;
+      padding: 0.94rem 1.9rem;
+      font-size: 1.2rem;
       border-radius: 30px;
       transition: 0.2s background-color;
       box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 1px,
@@ -71,26 +71,32 @@
         background-color: #f7bc92;
         border-radius: 50px;
         margin-bottom: 10px;
+        @include mobile {
+          margin-bottom: 0;
+        }
         cursor: pointer;
         .avatar {
           @include flex(center, center);
-          width: 50px;
-          height: 50px;
+          width: 3.2rem;
+          height: 3.2rem;
           background-color: $white;
           border-radius: 50%;
           box-shadow: $box-shadow;
+          .anticon-user {
+            font-size: 1.5rem;
+          }
         }
         .user-img {
-          width: 50px;
-          height: 50px;
+          width: 3.2rem;
+          height: 3.2rem;
           border-radius: 50%;
           object-fit: cover;
           box-shadow: $box-shadow;
         }
         .user-name {
-          max-width: 150px;
+          max-width: 9rem;
           margin-left: 10px;
-          font-size: 20px;
+          font-size: 1.2rem;
           display: -webkit-box;
           -webkit-line-clamp: 1;
           -webkit-box-orient: vertical;
@@ -104,9 +110,6 @@
         visibility: visible;
         opacity: 1;
       }
-      .anticon {
-        font-size: 25px;
-      }
       .dropdown-list {
         visibility: hidden;
         opacity: 0;
@@ -117,17 +120,20 @@
         background-color: $white;
         border-radius: 5px;
         box-shadow: $box-shadow;
-        width: 230px;
-        padding: 15px 20px;
+        width: 14.3rem;
+        padding: 0.95rem 1rem;
+        @include mobile {
+          top: 4.9rem;
+        }
         .user-welcome {
-          padding-inline: 10px;
+          padding-inline: 0.6rem;
           @include flex(baseline, flex-start);
-          font-size: 14px;
+          font-size: 0.9rem;
           border-bottom: 1px solid #dddcdc;
           padding-bottom: 5px;
           .user-name {
             color: $main-color;
-            font-size: 17px;
+            font-size: 1.1rem;
             margin-left: 5px;
             max-width: 100%;
             display: -webkit-box;
@@ -141,7 +147,7 @@
         }
         .dropdown-nav {
           display: block;
-          padding: 10px 10px;
+          padding: 0.6rem 0.6rem;
           border-radius: 8px;
           &:hover {
             background-color: #e7e7e9;
@@ -152,10 +158,10 @@
           }
         }
         .dropdown-nav ~ .dropdown-nav {
-          margin-top: 5px;
+          margin-top: 0.4rem;
         }
         .user-profile {
-          margin-top: 10px;
+          margin-top: 0.6rem;
         }
       }
     }

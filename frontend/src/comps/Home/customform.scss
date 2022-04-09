@@ -8,50 +8,19 @@
   box-shadow: $box-shadow;
   border-radius: 10px;
   .form-warning {
-    margin-top: 15px;
-    font-size: 13px;
-    .anticon {
-      color: #fcbc03;
-      margin-right: 5px;
-      font-size: 18px;
-    }
+    margin-top: 0.95rem;
+    font-size: 0.75rem;
     border: 1px solid #fcbc03;
-    padding: 10px 20px;
+    padding: 0.6rem 1.2rem;
     background-color: #fffbe6;
     border-radius: 5px;
-  }
-  label {
-    display: block;
-    text-align: start;
-    font-weight: 500;
-    margin-block: 10px;
-  }
-  input {
-    padding: 20px 10px;
-    border-radius: 15px;
-    width: 100%;
-    border: 1px solid #e7e7e7;
-    background-color: $white !important;
-    font-size: 16px;
-    margin-bottom: 5px;
-  }
-  .error {
-    color: $red;
-    height: 20px;
-  }
-  .customurl-button {
-    box-shadow: $box-shadow;
-    border-radius: 30px;
-    transition: 0.3s background-color;
-    color: #fff;
-    font-size: 18px;
-    width: 100%;
-    margin-bottom: 20px;
-    margin-top: 15px;
-    padding-block: 20px;
-    background-color: $main-color;
-    &:hover {
-      background-color: $second-color;
+    .anticon-warning {
+      color: #fcbc03;
+      margin-right: 0.3rem;
+      font-size: 1.1rem;
     }
+  }
+  @include mobile {
+    margin-inline: 2.5rem;
   }
 }

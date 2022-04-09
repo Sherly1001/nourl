@@ -1,85 +1,47 @@
 @import '../../scss';
 
 .modal {
-  padding-bottom: 50px;
+  padding-bottom: 3.2rem;
   &-content {
-    padding: 25px 60px;
-    text-align: center;
     h2 {
-      font-size: 35px;
-      margin-bottom: 10px;
+      font-size: 2.4rem;
+      margin-bottom: 0.6rem;
     }
     .desc {
-      margin-bottom: 20px;
+      margin-bottom: 1.4rem;
       line-height: 1.2;
     }
-    .form {
-      label {
-        display: block;
-        text-align: start;
-        font-weight: 500;
-        margin-bottom: 10px;
-      }
-      input {
-        padding: 20px 10px;
-        border-radius: 15px;
-        width: 100%;
-        border: 1px solid #e7e7e7;
-        background-color: $white !important;
-        font-size: 16px;
-        margin-bottom: 5px;
-      }
-      .signup-button,
-      .signin-button {
-        box-shadow: $box-shadow;
-        border-radius: 30px;
-        transition: 0.3s background-color;
-        color: #fff;
-        font-size: 18px;
-        width: 100%;
-        margin-bottom: 20px;
-        margin-top: 15px;
-        padding-block: 20px;
-        background-color: $main-color;
-        &:hover {
-          background-color: $second-color;
-        }
-      }
-      .error {
-        height: 20px;
-        color: $red;
-      }
-    }
+
     .signin span,
     .signup span {
       margin-left: 5px;
       cursor: pointer;
       color: $main-color;
       font-weight: 500;
-      font-size: 18px;
+      font-size: 1.1rem;
     }
     .seperate {
       display: inline-block;
       color: $third-color;
       font-weight: 500;
-      font-size: 17px;
+      font-size: 1.1rem;
       position: relative;
-      margin-top: 10px;
-      margin-bottom: 15px;
+      margin-top: 0.6rem;
+      margin-bottom: 0.95rem;
       &:before,
       &:after {
         content: '';
         position: absolute;
-        left: -90px;
+        left: -5rem;
         top: 50%;
         transform: translateY(-50%);
         height: 1px;
-        width: 75px;
+        width: 4.7rem;
         background-color: #dddcdc;
       }
       &:after {
         left: unset;
-        right: -90px;
+        right: -5rem;
       }
     }
   }

@@ -8,10 +8,17 @@
   img {
     margin-inline: auto;
     display: block;
+    width: 25rem;
   }
   &-content {
     @include flex(center, flex-start);
-    padding-block: 50px;
+    padding-block: 3.2rem;
+    @include mobile {
+      flex: 100%;
+    }
+    @include mobile {
+      display: block;
+    }
   }
   &-desc {
     flex: 40%;
@@ -28,6 +35,9 @@
         font-size: 25px;
         color: $main-color;
         margin-right: 5px;
+      }
+      @include mobile {
+        display: none;
       }
     }
   }

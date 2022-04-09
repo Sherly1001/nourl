@@ -7,22 +7,6 @@
   background-color: $white;
   box-shadow: $box-shadow;
   border-radius: 10px;
-  label {
-    display: block;
-    text-align: start;
-    font-weight: 500;
-    margin-block: 10px;
-  }
-  input {
-    padding: 20px 10px;
-    border-radius: 15px;
-    width: 100%;
-    border: 1px solid #e7e7e7;
-    background-color: $white;
-    font-size: 16px;
-    margin-bottom: 10px;
-    cursor: text;
-  }
   input:disabled {
     background-color: #e7e7e7;
     cursor: alias;
@@ -31,8 +15,8 @@
   .form-box {
     @include flex(center, space-between);
     background-color: #e7e7e7;
-    padding: 15px 10px;
-    border-radius: 15px;
+    padding: 0.7rem 1rem;
+    border-radius: 0.95rem;
     .shortened-url {
       color: $main-color;
       &:hover {
@@ -65,20 +49,16 @@
       }
     }
   }
-  .error {
-    color: #ff0000;
-    height: 20px;
-  }
   .button-box {
     @include flex(center, center);
-    margin-block: 20px;
+    margin-block: 1.2rem;
     .myurl-button,
     .return-button {
       flex: 50%;
-      font-size: 18px;
+      font-size: 1.2rem;
       box-shadow: $box-shadow;
-      border-radius: 30px;
-      padding-block: 20px;
+      border-radius: 1.9rem;
+      padding-block: 1.2rem;
     }
     .myurl-button {
       transition: 0.3s all;
@@ -89,7 +69,7 @@
         background-color: $main-color;
         color: $white;
       }
-      margin-right: 20px;
+      margin-right: 1.2rem;
     }
     .return-button {
       transition: 0.3s background-color;

@@ -8,12 +8,15 @@
   background-color: #fff;
   &-content {
     margin-top: 10px;
-    padding: 20px 30px;
-    padding-bottom: 50px;
+    padding: 1.5rem 1.9rem;
+    padding-bottom: 3.2rem;
+    @include mobile {
+      padding-inline: 0.3rem;
+    }
     h2 {
-      font-size: 35px;
-      margin-bottom: 20px;
-      margin-left: 15px;
+      text-align: center;
+      font-size: 2.2rem;
+      margin-bottom: 1.2rem;
       font-weight: 500;
     }
     .urls-box {
@@ -22,9 +25,12 @@
       overflow-x: auto;
       padding-right: 5px;
       max-width: 100%;
+      @include tablet {
+        max-height: unset;
+      }
       &::-webkit-scrollbar {
-        height: 8px;
-        width: 8px;
+        height: 0.5rem;
+        width: 0.5rem;
       }
       &::-webkit-scrollbar-thumb {
         background: $main-color;
@@ -37,27 +43,25 @@
         width: 100%;
         border-spacing: 0;
         margin-bottom: 5px;
-        padding-left: 10px;
+        padding-left: 0.6rem;
         border-collapse: separate;
         border-spacing: 0 5px;
         tbody {
-          padding-right: 10px;
           width: 100%;
           tr {
             transition: 0.2s all;
-            border-radius: 10px;
           }
           tr:first-child {
             background-color: #dddddd;
           }
           td,
           th {
-            padding: 15px 5px;
+            padding: 0.9rem 0.3rem;
             text-align: start;
             vertical-align: middle;
           }
           th {
-            font-size: 18px;
+            font-size: 1.15rem;
             font-weight: 500;
           }
           td {
@@ -72,18 +76,35 @@
           }
           tr th:first-child,
           tr td:first-child {
-            border-bottom-left-radius: 10px;
-            border-top-left-radius: 10px;
-            padding-left: 15px;
+            border-bottom-left-radius: 0.6rem;
+            border-top-left-radius: 0.6rem;
+            padding-left: 0.9rem;
           }
           th:last-child,
           tr td:last-child {
-            border-bottom-right-radius: 10px;
-            border-top-right-radius: 10px;
+            border-bottom-right-radius: 0.6rem;
+            border-top-right-radius: 0.6rem;
           }
           tr:not(:first-child):hover {
             box-shadow: $box-shadow;
             background-color: #f7f9fc;
+          }
+          th.code-col {
+            display: flex;
+            align-items: center;
+            .sort-box {
+              margin-left: 0.3rem;
+              display: flex;
+              flex-direction: column;
+              cursor: pointer;
+              .anticon {
+                font-size: 0.9rem;
+                color: white;
+                &.active {
+                  color: $main-color;
+                }
+              }
+            }
           }
           tr td:nth-child(1) {
             width: 5%;
@@ -101,13 +122,13 @@
             width: 13%;
           }
           .url {
-            max-width: 400px;
+            max-width: 25rem;
           }
           .code {
-            max-width: 200px;
+            max-width: 12.5rem;
           }
           .td-box {
-            max-width: 300px;
+            max-width: 18.8rem;
             display: flex;
           }
           .shortened-url {
@@ -131,7 +152,7 @@
             position: relative;
             .copied {
               text-transform: uppercase;
-              font-size: 13px;
+              font-size: 0.8rem;
               position: absolute;
               top: 0;
               left: 0;
@@ -150,7 +171,7 @@
             }
           }
           .redirect-url {
-            margin-left: 5px;
+            margin-left: 0.3rem;
             .anticon {
               color: $main-color;
             }
@@ -159,9 +180,8 @@
           .new-url {
             display: none;
             width: 100%;
-            font-size: 16px;
-            padding: 15px 10px;
-            border-radius: 10px;
+            padding: 0.9rem 0.6rem;
+            border-radius: 0.6rem;
             color: $txt-color;
             border: 1px solid $third-color;
           }
@@ -172,30 +192,30 @@
             display: flex;
             button {
               color: $white;
-              border-radius: 10px;
+              border-radius: 0.6rem;
               transition: 0.3s background-color;
-              font-size: 14px;
+              font-size: 0.85rem;
             }
             .delete-url {
-              padding: 10px 15px;
+              padding: 0.6rem 0.9rem;
               background-color: $main-color;
-              margin-right: 5px;
+              margin-right: 0.3rem;
               &:hover {
                 background-color: $second-color;
               }
             }
             .edit-url {
               background-color: #7359a8;
-              padding: 10px 10px;
+              padding: 0.6rem 0.6rem;
               &:hover {
                 background-color: #5125aa;
               }
             }
             .cancel-edit,
             .cancel-delete {
-              padding: 10px 15px;
+              padding: 0.6rem 0.9rem;
               background-color: #8559e2;
-              margin-right: 5px;
+              margin-right: 0.3rem;
               &:hover {
                 background-color: #5d22db;
               }
@@ -203,7 +223,7 @@
             .ok-edit,
             .ok-delete {
               background-color: #24c56f;
-              padding: 10px 10px;
+              padding: 0.6rem 0.6rem;
               &:hover {
                 background-color: #0b9e50;
               }

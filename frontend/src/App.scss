@@ -20,6 +20,16 @@ body {
   height: 100%;
 }
 
+html {
+  font-size: 100%;
+  @include tablet {
+    font-size: 80%;
+  }
+  @include mobile {
+    font-size: 60%;
+  }
+}
+
 .App {
   height: 100%;
 }
@@ -51,6 +61,49 @@ input {
     border-color: $main-color !important;
   }
 }
+form {
+  label {
+    display: block;
+    text-align: start;
+    font-weight: 500;
+    margin-bottom: 0.6rem;
+    font-size: 1.1rem;
+    &:not(:first-child) {
+      margin-top: 0.5rem;
+    }
+  }
+  input {
+    padding: 1.2rem 1rem;
+    border-radius: 0.9rem;
+    width: 100%;
+    border: 1px solid #e7e7e7;
+    background-color: $white !important;
+    font-size: 1rem;
+    margin-bottom: 5px;
+  }
+  button {
+    box-shadow: $box-shadow;
+    border-radius: 30px;
+    transition: 0.3s background-color;
+    color: #fff;
+    font-size: 1.1rem;
+    width: 100%;
+    margin-bottom: 1.2rem;
+    margin-top: 0.9rem;
+    padding-block: 1.2rem;
+    background-color: $main-color;
+    &:hover {
+      background-color: $second-color;
+    }
+    &:disabled {
+      background-color: #f7b081;
+    }
+  }
+  .error {
+    height: 1.2rem;
+    color: $red;
+  }
+}
 
 a {
   color: unset;
@@ -69,6 +122,7 @@ a {
 .container {
   max-width: 1450px;
   margin: auto;
+  padding: 0 1rem;
 }
 
 .hidden {

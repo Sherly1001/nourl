@@ -77,8 +77,10 @@ const CustomForm = () => {
           ) : (
             <div className="form-warning">
               <WarningOutlined />
-              Your shortened URL may be overridden by others since you are not
-              signed.
+              <span>
+                Your shortened URL may be overridden by others since you are not
+                signed.
+              </span>
             </div>
           )}
           <button

@@ -26,8 +26,6 @@ export function handleCancelDeleteUrl(url_id: string) {
 }
 
 export function handleConfirmDeleteUrl(urlsStore: UrlsStore, code: string) {
-  console.log(code)
-
   toast.promise(urlsStore.deleteUrl(code), {
     pending: 'Deleting...',
     success: 'Deleted',
@@ -145,4 +143,28 @@ export function handleConfirmEditUrl(
   code: string
 ) {
   handleValidateEditUrl(urlsStore, url_id, code)
+}
+
+export function handleSortByCode(urlStore: UrlsStore) {
+  const sortCodeDown = document.querySelector(
+    '.sort-box .anticon-caret-down'
+  ) as HTMLInputElement
+  const sortCodeUp = document.querySelector(
+    '.sort-box .anticon-caret-up'
+  ) as HTMLInputElement
+  if (
+    !sortCodeDown.classList.contains('active') &&
+    !sortCodeUp.classList.contains('active')
+  ) {
+    sortCodeDown.classList.add('active')
+    urlStore.sortUrlsByCodeDown()
+  } else if (sortCodeDown.classList.contains('active')) {
+    sortCodeDown.classList.remove('active')
+    sortCodeUp.classList.add('active')
+    urlStore.sortUrlsByCodeUp()
+  } else {
+    sortCodeUp.classList.remove('active')
+    sortCodeDown.classList.remove('active')
+    urlStore.sortUrlsByTime()
+  }
 }
