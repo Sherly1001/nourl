@@ -1,13 +1,16 @@
 @import '../../scss';
 
 .profile {
-  margin-top: 10px;
+  margin-top: 0.6rem;
   max-width: 1200px;
   margin-inline: auto;
   background-color: $white;
-  border-radius: 10px;
+  border-radius: 0.6rem;
   box-shadow: $box-shadow;
   height: 100%;
+  @include mobile {
+    margin-top: 2rem;
+  }
   &-box {
     height: 100%;
     @include flex(stretch, center);
@@ -48,7 +51,6 @@
   }
   &-right {
     flex: 75%;
-    padding-top: 3.2rem;
-    padding-inline: 4rem;
+    padding: 3.2rem 4rem 3rem;
   }
 }

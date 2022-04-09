@@ -3,8 +3,8 @@
 .custom {
   max-width: 1200px;
   margin-inline: auto;
-  border-radius: 10px;
-  padding-top: 20px;
+  border-radius: 0.6rem;
+  padding-top: 1.2rem;
   img {
     margin-inline: auto;
     display: block;
@@ -22,19 +22,19 @@
   }
   &-desc {
     flex: 40%;
-    margin-left: 100px;
-    font-size: 20px;
+    margin-left: 6.2rem;
+    font-size: 1.2rem;
     .feature {
       li {
         @include flex(center, flex-start);
       }
       li ~ li {
-        margin-top: 10px;
+        margin-top: 0.6rem;
       }
       .anticon {
-        font-size: 25px;
+        font-size: 1.5rem;
         color: $main-color;
-        margin-right: 5px;
+        margin-right: 0.3rem;
       }
       @include mobile {
         display: none;

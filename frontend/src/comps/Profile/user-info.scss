@@ -7,7 +7,6 @@
       margin-bottom: 1.2rem;
       height: 9.4rem;
       &-img {
-        cursor: pointer;
         width: 9.4rem;
         .user-img {
           @include flex(center, center);

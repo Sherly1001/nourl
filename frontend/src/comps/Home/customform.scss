@@ -3,17 +3,17 @@
 .custom .custom-form {
   flex: 50%;
   flex-shrink: 0;
-  padding: 20px;
+  padding: 1.2rem;
   background-color: $white;
   box-shadow: $box-shadow;
-  border-radius: 10px;
+  border-radius: 0.6rem;
   .form-warning {
     margin-top: 0.95rem;
     font-size: 0.75rem;
     border: 1px solid #fcbc03;
     padding: 0.6rem 1.2rem;
     background-color: #fffbe6;
-    border-radius: 5px;
+    border-radius: 0.3rem;
     .anticon-warning {
       color: #fcbc03;
       margin-right: 0.3rem;

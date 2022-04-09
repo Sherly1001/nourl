@@ -3,10 +3,10 @@
 .custom .show-form {
   flex: 50%;
   flex-shrink: 0;
-  padding: 20px;
+  padding: 1.2rem;
   background-color: $white;
   box-shadow: $box-shadow;
-  border-radius: 10px;
+  border-radius: 0.6rem;
   input:disabled {
     background-color: #e7e7e7;
     cursor: alias;
@@ -24,27 +24,27 @@
       }
     }
     .anticon {
-      font-size: 20px;
+      font-size: 1.2rem;
       cursor: copy;
-      padding: 5px;
+      padding: 0.3rem;
     }
     .copy {
       position: relative;
       .copied {
         text-transform: uppercase;
-        font-size: 13px;
+        font-size: 0.8rem;
         position: absolute;
         top: 0;
-        left: -8px;
+        left: -0.5rem;
         opacity: 0;
         visibility: hidden;
         transition: all 0.5s;
-        transform: translateY(-10px);
+        transform: translateY(-0.6rem);
         color: rgb(58, 58, 58);
         &.show {
           opacity: 1;
           visibility: visible;
-          transform: translateY(-20px);
+          transform: translateY(-1.2rem);
         }
       }
     }

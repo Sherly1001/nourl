@@ -60,7 +60,7 @@ class UrlsStore {
   }
 
   sortUrlsByTime() {
-    this.urls.sort((a, b) => a.id.localeCompare(b.code))
+    return this.getAllUrls()
   }
 }
 

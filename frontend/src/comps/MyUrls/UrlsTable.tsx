@@ -84,8 +84,9 @@ const UrlTable = () => {
                         className="shortened-url"
                         onClick={handleCopyToClipBoard}
                       >
-                        {`${go_url}/${encodeURI(url.code)}`}
-
+                        <span className="url-text">
+                          {`${go_url}/${encodeURI(url.code)}`}
+                        </span>
                         <span className="copied" aria-hidden={true}>
                           Copied
                         </span>

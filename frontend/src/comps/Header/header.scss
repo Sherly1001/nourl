@@ -2,7 +2,7 @@
 
 .header {
   &-inner {
-    padding-block: 20px;
+    padding-block: 1.2rem;
     @include flex(center, space-between);
   }
   &-logo {
@@ -20,7 +20,7 @@
       cursor: pointer;
       transition: 0.2s color;
       position: relative;
-      padding-bottom: 3px;
+      padding-bottom: 0.2rem;
       padding-inline: 0.6rem;
       &:after {
         content: '';
@@ -50,12 +50,12 @@
       background-color: $main-color;
       padding: 0.94rem 1.9rem;
       font-size: 1.2rem;
-      border-radius: 30px;
+      border-radius: 1.9rem;
       transition: 0.2s background-color;
       box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 1px,
         rgba(0, 0, 0, 0.07) 0px 2px 2px, rgba(0, 0, 0, 0.07) 0px 4px 4px,
         rgba(0, 0, 0, 0.07) 0px 8px 8px, rgba(0, 0, 0, 0.07) 0px 16px 16px;
-      margin-left: 10px;
+      margin-left: 0.6rem;
       &:hover {
         background-color: $second-color;
       }
@@ -67,10 +67,10 @@
       position: relative;
       .dropdown-info {
         @include flex(center, center);
-        padding: 5px 15px;
+        padding: 0.3rem 0.9rem;
         background-color: #f7bc92;
-        border-radius: 50px;
-        margin-bottom: 10px;
+        border-radius: 3.2rem;
+        margin-bottom: 0.6rem;
         @include mobile {
           margin-bottom: 0;
         }
@@ -95,7 +95,7 @@
         }
         .user-name {
           max-width: 9rem;
-          margin-left: 10px;
+          margin-left: 0.6rem;
           font-size: 1.2rem;
           display: -webkit-box;
           -webkit-line-clamp: 1;
@@ -118,7 +118,7 @@
         top: 70px;
         right: 5px;
         background-color: $white;
-        border-radius: 5px;
+        border-radius: 0.3rem;
         box-shadow: $box-shadow;
         width: 14.3rem;
         padding: 0.95rem 1rem;
@@ -130,11 +130,11 @@
           @include flex(baseline, flex-start);
           font-size: 0.9rem;
           border-bottom: 1px solid #dddcdc;
-          padding-bottom: 5px;
+          padding-bottom: 0.3rem;
           .user-name {
             color: $main-color;
             font-size: 1.1rem;
-            margin-left: 5px;
+            margin-left: 0.3rem;
             max-width: 100%;
             display: -webkit-box;
             -webkit-line-clamp: 1;
@@ -142,13 +142,13 @@
             overflow: hidden;
             text-overflow: ellipsis;
             word-break: break-all;
-            margin-right: 5px;
+            margin-right: 0.3rem;
           }
         }
         .dropdown-nav {
           display: block;
           padding: 0.6rem 0.6rem;
-          border-radius: 8px;
+          border-radius: 0.5rem;
           &:hover {
             background-color: #e7e7e9;
           }
