@@ -78,3 +78,41 @@ a {
 .d-none {
   display: none;
 }
+
+.nopage {
+  max-width: 800px;
+  text-align: center;
+  background-color: $white;
+  margin-inline: auto;
+  margin-top: 50px;
+  border-radius: 10px;
+  box-shadow: $box-shadow;
+  padding: 20px 0 50px;
+  h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: $main-color;
+  }
+  .header {
+    font-size: 1.3rem;
+    font-weight: 500;
+  }
+  .desc {
+    color: #8b8b8b;
+  }
+  .button {
+    display: inline-block;
+    background-color: $main-color;
+    color: $white;
+    margin-top: 20px;
+    font-size: 1.2rem;
+    padding: 15px 30px;
+    border-radius: 30px;
+    transition: 0.2s background-color;
+    box-shadow: $box-shadow;
+    &:hover {
+      background-color: $second-color;
+    }
+  }
+}

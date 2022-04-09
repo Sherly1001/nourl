@@ -19,6 +19,7 @@ const UserInfo = () => {
     name: yup.string().required('Name is required'),
     email: yup
       .string()
+      .nullable()
       .email('Email is invalidd')
       .required('Email is required'),
   })
@@ -37,6 +38,8 @@ const UserInfo = () => {
       : authStore.user?.email
 
   useEffect(() => {
+    setValue('email', '')
+    setValue('name', '')
     if (authStore.user) {
       if (authStore.user.display_name != 'none')
         setValue('name', authStore.user.display_name)
@@ -61,7 +64,7 @@ const UserInfo = () => {
     setClickButtonEdit(true)
     toast.promise(
       authStore.updateUser({
-        avatar_url: getValues('avatar'),
+        avatar_url: getValues('avatar') || null,
         email: getValues('email'),
         display_name: getValues('name'),
       }),

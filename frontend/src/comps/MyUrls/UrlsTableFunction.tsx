@@ -84,8 +84,8 @@ export async function handleValidateEditUrl(
   let customValidation = yup.object().shape({
     code: yup
       .string()
-      .required('Code is required')
-      .matches(/^[^// ]+$/, 'Invalid code'),
+      .matches(/^[^// ]+$/, 'Invalid code')
+      .required('Code is required'),
     url: yup.string().required('Url is required').url('Invalid url'),
   })
 

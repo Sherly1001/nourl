@@ -1,7 +1,7 @@
 import UserProfile from '../comps/Profile/UserProfile'
 
-const Info = () => {
+const Profile = () => {
   return <UserProfile />
 }
 
-export default Info
+export default Profile
