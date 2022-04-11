@@ -23,12 +23,12 @@ pub enum UserId {
 
 #[derive(Serialize, Deserialize, Queryable, Insertable, Clone, Debug)]
 pub struct User {
-    #[serde(with = "super::url::string")]
+    #[serde(with = "super::string")]
     pub id: i64,
     pub display_name: String,
     pub email: Option<String>,
     pub avatar_url: Option<String>,
-    #[serde(skip_serializing)]
+    #[serde(serialize_with = "super::opt_hidden_str")]
     pub hash_passwd: Option<String>,
     pub github_id: Option<String>,
     pub google_id: Option<String>,
