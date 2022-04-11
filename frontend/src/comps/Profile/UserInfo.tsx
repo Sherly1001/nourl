@@ -111,6 +111,7 @@ const UserInfo = () => {
         <input
           type="text"
           id="avatar"
+          placeholder="Enter avatar url"
           {...register('avatar', { onChange: (e) => handleAvatarChange(e) })}
         />
         <p className="error">{errors.avatar?.message}</p>
@@ -118,6 +119,7 @@ const UserInfo = () => {
         <input
           type="text"
           id="name"
+          placeholder="Enter display name"
           {...register('name', { onChange: handleDisabledButtonEdit })}
         />
         <p className="error">{errors.name?.message}</p>
@@ -125,6 +127,7 @@ const UserInfo = () => {
         <input
           type="text"
           id="email"
+          placeholder="Enter email"
           {...register('email', { onChange: handleDisabledButtonEdit })}
         />
         <p className="error">{errors.email?.message}</p>

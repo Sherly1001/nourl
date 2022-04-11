@@ -53,10 +53,20 @@ const ChangePasswd = () => {
     <div className="change-passwd">
       <form onSubmit={handleSubmit(handleChangePasswdSubmit)}>
         <label htmlFor="old_password">Old password</label>
-        <input type="password" id="old_password" {...register('old_passwd')} />
+        <input
+          placeholder="Enter old password"
+          type="password"
+          id="old_password"
+          {...register('old_passwd')}
+        />
         <p className="error">{errors.old_passwd?.message}</p>
         <label htmlFor="new_password">New password</label>
-        <input type="password" id="new_password" {...register('new_passwd')} />
+        <input
+          placeholder="Enter new password"
+          type="password"
+          id="new_password"
+          {...register('new_passwd')}
+        />
         <p className="error">{errors.new_passwd?.message}</p>
         <button
           className="change-button"
