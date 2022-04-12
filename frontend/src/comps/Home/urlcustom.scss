@@ -36,9 +36,11 @@
         color: $main-color;
         margin-right: 0.3rem;
       }
-      @include mobile {
-        display: none;
-      }
+    }
+    @include mobile {
+      @include flex(center, center);
+      margin-top: 30px;
+      margin-left: 0;
     }
   }
 }

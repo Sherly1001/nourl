@@ -8,6 +8,7 @@ export interface User {
   github_id: Nullable<string>
   google_id: Nullable<string>
   facebook_id: Nullable<string>
+  hash_passwd: Nullable<string>
 }
 
 export interface Url {

@@ -6,6 +6,7 @@ import { toast } from 'react-toastify'
 import useStores from '../../stores'
 import { useState } from 'react'
 import { observer } from 'mobx-react-lite'
+import { Nullable } from '../../shared/interfaces/index'
 
 const ChangePasswd = () => {
   const { authStore } = useStores()
@@ -13,7 +14,9 @@ const ChangePasswd = () => {
     useState(false)
 
   const schema = yup.object().shape({
-    old_passwd: yup.string().required('Old password is required'),
+    old_passwd: authStore.user?.hash_passwd
+      ? yup.string().required('Old password is required')
+      : yup.string().nullable(),
     new_passwd: yup
       .string()
       .required('New password is required')
@@ -30,7 +33,10 @@ const ChangePasswd = () => {
   function handleChangePasswdSubmit() {
     setClickButtonChangePasswd(true)
     toast.promise(
-      authStore.changePasswd(getValues('old_passwd'), getValues('new_passwd')),
+      authStore.changePasswd(
+        authStore.user?.hash_passwd ? getValues('old_passwd') : null,
+        getValues('new_passwd')
+      ),
       {
         pending: 'Pending',
         success: {
@@ -52,14 +58,18 @@ const ChangePasswd = () => {
   return (
     <div className="change-passwd">
       <form onSubmit={handleSubmit(handleChangePasswdSubmit)}>
-        <label htmlFor="old_password">Old password</label>
-        <input
-          placeholder="Enter old password"
-          type="password"
-          id="old_password"
-          {...register('old_passwd')}
-        />
-        <p className="error">{errors.old_passwd?.message}</p>
+        {authStore.user?.hash_passwd != null ? (
+          <>
+            <label htmlFor="old_password">Old password</label>
+            <input
+              placeholder="Enter old password"
+              type="password"
+              id="old_password"
+              {...register('old_passwd')}
+            />
+            <p className="error">{errors.old_passwd?.message}</p>
+          </>
+        ) : null}
         <label htmlFor="new_password">New password</label>
         <input
           placeholder="Enter new password"

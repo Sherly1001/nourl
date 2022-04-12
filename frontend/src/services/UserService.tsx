@@ -23,13 +23,20 @@ class UserService {
     return res.data
   }
 
-  async changePasswd(old_passwd: string, passwd: string) {
-    const res = await axios.put('api/users/update', {
-      old_passwd,
-      info: {
-        passwd,
-      },
-    })
+  async changePasswd(old_passwd: string | null, passwd: string) {
+    const data = old_passwd
+      ? {
+          old_passwd,
+          info: {
+            passwd,
+          },
+        }
+      : {
+          info: {
+            passwd,
+          },
+        }
+    const res = await axios.put('api/users/update', data)
     return res.data
   }
 }
