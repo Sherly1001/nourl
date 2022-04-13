@@ -21,25 +21,7 @@
       font-weight: 500;
     }
     .urls-box {
-      max-height: 575px;
-      overflow-y: auto;
-      overflow-x: auto;
-      padding-right: 0.3rem;
       max-width: 100%;
-      @include tablet {
-        max-height: unset;
-      }
-      &::-webkit-scrollbar {
-        height: 0.5rem;
-        width: 0.5rem;
-      }
-      &::-webkit-scrollbar-thumb {
-        background: $main-color;
-        border-radius: 0.3rem;
-      }
-      &::-webkit-scrollbar-thumb:hover {
-        background: $second-color;
-      }
       table {
         width: 100%;
         border-spacing: 0;

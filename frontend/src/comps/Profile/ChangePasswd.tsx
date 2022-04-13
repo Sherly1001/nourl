@@ -58,7 +58,7 @@ const ChangePasswd = () => {
   return (
     <div className="change-passwd">
       <form onSubmit={handleSubmit(handleChangePasswdSubmit)}>
-        {authStore.user?.hash_passwd != null ? (
+        {authStore.user?.hash_passwd ? (
           <>
             <label htmlFor="old_password">Old password</label>
             <input

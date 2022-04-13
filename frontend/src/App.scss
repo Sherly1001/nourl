@@ -41,7 +41,18 @@ body {
   color: $txt-color;
   font-family: $main-font;
   overflow-x: auto;
-  overflow-y: visible;
+  overflow-y: auto;
+  &::-webkit-scrollbar {
+    height: 0.5rem;
+    width: 0.5rem;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: $main-color;
+    border-radius: 0.3rem;
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background: $second-color;
+  }
 }
 
 ul,
