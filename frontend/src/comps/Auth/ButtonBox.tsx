@@ -114,6 +114,7 @@ const ButtonBox = () => {
         icon={<FacebookOutlined />}
         textButton=""
         redirectUri={window.location.origin}
+        isMobile={false}
       />
     </div>
   )
