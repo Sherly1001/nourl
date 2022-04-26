@@ -17,8 +17,11 @@ const Modal = ({ children, visible, setVisible, className }: ModalProps) => {
     setVisible()
   }
 
-  function handleClickOverlay() {
-    setVisible()
+  function handleClickOverlay(e: React.MouseEvent) {
+    const target = e.target as HTMLDivElement
+    if (target.classList.contains('modal-overlay')) {
+      setVisible()
+    }
   }
 
   return (
@@ -26,12 +29,13 @@ const Modal = ({ children, visible, setVisible, className }: ModalProps) => {
       <div
         className="modal-overlay"
         ref={modalOverlay}
-        onClick={handleClickOverlay}
-      ></div>
-      <div className="modal-container">
-        <div className="modal-content">{children}</div>
-        <div className="close-icon" onClick={handleCloseModal}>
-          <CloseCircleOutlined />
+        onClick={(e) => handleClickOverlay(e)}
+      >
+        <div className="modal-container">
+          <div className="modal-content">{children}</div>
+          <div className="close-icon" onClick={handleCloseModal}>
+            <CloseCircleOutlined />
+          </div>
         </div>
       </div>
     </div>

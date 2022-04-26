@@ -13,11 +13,23 @@
 #root {
   height: 100%;
 }
+
 html,
 body {
   font-size: 100%;
   position: relative;
   height: 100%;
+  &::-webkit-scrollbar {
+    height: 0.6rem;
+    width: 0.6rem;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: rgb(190, 190, 190);
+    border-radius: 0.3rem;
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background: rgb(175, 175, 175);
+  }
 }
 
 html {
@@ -40,8 +52,6 @@ body {
   line-height: 1.5;
   color: $txt-color;
   font-family: $main-font;
-  overflow-x: auto;
-  overflow-y: auto;
 }
 
 ul,

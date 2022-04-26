@@ -7,6 +7,8 @@ import Header from './comps/Header/Header'
 import { observer } from 'mobx-react-lite'
 import useStores from './stores'
 import Profile from './pages/Profile'
+import SignUp from './comps/Auth/SignUp'
+import SignIn from './comps/Auth/SignIn'
 
 const App = () => {
   const { authStore } = useStores()
@@ -29,6 +31,8 @@ const App = () => {
             </Route>
           </Routes>
         </div>
+        <SignIn />
+        <SignUp />
       </div>
     </>
   )

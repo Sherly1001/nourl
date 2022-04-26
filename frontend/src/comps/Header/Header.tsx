@@ -2,8 +2,6 @@ import './header.scss'
 import { logoImg, logoText } from '../../assests/images'
 import LinkCustom from './LinkCustom'
 import { Outlet } from 'react-router-dom'
-import SignUp from '../Auth/SignUp'
-import SignIn from '../Auth/SignIn'
 import useStores from '../../stores'
 import { observer } from 'mobx-react-lite'
 import { UserOutlined } from '@ant-design/icons'
@@ -114,8 +112,6 @@ const Header = ({}) => {
               >
                 Sign up
               </button>
-              <SignIn />
-              <SignUp />
             </div>
           )}
         </div>

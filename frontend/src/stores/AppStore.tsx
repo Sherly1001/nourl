@@ -11,10 +11,12 @@ class AppStore {
   }
 
   setSigninModalVisible = (visible: boolean) => {
+    document.body.style.overflow = visible ? 'hidden' : 'auto'
     this.isSigniModalVisible = visible
   }
 
   setSignupModalVisible = (visible: boolean) => {
+    document.body.style.overflow = visible ? 'hidden' : 'auto'
     this.isSignupModalVisible = visible
   }
 }

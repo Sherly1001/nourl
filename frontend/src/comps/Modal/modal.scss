@@ -3,21 +3,41 @@
 .modal {
   z-index: 99;
   position: fixed;
-  @include flex(center, center);
-  height: 100%;
-  width: 100%;
   top: 0;
   left: 0;
+  height: 100%;
+  width: 100%;
   visibility: hidden;
   opacity: 0;
   transition: 0.5s all;
+  overflow: auto;
+  &::-webkit-scrollbar {
+    height: 0.6rem;
+    width: 0.6rem;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: rgb(190, 190, 190);
+    border-radius: 0.3rem;
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background: rgb(175, 175, 175);
+  }
+  &::-webkit-scrollbar-track {
+    background: #fff;
+  }
   &-overlay {
     position: absolute;
+    @include flex(center, center);
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
+    min-height: 100%;
     background-color: rgba($color: #000000, $alpha: 0.9);
+    padding-top: 1rem;
+    padding-bottom: 3.2rem;
+    @media screen and (max-height: 600px) {
+      align-items: flex-start;
+    }
   }
   &.active {
     visibility: visible;
@@ -33,7 +53,7 @@
     min-width: 32rem;
     border-radius: 1.2rem;
     background-color: $white;
-    box-shadow: 0px 5px 20px black;
+    box-shadow: $box-shadow;
     position: relative;
     .close-icon {
       position: absolute;
@@ -49,6 +69,8 @@
     }
   }
   &-content {
+    overflow: hidden;
+    height: 100%;
     padding: 1.6rem 3.75rem;
     text-align: center;
   }

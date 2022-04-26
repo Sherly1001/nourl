@@ -52,7 +52,10 @@ const SignIn = () => {
 
   function handleSignupModalOpen() {
     appStore.setSigninModalVisible(false)
-    appStore.setSignupModalVisible(true)
+    setTimeout(() => {
+      appStore.setSignupModalVisible(true)
+      document.body.style.overflow = 'hidden'
+    }, 10)
   }
 
   useEffect(() => {
