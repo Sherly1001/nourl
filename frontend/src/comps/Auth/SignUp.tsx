@@ -30,10 +30,7 @@ const SignUp = () => {
 
   function handleSigninModalOpen() {
     appStore.setSignupModalVisible(false)
-    setTimeout(() => {
-      appStore.setSigninModalVisible(true)
-      document.body.style.overflow = 'hidden'
-    }, 10)
+    appStore.setSigninModalVisible(true)
   }
 
   const onSignupSubmit = () => {
