@@ -61,6 +61,7 @@ const CustomForm = () => {
             placeholder="Enter url"
             disabled={isClickButtonCustomUrl ? true : false}
             {...register('url')}
+            autoFocus
           />
           <p className="error">{errors.url?.message}</p>
           <label htmlFor="code">Code</label>
