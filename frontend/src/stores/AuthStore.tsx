@@ -48,7 +48,7 @@ class AuthStore {
         res = await AuthService.signinWithGithub(data.code!)
         break
       case 'facebook':
-        res = await AuthService.signupWithFacebook(data.access_token!)
+        res = await AuthService.signinWithFacebook(data.access_token!)
         break
       case 'google':
         res = await AuthService.signinWithGoogle(data.id_token!)
