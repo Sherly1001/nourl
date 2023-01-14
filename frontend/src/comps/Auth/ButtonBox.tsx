@@ -15,6 +15,7 @@ import { gg_client_id, gh_client_id, fb_client_id } from '../../utils/const'
 const ButtonBox = () => {
   const { authStore, appStore } = useStores()
   function responseFacebook(response: ReactFacebookLoginInfo) {
+    if (!response.accessToken) return
     toast.promise(
       authStore.signin('facebook', {
         access_token: response.accessToken,
