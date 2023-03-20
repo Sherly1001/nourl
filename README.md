@@ -1,5 +1,5 @@
 # nourl
-Shorten your URL, custom, and edit, check [here](https://nourl.tk).
+Shorten your URL, custom, and edit, check [here](https://nourl.site).
 - Just enter URL and alias code
 - Sign in to take your codes, so you can custom and manage them
 
